@@ -173,7 +173,7 @@ namespace RatioForge
 
                         if (!MainForm._24h_format_enabled)
                             dateString = "[" + String.Format("{0:hh:mm:ss}", dtNow) + "]";
-                        else 
+                        else
                             dateString = "[" + String.Format("{0:HH:mm:ss}", dtNow) + "]";
 
                         logWindow.AppendText(dateString + " " + logLine + "\r\n");
@@ -379,7 +379,8 @@ namespace RatioForge
             cmbVersion.Items.Clear();
             try
             {
-                switch (cmbClient.SelectedItem.ToString())
+                string selectedClient = cmbClient.SelectedItem as string ?? string.Empty;
+                switch (selectedClient)
                 {
                     case "BitComet":
                         {
@@ -394,155 +395,155 @@ namespace RatioForge
                             break;
                         }
 
-                case "Vuze":
-                    {
-                        cmbVersion.Items.Add("4.2.0.8");
-                        cmbVersion.SelectedItem = "4.2.0.8";
-                        if (customPeersNum.Text == "0" || customPeersNum.Text == "") customPeersNum.Text = "50";
-                        break;
-                    }
+                    case "Vuze":
+                        {
+                            cmbVersion.Items.Add("4.2.0.8");
+                            cmbVersion.SelectedItem = "4.2.0.8";
+                            if (customPeersNum.Text == "0" || customPeersNum.Text == "") customPeersNum.Text = "50";
+                            break;
+                        }
 
-                case "Azureus":
-                    {
-                        cmbVersion.Items.Add("3.1.1.0");
-                        cmbVersion.Items.Add("3.0.5.0");
-                        cmbVersion.Items.Add("3.0.4.2");
-                        cmbVersion.Items.Add("3.0.3.4");
-                        cmbVersion.Items.Add("3.0.2.2");
-                        cmbVersion.Items.Add("2.5.0.4");
-                        cmbVersion.SelectedItem = "3.1.1.0";
-                        if (customPeersNum.Text == "0" || customPeersNum.Text == "") customPeersNum.Text = "50";
-                        break;
-                    }
+                    case "Azureus":
+                        {
+                            cmbVersion.Items.Add("3.1.1.0");
+                            cmbVersion.Items.Add("3.0.5.0");
+                            cmbVersion.Items.Add("3.0.4.2");
+                            cmbVersion.Items.Add("3.0.3.4");
+                            cmbVersion.Items.Add("3.0.2.2");
+                            cmbVersion.Items.Add("2.5.0.4");
+                            cmbVersion.SelectedItem = "3.1.1.0";
+                            if (customPeersNum.Text == "0" || customPeersNum.Text == "") customPeersNum.Text = "50";
+                            break;
+                        }
 
-                case "uTorrent":
-                    {
-                        cmbVersion.Items.Add("3.6.0 (build 46590)");
-                        cmbVersion.Items.Add("3.3.2");
-                        cmbVersion.Items.Add("3.3.0");
-                        cmbVersion.Items.Add("3.2.0");
-                        cmbVersion.Items.Add("2.0.1 (build 19078)");
-                        cmbVersion.Items.Add("1.8.5 (build 17414)");
-                        cmbVersion.Items.Add("1.8.1-beta(11903)");
-                        cmbVersion.Items.Add("1.8.0");
-                        cmbVersion.Items.Add("1.7.7");
-                        cmbVersion.Items.Add("1.7.6");
-                        cmbVersion.Items.Add("1.7.5");
-                        cmbVersion.Items.Add("1.6.1");
-                        cmbVersion.Items.Add("1.6");
-                        cmbVersion.SelectedItem = "3.3.2";
-                        if (customPeersNum.Text == "0" || customPeersNum.Text == "") customPeersNum.Text = "200";
-                        break;
-                    }
+                    case "uTorrent":
+                        {
+                            cmbVersion.Items.Add("3.6.0 (build 46590)");
+                            cmbVersion.Items.Add("3.3.2");
+                            cmbVersion.Items.Add("3.3.0");
+                            cmbVersion.Items.Add("3.2.0");
+                            cmbVersion.Items.Add("2.0.1 (build 19078)");
+                            cmbVersion.Items.Add("1.8.5 (build 17414)");
+                            cmbVersion.Items.Add("1.8.1-beta(11903)");
+                            cmbVersion.Items.Add("1.8.0");
+                            cmbVersion.Items.Add("1.7.7");
+                            cmbVersion.Items.Add("1.7.6");
+                            cmbVersion.Items.Add("1.7.5");
+                            cmbVersion.Items.Add("1.6.1");
+                            cmbVersion.Items.Add("1.6");
+                            cmbVersion.SelectedItem = "3.3.2";
+                            if (customPeersNum.Text == "0" || customPeersNum.Text == "") customPeersNum.Text = "200";
+                            break;
+                        }
 
-                case "BitTorrent":
-                    {
-                        cmbVersion.Items.Add("6.0.3 (8642)");
-                        cmbVersion.SelectedItem = "6.0.3 (8642)";
-                        if (customPeersNum.Text == "0" || customPeersNum.Text == "") customPeersNum.Text = "200";
-                        break;
-                    }
+                    case "BitTorrent":
+                        {
+                            cmbVersion.Items.Add("6.0.3 (8642)");
+                            cmbVersion.SelectedItem = "6.0.3 (8642)";
+                            if (customPeersNum.Text == "0" || customPeersNum.Text == "") customPeersNum.Text = "200";
+                            break;
+                        }
 
-		case "Transmission":
-		    {
-			cmbVersion.Items.Add("2.82 (14160)");
-			cmbVersion.Items.Add("2.92 (14714)");
-			cmbVersion.SelectedItem = "2.92 (14714)";
-			if (customPeersNum.Text == "0" || customPeersNum.Text == "") customPeersNum.Text = "200";
-                        break;
-		    }
+                    case "Transmission":
+                        {
+                            cmbVersion.Items.Add("2.82 (14160)");
+                            cmbVersion.Items.Add("2.92 (14714)");
+                            cmbVersion.SelectedItem = "2.92 (14714)";
+                            if (customPeersNum.Text == "0" || customPeersNum.Text == "") customPeersNum.Text = "200";
+                            break;
+                        }
 
-                case "BitLord":
-                    {
-                        cmbVersion.Items.Add("1.1");
-                        cmbVersion.SelectedItem = "1.1";
-                        if (customPeersNum.Text == "0" || customPeersNum.Text == "") customPeersNum.Text = "200";
-                        break;
-                    }
+                    case "BitLord":
+                        {
+                            cmbVersion.Items.Add("1.1");
+                            cmbVersion.SelectedItem = "1.1";
+                            if (customPeersNum.Text == "0" || customPeersNum.Text == "") customPeersNum.Text = "200";
+                            break;
+                        }
 
-                case "ABC":
-                    {
-                        cmbVersion.Items.Add("3.1");
-                        cmbVersion.SelectedItem = "3.1";
-                        if (customPeersNum.Text == "0" || customPeersNum.Text == "") customPeersNum.Text = "200";
-                        break;
-                    }
+                    case "ABC":
+                        {
+                            cmbVersion.Items.Add("3.1");
+                            cmbVersion.SelectedItem = "3.1";
+                            if (customPeersNum.Text == "0" || customPeersNum.Text == "") customPeersNum.Text = "200";
+                            break;
+                        }
 
-                case "BTuga":
-                    {
-                        cmbVersion.Items.Add("2.1.8");
-                        cmbVersion.SelectedItem = "2.1.8";
-                        if (customPeersNum.Text == "0" || customPeersNum.Text == "") customPeersNum.Text = "200";
-                        break;
-                    }
+                    case "BTuga":
+                        {
+                            cmbVersion.Items.Add("2.1.8");
+                            cmbVersion.SelectedItem = "2.1.8";
+                            if (customPeersNum.Text == "0" || customPeersNum.Text == "") customPeersNum.Text = "200";
+                            break;
+                        }
 
-                case "BitTornado":
-                    {
-                        cmbVersion.Items.Add("0.3.17");
-                        cmbVersion.SelectedItem = "0.3.17";
-                        if (customPeersNum.Text == "0" || customPeersNum.Text == "") customPeersNum.Text = "200";
-                        break;
-                    }
+                    case "BitTornado":
+                        {
+                            cmbVersion.Items.Add("0.3.17");
+                            cmbVersion.SelectedItem = "0.3.17";
+                            if (customPeersNum.Text == "0" || customPeersNum.Text == "") customPeersNum.Text = "200";
+                            break;
+                        }
 
-                case "Burst":
-                    {
-                        cmbVersion.Items.Add("3.1.0b");
-                        cmbVersion.SelectedItem = "3.1.0b";
-                        if (customPeersNum.Text == "0" || customPeersNum.Text == "") customPeersNum.Text = "200";
-                        break;
-                    }
+                    case "Burst":
+                        {
+                            cmbVersion.Items.Add("3.1.0b");
+                            cmbVersion.SelectedItem = "3.1.0b";
+                            if (customPeersNum.Text == "0" || customPeersNum.Text == "") customPeersNum.Text = "200";
+                            break;
+                        }
 
-                case "BitTyrant":
-                    {
-                        cmbVersion.Items.Add("1.1");
-                        cmbVersion.SelectedItem = "1.1";
-                        if (customPeersNum.Text == "0" || customPeersNum.Text == "") customPeersNum.Text = "50";
-                        break;
-                    }
+                    case "BitTyrant":
+                        {
+                            cmbVersion.Items.Add("1.1");
+                            cmbVersion.SelectedItem = "1.1";
+                            if (customPeersNum.Text == "0" || customPeersNum.Text == "") customPeersNum.Text = "50";
+                            break;
+                        }
 
-                case "BitSpirit":
-                    {
-                        cmbVersion.Items.Add("3.6.0.200");
-                        cmbVersion.Items.Add("3.1.0.077");
-                        cmbVersion.SelectedItem = "3.6.0.200";
-                        if (customPeersNum.Text == "0" || customPeersNum.Text == "") customPeersNum.Text = "200";
-                        break;
-                    }
+                    case "BitSpirit":
+                        {
+                            cmbVersion.Items.Add("3.6.0.200");
+                            cmbVersion.Items.Add("3.1.0.077");
+                            cmbVersion.SelectedItem = "3.6.0.200";
+                            if (customPeersNum.Text == "0" || customPeersNum.Text == "") customPeersNum.Text = "200";
+                            break;
+                        }
 
-                case "Deluge":
-                    {
-                        cmbVersion.Items.Add("1.2.0");
-                        cmbVersion.Items.Add("0.5.8.7");
-                        cmbVersion.Items.Add("0.5.8.6");
-                        cmbVersion.SelectedItem = "1.2.0";
-                        if (customPeersNum.Text == "0" || customPeersNum.Text == "") customPeersNum.Text = "200";
-                        break;
-                    }
+                    case "Deluge":
+                        {
+                            cmbVersion.Items.Add("1.2.0");
+                            cmbVersion.Items.Add("0.5.8.7");
+                            cmbVersion.Items.Add("0.5.8.6");
+                            cmbVersion.SelectedItem = "1.2.0";
+                            if (customPeersNum.Text == "0" || customPeersNum.Text == "") customPeersNum.Text = "200";
+                            break;
+                        }
 
-                case "KTorrent":
-                    {
-                        cmbVersion.Items.Add("2.2.1");
-                        cmbVersion.SelectedItem = "2.2.1";
-                        if (customPeersNum.Text == "0" || customPeersNum.Text == "") customPeersNum.Text = "100";
-                        break;
-                    }
+                    case "KTorrent":
+                        {
+                            cmbVersion.Items.Add("2.2.1");
+                            cmbVersion.SelectedItem = "2.2.1";
+                            if (customPeersNum.Text == "0" || customPeersNum.Text == "") customPeersNum.Text = "100";
+                            break;
+                        }
 
-                case "Gnome BT":
-                    {
-                        cmbVersion.Items.Add("0.0.28-1");
-                        cmbVersion.SelectedItem = "0.0.28-1";
-                        if (customPeersNum.Text == "0" || customPeersNum.Text == "") customPeersNum.Text = "200";
+                    case "Gnome BT":
+                        {
+                            cmbVersion.Items.Add("0.0.28-1");
+                            cmbVersion.SelectedItem = "0.0.28-1";
+                            if (customPeersNum.Text == "0" || customPeersNum.Text == "") customPeersNum.Text = "200";
 
-                        break;
-                    }
+                            break;
+                        }
 
-                case "qBittorrent":
-                    {
-                        cmbVersion.Items.Add("5.1.2");
-                        cmbVersion.SelectedItem = "5.1.2";
-                        if (customPeersNum.Text == "0" || customPeersNum.Text == "") customPeersNum.Text = "200";
-                        break;
-                    }
+                    case "qBittorrent":
+                        {
+                            cmbVersion.Items.Add("5.1.2");
+                            cmbVersion.SelectedItem = "5.1.2";
+                            if (customPeersNum.Text == "0" || customPeersNum.Text == "") customPeersNum.Text = "200";
+                            break;
+                        }
 
                     default:
                         {
@@ -885,7 +886,7 @@ namespace RatioForge
 
         internal void btnDefault_Click(object sender, EventArgs e)
         {
-            getnew = false;                
+            getnew = false;
             cmbClient.SelectedItem = DefaultClient;
             cmbVersion.SelectedItem = DefaultClientVersion;
 
@@ -1193,7 +1194,7 @@ namespace RatioForge
                                 AddLogLine("incomplete: " + BEncode.String(dictionary2["incomplete"]));
                                 updateScrapStats(BEncode.String(dictionary2["complete"]), BEncode.String(dictionary2["incomplete"]), BEncode.String(dictionary2["downloaded"]));
                                 decimal leechers = BEncode.String(dictionary2["incomplete"]).ParseValidInt(-1);
-                                if (Leechers != -1  && (leechers == 0))
+                                if (Leechers != -1 && (leechers == 0))
                                 {
                                     // AddLogLine("Min number of leechers reached... setting upload speed to 0");
                                     // updateTextBox(uploadRate, "0");
@@ -1332,7 +1333,7 @@ namespace RatioForge
                 Seeders = int.Parse(seedStr);
                 Leechers = int.Parse(leechStr);
             }
-            catch(Exception)
+            catch (Exception)
             {
                 Seeders = -1;
                 Leechers = -1;
@@ -1345,11 +1346,11 @@ namespace RatioForge
             // }
             // else
             // {
-                seedLabel.Text = "Seeders: " + seedStr;
-                leechLabel.Text = "Leechers: " + leechStr;
-                scrapStatsUpdated = true;
+            seedLabel.Text = "Seeders: " + seedStr;
+            leechLabel.Text = "Leechers: " + leechStr;
+            scrapStatsUpdated = true;
 
-                // AddLogLine("Scrap Stats Updated" + "\n" + "\n");
+            // AddLogLine("Scrap Stats Updated" + "\n" + "\n");
             // }
         }
 
@@ -1681,135 +1682,135 @@ namespace RatioForge
                     headers += "\r\nConnection: close";
                 }
                 string cmd = "GET " + path + " " + currentClient.HttpProtocol + "\r\n" + headers + "\r\n\r\n";
-        AddLogLine("======== Sending Command to Tracker ========");
-        AddLogLine(cmd);
+                AddLogLine("======== Sending Command to Tracker ========");
+                AddLogLine(cmd);
 
-        // HTTPS Support
-        if (reqUri.Scheme.ToLower() == "https")
-        {
-            try
-            {
-                AddLogLine("Initiating SSL/TLS Handshake...");
-                // Wrap the existing connected socket in a NetworkStream, then SslStream
-                // ownsSocket: false so we don't close the socket when disposing the stream (managed by `sock` cleanup mostly, though we need to be careful)
-                NetworkStream ns = new NetworkStream(sock.SystemSocket, false);
-                // Use a custom validation callback
-                SslStream sslStream = new SslStream(ns, false, new RemoteCertificateValidationCallback(ValidateServerCertificate));
-                
-                // Authenticate
-                sslStream.AuthenticateAsClient(host);
-                AddLogLine("SSL/TLS Handshake Completed.");
-
-                // Send GET request
-                byte[] requestBytes = _usedEnc.GetBytes(cmd);
-                sslStream.Write(requestBytes, 0, requestBytes.Length);
-                sslStream.Flush();
-
-                // Read Response
-                MemoryStream memStream = new MemoryStream();
-                byte[] buffer = new byte[32 * 1024];
-                int bytesRead;
-
-                // Read until the stream is closed or we have data (simple approach)
-                // Note: HTTP 1.1 might keep connection alive, but usually trackers close or we can rely on reading until 0 if not chunked loop hell.
-                // For this simple implementation, we read until socket close or timeout.
-                do
+                // HTTPS Support
+                if (reqUri.Scheme.ToLower() == "https")
                 {
-                    bytesRead = sslStream.Read(buffer, 0, buffer.Length);
-                    if (bytesRead > 0)
+                    try
                     {
-                        memStream.Write(buffer, 0, bytesRead);
+                        AddLogLine("Initiating SSL/TLS Handshake...");
+                        // Wrap the existing connected socket in a NetworkStream, then SslStream
+                        // ownsSocket: false so we don't close the socket when disposing the stream (managed by `sock` cleanup mostly, though we need to be careful)
+                        NetworkStream ns = new NetworkStream(sock.SystemSocket, false);
+                        // Use a custom validation callback
+                        SslStream sslStream = new SslStream(ns, false, new RemoteCertificateValidationCallback(ValidateServerCertificate));
+
+                        // Authenticate
+                        sslStream.AuthenticateAsClient(host);
+                        AddLogLine("SSL/TLS Handshake Completed.");
+
+                        // Send GET request
+                        byte[] requestBytes = _usedEnc.GetBytes(cmd);
+                        sslStream.Write(requestBytes, 0, requestBytes.Length);
+                        sslStream.Flush();
+
+                        // Read Response
+                        MemoryStream memStream = new MemoryStream();
+                        byte[] buffer = new byte[32 * 1024];
+                        int bytesRead;
+
+                        // Read until the stream is closed or we have data (simple approach)
+                        // Note: HTTP 1.1 might keep connection alive, but usually trackers close or we can rely on reading until 0 if not chunked loop hell.
+                        // For this simple implementation, we read until socket close or timeout.
+                        do
+                        {
+                            bytesRead = sslStream.Read(buffer, 0, buffer.Length);
+                            if (bytesRead > 0)
+                            {
+                                memStream.Write(buffer, 0, bytesRead);
+                            }
+                        } while (bytesRead > 0);
+
+                        if (memStream.Length == 0)
+                        {
+                            AddLogLine("Error : Tracker Response is empty (SSL)");
+                            return null;
+                        }
+
+                        memStream.Position = 0;
+                        trackerResponse = new TrackerResponse(memStream);
+
+                        // Cleanup logic handled by outer finally/try-catch mostly, but we should dispose wrapper streams
+                        // sslStream.Dispose(); // Avoid closing inner socket if we want to reuse? RatioMaster usually one-shots.
                     }
-                } while (bytesRead > 0);
-
-                if (memStream.Length == 0)
+                    catch (Exception ex)
+                    {
+                        AddLogLine("SSL Error: " + ex.Message);
+                        sock.Close();
+                        return null;
+                    }
+                }
+                else
                 {
-                    AddLogLine("Error : Tracker Response is empty (SSL)");
-                    return null;
+                    // Original HTTP Logic
+                    sock.Send(_usedEnc.GetBytes(cmd));
+
+                    // simple reading loop
+                    // read while have the data
+                    try
+                    {
+                        byte[] data = new byte[32 * 1024];
+                        MemoryStream memStream = new MemoryStream();
+                        while (true)
+                        {
+                            int dataLen = sock.Receive(data);
+                            if (0 == dataLen)
+                                break;
+                            memStream.Write(data, 0, dataLen);
+                        }
+
+                        if (memStream.Length == 0)
+                        {
+                            AddLogLine("Error : Tracker Response is empty");
+                            return null;
+                        }
+
+                        memStream.Position = 0; // Reset position for reading
+                        trackerResponse = new TrackerResponse(memStream);
+                    }
+                    catch (Exception ex)
+                    {
+                        sock.Close();
+                        AddLogLine(Environment.NewLine + ex.Message);
+                        return null;
+                    }
                 }
 
-                memStream.Position = 0;
-                trackerResponse = new TrackerResponse(memStream);
-                
-                // Cleanup logic handled by outer finally/try-catch mostly, but we should dispose wrapper streams
-                // sslStream.Dispose(); // Avoid closing inner socket if we want to reuse? RatioMaster usually one-shots.
+                // Common Response Handling
+                if (trackerResponse.doRedirect)
+                {
+                    return MakeWebRequestEx(new Uri(trackerResponse.RedirectionURL));
+                }
+
+                AddLogLine("======== Tracker Response ========");
+                AddLogLine(trackerResponse.Headers);
+                if (trackerResponse.Dict == null)
+                {
+                    AddLogLine("*** Failed to decode tracker response :");
+                    AddLogLine(trackerResponse.Body);
+                }
+
+                return trackerResponse;
             }
             catch (Exception ex)
             {
-                AddLogLine("SSL Error: " + ex.Message);
-                sock.Close();
+                if (null != sock) sock.Close();
+                AddLogLine("Exception:" + ex.Message);
                 return null;
             }
+
+            // if (null != sock) sock.Close();
+            // else return null;
         }
-        else
+
+        private static bool ValidateServerCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
         {
-            // Original HTTP Logic
-            sock.Send(_usedEnc.GetBytes(cmd));
-
-            // simple reading loop
-            // read while have the data
-            try
-            {
-                byte[] data = new byte[32 * 1024];
-                MemoryStream memStream = new MemoryStream();
-                while (true)
-                {
-                    int dataLen = sock.Receive(data);
-                    if (0 == dataLen)
-                        break;
-                    memStream.Write(data, 0, dataLen);
-                }
-
-                if (memStream.Length == 0)
-                {
-                    AddLogLine("Error : Tracker Response is empty");
-                    return null;
-                }
-                
-                memStream.Position = 0; // Reset position for reading
-                trackerResponse = new TrackerResponse(memStream);
-            }
-            catch (Exception ex)
-            {
-                sock.Close();
-                AddLogLine(Environment.NewLine + ex.Message);
-                return null;
-            }
+            // Accept all certificates (Emulation/Spoofing context often involves private trackers or self-signed)
+            // In a real security context, we check sslPolicyErrors
+            return true;
         }
-
-        // Common Response Handling
-        if (trackerResponse.doRedirect)
-        {
-            return MakeWebRequestEx(new Uri(trackerResponse.RedirectionURL));
-        }
-
-        AddLogLine("======== Tracker Response ========");
-        AddLogLine(trackerResponse.Headers);
-        if (trackerResponse.Dict == null)
-        {
-            AddLogLine("*** Failed to decode tracker response :");
-            AddLogLine(trackerResponse.Body);
-        }
-
-        return trackerResponse;
-    }
-    catch (Exception ex)
-    {
-        if (null != sock) sock.Close();
-        AddLogLine("Exception:" + ex.Message);
-        return null;
-    }
-
-    // if (null != sock) sock.Close();
-    // else return null;
-}
-
-private static bool ValidateServerCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
-{
-    // Accept all certificates (Emulation/Spoofing context often involves private trackers or self-signed)
-    // In a real security context, we check sslPolicyErrors
-    return true; 
-}
 
         internal void RemaningWork_Tick(object sender, EventArgs e)
         {
@@ -1907,7 +1908,7 @@ private static bool ValidateServerCertificate(object sender, X509Certificate cer
                     return;
                 }
 
-                string Version = (string)reg.GetValue("Version", "none");
+                string Version = GetRegistryString(reg, "Version", "none");
                 if (Version == "none")
                 {
                     btnDefault_Click(null, null);
@@ -1916,16 +1917,16 @@ private static bool ValidateServerCertificate(object sender, X509Certificate cer
 
                 chkNewValues.Checked = ItoB((int)reg.GetValue("NewValues", true));
                 getnew = false;
-                cmbClient.SelectedItem = reg.GetValue("Client", DefaultClient);
+                cmbClient.SelectedItem = GetRegistryString(reg, "Client", DefaultClient);
                 getnew = false;
-                cmbVersion.SelectedItem = reg.GetValue("ClientVersion", DefaultClientVersion);
-                uploadRate.Text = ((string)reg.GetValue("UploadRate", uploadRate.Text));
-                downloadRate.Text = ((string)reg.GetValue("DownloadRate", downloadRate.Text));
-                fileSize.Text = (string)reg.GetValue("fileSize", "0");
+                cmbVersion.SelectedItem = GetRegistryString(reg, "ClientVersion", DefaultClientVersion);
+                uploadRate.Text = GetRegistryString(reg, "UploadRate", uploadRate.Text);
+                downloadRate.Text = GetRegistryString(reg, "DownloadRate", downloadRate.Text);
+                fileSize.Text = GetRegistryString(reg, "fileSize", "0");
 
                 // fileSize.Text = "0";
-                interval.Text = (reg.GetValue("Interval", interval.Text)).ToString();
-                DefaultDirectory = (string)reg.GetValue("Directory", DefaultDirectory);
+                interval.Text = GetRegistryString(reg, "Interval", interval.Text);
+                DefaultDirectory = GetRegistryString(reg, "Directory", DefaultDirectory);
                 checkTCPListen.Checked = ItoB((int)reg.GetValue("TCPlistener", BtoI(checkTCPListen.Checked)));
                 checkRequestScrap.Checked = ItoB((int)reg.GetValue("ScrapeInfo", BtoI(checkRequestScrap.Checked)));
                 checkLogEnabled.Checked = ItoB((int)reg.GetValue("EnableLog", BtoI(checkLogEnabled.Checked)));
@@ -1933,16 +1934,16 @@ private static bool ValidateServerCertificate(object sender, X509Certificate cer
                 // Radnom value
                 chkRandUP.Checked = ItoB((int)reg.GetValue("GetRandUp", BtoI(chkRandUP.Checked)));
                 chkRandDown.Checked = ItoB((int)reg.GetValue("GetRandDown", BtoI(chkRandDown.Checked)));
-                txtRandUpMin.Text = (string)reg.GetValue("MinRandUp", txtRandUpMin.Text);
-                txtRandUpMax.Text = (string)reg.GetValue("MaxRandUp", txtRandUpMax.Text);
-                txtRandDownMin.Text = (string)reg.GetValue("MinRandDown", txtRandDownMin.Text);
-                txtRandDownMax.Text = (string)reg.GetValue("MaxRandDown", txtRandDownMax.Text);
+                txtRandUpMin.Text = GetRegistryString(reg, "MinRandUp", txtRandUpMin.Text);
+                txtRandUpMax.Text = GetRegistryString(reg, "MaxRandUp", txtRandUpMax.Text);
+                txtRandDownMin.Text = GetRegistryString(reg, "MinRandDown", txtRandDownMin.Text);
+                txtRandDownMax.Text = GetRegistryString(reg, "MaxRandDown", txtRandDownMax.Text);
 
                 // Custom values
-                if (chkNewValues.Checked == false)
+                if (!chkNewValues.Checked)
                 {
-                    customKey.Text = (string)reg.GetValue("CustomKey", customKey.Text);
-                    customPeerID.Text = (string)reg.GetValue("CustomPeerID", customPeerID.Text);
+                    customKey.Text = GetRegistryString(reg, "CustomKey", customKey.Text);
+                    customPeerID.Text = GetRegistryString(reg, "CustomPeerID", customPeerID.Text);
                     lblGenStatus.Text = "Generation status: " + "using last saved values";
                 }
                 else
@@ -1950,27 +1951,27 @@ private static bool ValidateServerCertificate(object sender, X509Certificate cer
                     SetCustomValues();
                 }
 
-                customPort.Text = (string)reg.GetValue("CustomPort", customPort.Text);
-                customPeersNum.Text = (string)reg.GetValue("CustomPeers", customPeersNum.Text);
+                customPort.Text = GetRegistryString(reg, "CustomPort", customPort.Text);
+                customPeersNum.Text = GetRegistryString(reg, "CustomPeers", customPeersNum.Text);
 
                 // Radnom value on next
                 checkRandomUpload.Checked = ItoB((int)reg.GetValue("GetRandUpNext", BtoI(checkRandomUpload.Checked)));
                 checkRandomDownload.Checked = ItoB((int)reg.GetValue("GetRandDownNext", BtoI(checkRandomDownload.Checked)));
-                RandomUploadFrom.Text = (string)reg.GetValue("MinRandUpNext", RandomUploadFrom.Text);
-                RandomUploadTo.Text = (string)reg.GetValue("MaxRandUpNext", RandomUploadTo.Text);
-                RandomDownloadFrom.Text = (string)reg.GetValue("MinRandDownNext", RandomDownloadFrom.Text);
-                RandomDownloadTo.Text = (string)reg.GetValue("MaxRandDownNext", RandomDownloadTo.Text);
+                RandomUploadFrom.Text = GetRegistryString(reg, "MinRandUpNext", RandomUploadFrom.Text);
+                RandomUploadTo.Text = GetRegistryString(reg, "MaxRandUpNext", RandomUploadTo.Text);
+                RandomDownloadFrom.Text = GetRegistryString(reg, "MinRandDownNext", RandomDownloadFrom.Text);
+                RandomDownloadTo.Text = GetRegistryString(reg, "MaxRandDownNext", RandomDownloadTo.Text);
 
                 // Stop after...
-                cmbStopAfter.SelectedItem = reg.GetValue("StopWhen", "Never");
-                txtStopValue.Text = (string)reg.GetValue("StopAfter", txtStopValue.Text);
+                cmbStopAfter.SelectedItem = GetRegistryString(reg, "StopWhen", "Never");
+                txtStopValue.Text = GetRegistryString(reg, "StopAfter", txtStopValue.Text);
 
                 // Proxy
-                comboProxyType.SelectedItem = reg.GetValue("ProxyType", comboProxyType.SelectedItem);
-                textProxyHost.Text = (string)reg.GetValue("ProxyAdress", textProxyHost.Text);
-                textProxyUser.Text = (string)reg.GetValue("ProxyUser", textProxyUser.Text);
-                textProxyPass.Text = (string)reg.GetValue("ProxyPass", textProxyPass.Text);
-                textProxyPort.Text = (string)reg.GetValue("ProxyPort", textProxyPort.Text);
+                comboProxyType.SelectedItem = GetRegistryString(reg, "ProxyType", comboProxyType.SelectedItem?.ToString() ?? "None");
+                textProxyHost.Text = GetRegistryString(reg, "ProxyAdress", textProxyHost.Text);
+                textProxyUser.Text = GetRegistryString(reg, "ProxyUser", textProxyUser.Text);
+                textProxyPass.Text = GetRegistryString(reg, "ProxyPass", textProxyPass.Text);
+                textProxyPort.Text = GetRegistryString(reg, "ProxyPort", textProxyPort.Text);
                 checkIgnoreFailureReason.Checked = ItoB((int)reg.GetValue("IgnoreFailureReason", BtoI(checkIgnoreFailureReason.Checked)));
             }
             catch (Exception e)
@@ -1990,6 +1991,11 @@ private static bool ValidateServerCertificate(object sender, X509Certificate cer
             if (param == 0) return false;
             if (param == 1) return true;
             return true;
+        }
+
+        internal static string GetRegistryString(RegistryKey registryKey, string valueName, string defaultValue)
+        {
+            return registryKey.GetValue(valueName, defaultValue)?.ToString() ?? defaultValue;
         }
 
         #endregion
@@ -2027,7 +2033,7 @@ private static bool ValidateServerCertificate(object sender, X509Certificate cer
                 long maxoffset = currentClient.MaxOffset;
                 long startoffset = currentClient.StartOffset;
                 string process = currentClient.ProcessName;
-                string pversion = cmbVersion.SelectedItem.ToString();
+                string pversion = cmbVersion.SelectedItem as string ?? string.Empty;
                 if (GETDATA(process, pversion, searchstring, startoffset, maxoffset))
                 {
                     customKey.Text = currentClient.Key;
@@ -2134,7 +2140,7 @@ private static bool ValidateServerCertificate(object sender, X509Certificate cer
                     return false;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 AddLogLine("Error when parsing: " + ex.Message);
                 return false;
@@ -2164,53 +2170,55 @@ private static bool ValidateServerCertificate(object sender, X509Certificate cer
         #endregion
         private void cmbStopAfter_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if ((string)cmbStopAfter.SelectedItem == "Never")
+            string selectedOption = cmbStopAfter.SelectedItem as string ?? string.Empty;
+            txtStopValue.Visible = selectedOption != "Never";
+
+            if (selectedOption == "Never")
             {
-                lblStopAfter.Text = "";
-                txtStopValue.Text = "";
-                txtStopValue.Visible = false;
+                lblStopAfter.Text = string.Empty;
+                txtStopValue.Text = string.Empty;
+                return;
             }
 
-            if ((string)cmbStopAfter.SelectedItem == "After time:")
+            if (selectedOption == "After time:")
             {
                 lblStopAfter.Text = "seconds";
                 txtStopValue.Text = "3600";
-                txtStopValue.Visible = true;
+                return;
             }
 
-            if ((string)cmbStopAfter.SelectedItem == "When seeders <")
+            if (selectedOption == "When seeders <")
             {
-                lblStopAfter.Text = "";
+                lblStopAfter.Text = string.Empty;
                 txtStopValue.Text = "10";
-                txtStopValue.Visible = true;
+                return;
             }
 
-            if ((string)cmbStopAfter.SelectedItem == "When leechers <")
+            if (selectedOption == "When leechers <")
             {
-                lblStopAfter.Text = "";
+                lblStopAfter.Text = string.Empty;
                 txtStopValue.Text = "10";
-                txtStopValue.Visible = true;
+                return;
             }
 
-            if ((string)cmbStopAfter.SelectedItem == "When uploaded >")
+            if (selectedOption == "When uploaded >")
             {
                 lblStopAfter.Text = "Mb";
                 txtStopValue.Text = "1024";
-                txtStopValue.Visible = true;
+                return;
             }
 
-            if ((string)cmbStopAfter.SelectedItem == "When downloaded >")
+            if (selectedOption == "When downloaded >")
             {
                 lblStopAfter.Text = "Mb";
                 txtStopValue.Text = "1024";
-                txtStopValue.Visible = true;
+                return;
             }
 
-            if ((string)cmbStopAfter.SelectedItem == "When leechers/seeders <")
+            if (selectedOption == "When leechers/seeders <")
             {
-                lblStopAfter.Text = "";
+                lblStopAfter.Text = string.Empty;
                 txtStopValue.Text = "1,000";
-                txtStopValue.Visible = true;
             }
         }
 

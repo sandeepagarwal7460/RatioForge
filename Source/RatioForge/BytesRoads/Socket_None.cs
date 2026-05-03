@@ -50,7 +50,7 @@ namespace BytesRoad.Net.Sockets
                 _port = port;
             }
 
-            internal int Port { get { return _port;} }
+            internal int Port { get { return _port; } }
         }
         #endregion
 
@@ -68,15 +68,15 @@ namespace BytesRoad.Net.Sockets
         {
             get { return ProxyType.None; }
         }
-        
-        override internal EndPoint LocalEndPoint 
-        {
-            get { return _socket.LocalEndPoint; } 
-        } 
 
-        override internal EndPoint RemoteEndPoint 
-        { 
-            get { return _socket.RemoteEndPoint; } 
+        override internal EndPoint LocalEndPoint
+        {
+            get { return _socket.LocalEndPoint; }
+        }
+
+        override internal EndPoint RemoteEndPoint
+        {
+            get { return _socket.RemoteEndPoint; }
         }
 
         #endregion
@@ -102,7 +102,7 @@ namespace BytesRoad.Net.Sockets
         {
             return new Socket_None(_socket.EndAccept(asyncResult));
         }
-        
+
         #endregion
 
         #region Connect functions (overriden)
@@ -113,8 +113,8 @@ namespace BytesRoad.Net.Sockets
         }
 
         override internal IAsyncResult BeginConnect(
-            EndPoint remoteEP, 
-            AsyncCallback callback, 
+            EndPoint remoteEP,
+            AsyncCallback callback,
             object state)
         {
             CheckDisposed();
@@ -125,11 +125,11 @@ namespace BytesRoad.Net.Sockets
                 stateObj = new Connect_SO(-1, callback, state);
 
                 _socket.BeginConnect(
-                    remoteEP, 
+                    remoteEP,
                     new AsyncCallback(Connect_End),
                     stateObj);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 SetProgress(false);
                 throw e;
@@ -139,9 +139,9 @@ namespace BytesRoad.Net.Sockets
         }
 
         override internal IAsyncResult BeginConnect(
-            string hostName, 
-            int port, 
-            AsyncCallback callback, 
+            string hostName,
+            int port,
+            AsyncCallback callback,
             object state)
         {
             CheckDisposed();
@@ -152,7 +152,7 @@ namespace BytesRoad.Net.Sockets
                 stateObj = new Connect_SO(port, callback, state);
                 Dns.BeginGetHostEntry(hostName, new AsyncCallback(GetHost_End), stateObj);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 SetProgress(false);
                 throw e;
@@ -168,10 +168,10 @@ namespace BytesRoad.Net.Sockets
             {
                 stateObj.UpdateContext();
                 IPHostEntry host = Dns.EndGetHostEntry(ar);
-                if(null == host)
+                if (null == host)
                     throw new SocketException(SockErrors.WSAHOST_NOT_FOUND);
 
-                    // throw new HostNotFoundException("Unable to resolve host name.");
+                // throw new HostNotFoundException("Unable to resolve host name.");
 
                 EndPoint remoteEP = ConstructEndPoint(host, stateObj.Port);
                 _socket.BeginConnect(
@@ -179,7 +179,7 @@ namespace BytesRoad.Net.Sockets
                     new AsyncCallback(Connect_End),
                     stateObj);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 stateObj.Exception = e;
                 stateObj.SetCompleted();
@@ -194,7 +194,7 @@ namespace BytesRoad.Net.Sockets
                 stateObj.UpdateContext();
                 _socket.EndConnect(ar);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 stateObj.Exception = e;
             }
@@ -219,8 +219,8 @@ namespace BytesRoad.Net.Sockets
         }
 
         override internal IAsyncResult BeginBind(
-            SocketBase baseSocket, 
-            AsyncCallback callback, 
+            SocketBase baseSocket,
+            AsyncCallback callback,
             object state)
         {
             CheckDisposed();
@@ -231,7 +231,7 @@ namespace BytesRoad.Net.Sockets
                 ep.Port = 0;
                 _socket.Bind(ep);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 stateObj.Exception = e;
             }

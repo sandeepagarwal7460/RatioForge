@@ -90,7 +90,7 @@ namespace BytesRoad.Net.Sockets
         /// </summary>
         public const int WSAHOST_NOT_FOUND = 11001;
 
-        SockErrors(){}
+        SockErrors() { }
     }
 
     #region Commented exceptions
@@ -191,7 +191,7 @@ namespace BytesRoad.Net.Sockets
         SocketBase _baseSocket = null;
         OpState _opState = OpState.Finished;
         bool _disposed = false;
-        Timer  _timer = null;
+        Timer _timer = null;
 
         int _recvTimeout = Timeout.Infinite;
         int _sendTimeout = Timeout.Infinite;
@@ -247,23 +247,23 @@ namespace BytesRoad.Net.Sockets
         /// method will fail.
         /// </remarks>
         public SocketEx(
-            ProxyType proxyType, 
-            string proxyServer, 
+            ProxyType proxyType,
+            string proxyServer,
             int proxyPort,
             byte[] proxyUser,
             byte[] proxyPassword)
         {
             NSTrace.WriteLineVerbose("-> SocketEx(full)");
 
-            if(ProxyType.None == proxyType)
+            if (ProxyType.None == proxyType)
                 _baseSocket = new Socket_None();
-            else if(ProxyType.Socks4 == proxyType)
+            else if (ProxyType.Socks4 == proxyType)
                 _baseSocket = new Socket_Socks4(proxyServer, proxyPort, proxyUser);
-            else if(ProxyType.Socks4a == proxyType)
+            else if (ProxyType.Socks4a == proxyType)
                 _baseSocket = new Socket_Socks4a(proxyServer, proxyPort, proxyUser);
-            else if(ProxyType.Socks5 == proxyType)
+            else if (ProxyType.Socks5 == proxyType)
                 _baseSocket = new Socket_Socks5(proxyServer, proxyPort, proxyUser, proxyPassword);
-            else if(ProxyType.HttpConnect == proxyType)
+            else if (ProxyType.HttpConnect == proxyType)
                 _baseSocket = new Socket_HttpConnect(proxyServer, proxyPort, proxyUser, proxyPassword);
             else
             {
@@ -311,7 +311,7 @@ namespace BytesRoad.Net.Sockets
             NSTrace.WriteLineVerbose("<- SocketEx(handle)");
         }
 */
-#endregion
+        #endregion
 
         /// <summary>
         /// Used in Accept methods
@@ -320,7 +320,7 @@ namespace BytesRoad.Net.Sockets
         internal SocketEx(SocketBase baseSocket)
         {
             NSTrace.WriteLineVerbose("-> SocketEx(handle)");
-            if(null == baseSocket)
+            if (null == baseSocket)
             {
                 NSTrace.WriteLineError("EX: SocketEx(handle), handle == null. " + Environment.StackTrace);
                 throw new ArgumentNullException("baseSocket");
@@ -332,7 +332,7 @@ namespace BytesRoad.Net.Sockets
             NSTrace.WriteLineVerbose("<- SocketEx(handle)");
         }
 
-        
+
         #region Helpers
         void Init()
         {
@@ -341,7 +341,7 @@ namespace BytesRoad.Net.Sockets
 
         void CheckDisposed()
         {
-            if(_disposed)
+            if (_disposed)
                 throw new ObjectDisposedException(GetType().FullName, "Object disposed.");
         }
         #endregion
@@ -359,10 +359,10 @@ namespace BytesRoad.Net.Sockets
         /// </exception>
         public int Available
         {
-            get 
-            { 
+            get
+            {
                 CheckDisposed();
-                return _baseSocket.Available; 
+                return _baseSocket.Available;
             }
         }
 
@@ -382,10 +382,10 @@ namespace BytesRoad.Net.Sockets
         /// </remarks>
         public bool Connected
         {
-            get 
-            { 
+            get
+            {
                 CheckDisposed();
-                return _baseSocket.Connected; 
+                return _baseSocket.Connected;
             }
         }
 
@@ -416,16 +416,16 @@ namespace BytesRoad.Net.Sockets
         /// </remarks>
         public bool PreAuthenticate
         {
-            get 
-            { 
+            get
+            {
                 CheckDisposed();
-                return _baseSocket.PreAuthenticate; 
+                return _baseSocket.PreAuthenticate;
             }
 
-            set 
-            { 
+            set
+            {
                 CheckDisposed();
-                _baseSocket.PreAuthenticate = value;    
+                _baseSocket.PreAuthenticate = value;
             }
         }
 
@@ -442,10 +442,10 @@ namespace BytesRoad.Net.Sockets
         /// </exception>
         public Socket SystemSocket
         {
-            get 
-            { 
+            get
+            {
                 CheckDisposed();
-                return _baseSocket.SystemSocket; 
+                return _baseSocket.SystemSocket;
             }
         }
 
@@ -465,13 +465,13 @@ namespace BytesRoad.Net.Sockets
         /// in constructor of the <see cref="BytesRoad.Net.Sockets.SocketEx"/> class.
         /// </remarks>
         public ProxyType ProxyType
-        { 
-            get 
-            { 
+        {
+            get
+            {
                 CheckDisposed();
-                return _baseSocket.ProxyType; 
+                return _baseSocket.ProxyType;
             }
-         }
+        }
 
         /// <summary>
         /// Gets the local end point the instance of the <b>SocketEx</b> class is bind to.
@@ -486,14 +486,14 @@ namespace BytesRoad.Net.Sockets
         /// <exception cref="System.ObjectDisposedException">
         /// The <see cref="BytesRoad.Net.Sockets.SocketEx"/> object was disposed.
         /// </exception>
-        public EndPoint LocalEndPoint 
-        { 
-            get 
-            { 
+        public EndPoint LocalEndPoint
+        {
+            get
+            {
                 CheckDisposed();
-                return _baseSocket.LocalEndPoint; 
-            } 
-        } 
+                return _baseSocket.LocalEndPoint;
+            }
+        }
 
         /// <summary>
         /// Gets the remote end point the instance of the <b>SocketEx</b> class connect to.
@@ -504,13 +504,13 @@ namespace BytesRoad.Net.Sockets
         /// <exception cref="System.ObjectDisposedException">
         /// The <see cref="BytesRoad.Net.Sockets.SocketEx"/> object was disposed.
         /// </exception>
-        public EndPoint RemoteEndPoint 
-        { 
-            get 
-            { 
+        public EndPoint RemoteEndPoint
+        {
+            get
+            {
                 CheckDisposed();
-                return _baseSocket.RemoteEndPoint; 
-            } 
+                return _baseSocket.RemoteEndPoint;
+            }
         }
 
         /// <summary>
@@ -533,16 +533,16 @@ namespace BytesRoad.Net.Sockets
         /// </exception>
         public int SendTimeout
         {
-            get 
-            { 
+            get
+            {
                 CheckDisposed();
-                return _sendTimeout; 
+                return _sendTimeout;
             }
 
-            set 
-            { 
+            set
+            {
                 CheckDisposed();
-                _sendTimeout = GetTimeoutValue(value, "SendTimeout"); 
+                _sendTimeout = GetTimeoutValue(value, "SendTimeout");
             }
         }
 
@@ -566,16 +566,16 @@ namespace BytesRoad.Net.Sockets
         /// </exception>
         public int ReceiveTimeout
         {
-            get 
-            { 
+            get
+            {
                 CheckDisposed();
-                return _recvTimeout; 
+                return _recvTimeout;
             }
 
-            set 
-            { 
+            set
+            {
                 CheckDisposed();
-                _recvTimeout = GetTimeoutValue(value, "ReceiveTimeout"); 
+                _recvTimeout = GetTimeoutValue(value, "ReceiveTimeout");
             }
         }
 
@@ -599,16 +599,16 @@ namespace BytesRoad.Net.Sockets
         /// </exception>
         public int AcceptTimeout
         {
-            get 
-            { 
+            get
+            {
                 CheckDisposed();
-                return _acceptTimeout; 
+                return _acceptTimeout;
             }
 
-            set 
-            { 
+            set
+            {
                 CheckDisposed();
-                _acceptTimeout = GetTimeoutValue(value, "AcceptTimeout"); 
+                _acceptTimeout = GetTimeoutValue(value, "AcceptTimeout");
             }
         }
 
@@ -637,16 +637,16 @@ namespace BytesRoad.Net.Sockets
         /// </exception>
         public int ConnectTimeout
         {
-            get 
-            { 
-                CheckDisposed();
-                return _connectTimeout; 
-            }
-
-            set 
+            get
             {
                 CheckDisposed();
-                _connectTimeout = GetTimeoutValue(value, "ConnectTimeout"); 
+                return _connectTimeout;
+            }
+
+            set
+            {
+                CheckDisposed();
+                _connectTimeout = GetTimeoutValue(value, "ConnectTimeout");
             }
         }
 
@@ -659,13 +659,13 @@ namespace BytesRoad.Net.Sockets
         #region Timeouts functions
         int GetTimeoutValue(int val, string propName)
         {
-            if(val < 0 && (Timeout.Infinite != val))
+            if (val < 0 && (Timeout.Infinite != val))
                 throw new ArgumentOutOfRangeException(propName, val, "Timeout value should not be less then zero (exception is only Timeout.Infinite");
 
-            if(0 == val)
+            if (0 == val)
                 return Timeout.Infinite;
             else
-                return val; 
+                return val;
         }
 
         internal void SetTimeout(int timeout)
@@ -684,7 +684,7 @@ namespace BytesRoad.Net.Sockets
         internal void SetSendTimeout(int timeout)
         {
             SendTimeout = timeout;
-        }        
+        }
 
         void StartTimeoutTrack(int timeout)
         {
@@ -694,9 +694,9 @@ namespace BytesRoad.Net.Sockets
 
         void StopTimeoutTrack(Exception e)
         {
-            lock(this)
+            lock (this)
             {
-                if(_opState == OpState.Timedout)
+                if (_opState == OpState.Timedout)
                 {
                     throw new SocketException(SockErrors.WSAETIMEDOUT);
 
@@ -714,12 +714,12 @@ namespace BytesRoad.Net.Sockets
 
         void OnTimer(object state)
         {
-            lock(this)
+            lock (this)
             {
-                if(!_disposed)
+                if (!_disposed)
                 {
                     _timer.Change(Timeout.Infinite, Timeout.Infinite);
-                    if(_opState == OpState.Working)
+                    if (_opState == OpState.Working)
                     {
                         _opState = OpState.Timedout;
                         Dispose();
@@ -738,7 +738,7 @@ namespace BytesRoad.Net.Sockets
             {
                 ret = op.Execute();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 NSTrace.WriteLineError("SocketEx (ex): " + e.ToString());
                 StopTimeoutTrack(e);
@@ -767,7 +767,7 @@ namespace BytesRoad.Net.Sockets
             {
                 ret = op.BeginExecute(cb, state);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 NSTrace.WriteLineError("SocketEx.B (ex): " + e.ToString());
                 StopTimeoutTrack(e);
@@ -792,7 +792,7 @@ namespace BytesRoad.Net.Sockets
             {
                 ret = op.EndExecute(ar);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 NSTrace.WriteLineError("SocketEx.E (ex): " + e.ToString());
                 StopTimeoutTrack(e);
@@ -926,9 +926,9 @@ namespace BytesRoad.Net.Sockets
         public IAsyncResult BeginAccept(AsyncCallback callback, object state)
         {
             return (IAsyncResult)BeginTimeoutOp(
-                _acceptTimeout, 
-                new Accept_Op(_baseSocket), 
-                callback, 
+                _acceptTimeout,
+                new Accept_Op(_baseSocket),
+                callback,
                 state);
         }
 
@@ -974,8 +974,8 @@ namespace BytesRoad.Net.Sockets
             }
 
             internal ConnectOp(
-                SocketBase baseSocket, 
-                string hostName, 
+                SocketBase baseSocket,
+                string hostName,
                 int hostPort)
             {
                 _baseSocket = baseSocket;
@@ -988,12 +988,12 @@ namespace BytesRoad.Net.Sockets
                 _baseSocket = baseSocket;
                 _remoteEP = remoteEP;
             }
-        
+
             #region IOp Members
 
             internal override object Execute()
             {
-                if(null != _remoteEP)
+                if (null != _remoteEP)
                     _baseSocket.Connect(_remoteEP);
                 else
                     _baseSocket.Connect(_hostName, _hostPort);
@@ -1002,7 +1002,7 @@ namespace BytesRoad.Net.Sockets
 
             internal override object BeginExecute(AsyncCallback cb, object state)
             {
-                if(null != _remoteEP)
+                if (null != _remoteEP)
                     return _baseSocket.BeginConnect(_remoteEP, cb, state);
 
                 return _baseSocket.BeginConnect(_hostName, _hostPort, cb, state);
@@ -1017,7 +1017,7 @@ namespace BytesRoad.Net.Sockets
             #endregion
         }
         #endregion
-        
+
         /// <overloads>
         /// Establishes a connection to a remote host.
         /// </overloads>
@@ -1057,7 +1057,7 @@ namespace BytesRoad.Net.Sockets
         public void Connect(string hostName, int hostPort)
         {
             DoTimeoutOp(
-                _connectTimeout, 
+                _connectTimeout,
                 new ConnectOp(_baseSocket, hostName, hostPort));
         }
 
@@ -1091,7 +1091,7 @@ namespace BytesRoad.Net.Sockets
         public void Connect(EndPoint remoteEP)
         {
             DoTimeoutOp(
-                _connectTimeout, 
+                _connectTimeout,
                 new ConnectOp(_baseSocket, remoteEP));
         }
 
@@ -1144,14 +1144,14 @@ namespace BytesRoad.Net.Sockets
         ///    <i>port</i> is greater than <see cref="System.Net.IPEndPoint.MaxPort">MaxPort</see>.
         /// </exception>
         public IAsyncResult BeginConnect(
-            string hostName, 
-                                        int port, 
-                                        AsyncCallback callback, 
+            string hostName,
+                                        int port,
+                                        AsyncCallback callback,
                                         object state)
         {
             return (IAsyncResult)BeginTimeoutOp(
-                _connectTimeout, 
-                new ConnectOp(_baseSocket, hostName, port), 
+                _connectTimeout,
+                new ConnectOp(_baseSocket, hostName, port),
                 callback, state);
         }
 
@@ -1198,17 +1198,17 @@ namespace BytesRoad.Net.Sockets
         /// The <i>remoteEP</i> parameter is <b>null</b> (<b>Nothing</b> in Visual Basic).
         /// </exception>
         public IAsyncResult BeginConnect(
-            EndPoint remoteEP, 
-                                        AsyncCallback callback, 
+            EndPoint remoteEP,
+                                        AsyncCallback callback,
                                         object state)
         {
             return (IAsyncResult)BeginTimeoutOp(
-                _connectTimeout, 
-                new ConnectOp(_baseSocket, remoteEP), 
-                callback, 
+                _connectTimeout,
+                new ConnectOp(_baseSocket, remoteEP),
+                callback,
                 state);
         }
-        
+
         /// <summary>
         /// Completes the asynchronous connect to remote host.
         /// </summary>
@@ -1241,12 +1241,12 @@ namespace BytesRoad.Net.Sockets
         #endregion
 
         #region Bind functions
-        
+
         #region Op class
-        class Bind_Op: IOp
+        class Bind_Op : IOp
         {
             SocketBase _baseSocket;
-            SocketEx   _primConnSock; // primary connection (used for socks proxy)
+            SocketEx _primConnSock; // primary connection (used for socks proxy)
 
             // constructor used for async end
             internal Bind_Op(SocketBase baseSocket)
@@ -1462,8 +1462,8 @@ namespace BytesRoad.Net.Sockets
         /// The operation is unsupported.
         /// </exception>
         public IAsyncResult BeginBind(
-            SocketEx socket, 
-                                        AsyncCallback callback, 
+            SocketEx socket,
+                                        AsyncCallback callback,
                                         object state)
         {
             return (IAsyncResult)BeginTimeoutOp(
@@ -1538,7 +1538,7 @@ namespace BytesRoad.Net.Sockets
             #endregion
         }
         #endregion
-        
+
 
         /// <summary>
         /// Places a <see cref="BytesRoad.Net.Sockets.SocketEx"/> in a listening state.
@@ -1648,7 +1648,7 @@ namespace BytesRoad.Net.Sockets
         }
         #endregion
 
-    
+
         /// <overloads>
         /// Receives data from the remote host.
         /// </overloads>
@@ -1694,7 +1694,7 @@ namespace BytesRoad.Net.Sockets
         public int Receive(byte[] buffer)
         {
             return (int)DoTimeoutOp(
-                _recvTimeout, 
+                _recvTimeout,
                 new Receive_Op(_baseSocket, buffer, 0, buffer.Length));
         }
 
@@ -1743,7 +1743,7 @@ namespace BytesRoad.Net.Sockets
         public int Receive(byte[] buffer, int size)
         {
             return (int)DoTimeoutOp(
-                _recvTimeout, 
+                _recvTimeout,
                 new Receive_Op(_baseSocket, buffer, 0, size));
         }
 
@@ -1801,7 +1801,7 @@ namespace BytesRoad.Net.Sockets
         public int Receive(byte[] buffer, int offset, int size)
         {
             return (int)DoTimeoutOp(
-                _recvTimeout, 
+                _recvTimeout,
                 new Receive_Op(_baseSocket, buffer, offset, size));
         }
 
@@ -1874,7 +1874,7 @@ namespace BytesRoad.Net.Sockets
                                             object state)
         {
             return (IAsyncResult)BeginTimeoutOp(
-                _recvTimeout, 
+                _recvTimeout,
                 new Receive_Op(_baseSocket, buffer, offset, size),
                 callback, state);
         }
@@ -2011,7 +2011,7 @@ namespace BytesRoad.Net.Sockets
         public int Send(byte[] buffer)
         {
             return (int)DoTimeoutOp(
-                _sendTimeout, 
+                _sendTimeout,
                 new Send_Op(_baseSocket, buffer, 0, buffer.Length));
         }
 
@@ -2051,7 +2051,7 @@ namespace BytesRoad.Net.Sockets
         public int Send(byte[] buffer, int size)
         {
             return (int)DoTimeoutOp(
-                _sendTimeout, 
+                _sendTimeout,
                 new Send_Op(_baseSocket, buffer, 0, size));
         }
 
@@ -2100,7 +2100,7 @@ namespace BytesRoad.Net.Sockets
         public int Send(byte[] buffer, int offset, int size)
         {
             return (int)DoTimeoutOp(
-                _sendTimeout, 
+                _sendTimeout,
                 new Send_Op(_baseSocket, buffer, offset, size));
         }
 
@@ -2177,7 +2177,7 @@ namespace BytesRoad.Net.Sockets
                                         object state)
         {
             return (IAsyncResult)BeginTimeoutOp(
-                _sendTimeout, 
+                _sendTimeout,
                 new Send_Op(_baseSocket, buffer, offset, size),
                 callback, state);
         }
@@ -2320,13 +2320,13 @@ namespace BytesRoad.Net.Sockets
         /// </remarks>
         protected virtual void Dispose(bool disposing)
         {
-            lock(this)
+            lock (this)
             {
-                if(disposing)
+                if (disposing)
                 {
                 }
 
-                if(!_disposed)
+                if (!_disposed)
                 {
                     _baseSocket.Dispose();
                     _timer.Dispose();

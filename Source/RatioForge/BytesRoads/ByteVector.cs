@@ -59,11 +59,11 @@ namespace BytesRoad.Net.Sockets
         void Reallocate(int requiredSize)
         {
             int newSize = (_capacity > 0) ? _capacity : 1;
-            while(newSize < requiredSize)
+            while (newSize < requiredSize)
                 newSize <<= 1;
 
             byte[] data = new byte[newSize];
-            if(null != _data)
+            if (null != _data)
                 _data.CopyTo(data, 0);
             _data = data;
             _capacity = newSize;
@@ -71,7 +71,7 @@ namespace BytesRoad.Net.Sockets
 
         void EnsureSpace(int needMore)
         {
-            if(_size + needMore >= _capacity)
+            if (_size + needMore >= _capacity)
                 Reallocate(_size + needMore);
         }
 
@@ -106,10 +106,10 @@ namespace BytesRoad.Net.Sockets
 
         internal void CutTail(int count)
         {
-            if(count < 0)
+            if (count < 0)
                 throw new ArgumentException("Should be a positive value", "count");
 
-            if(count > _size)
+            if (count > _size)
                 _size = 0;
             else
                 _size -= count;
@@ -117,10 +117,10 @@ namespace BytesRoad.Net.Sockets
 
         internal void CutHead(int count)
         {
-            if(count < 0)
+            if (count < 0)
                 throw new ArgumentException("Should be a positive value", "count");
 
-            if(count > _size)
+            if (count > _size)
             {
                 _size = 0;
             }

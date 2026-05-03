@@ -53,7 +53,7 @@ namespace BytesRoad.Net.Sockets.Advanced
 
         internal void UpdateContext()
         {
-            if(Thread.CurrentThread.GetHashCode() != _startThreadId)
+            if (Thread.CurrentThread.GetHashCode() != _startThreadId)
                 _completedSync = false;
         }
 
@@ -64,11 +64,11 @@ namespace BytesRoad.Net.Sockets.Advanced
 
         internal void SetCompleted()
         {
-            lock(this)  // sync with 'AsyncWaitHandle' property
+            lock (this)  // sync with 'AsyncWaitHandle' property
             {
                 UpdateContext();
                 _isCompleted = true;
-                if(null != _wait)
+                if (null != _wait)
                     _wait.Set();
             }
 
@@ -76,10 +76,10 @@ namespace BytesRoad.Net.Sockets.Advanced
 
             try
             {
-                if(null != CallBack)
+                if (null != CallBack)
                     CallBack(this);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 NSTrace.WriteLineError("Exception in CB: " + e.ToString());
                 throw;
@@ -96,9 +96,9 @@ namespace BytesRoad.Net.Sockets.Advanced
 
         void CloseWaitHandle()
         {
-            lock(this)
+            lock (this)
             {
-                if(null != _wait)
+                if (null != _wait)
                 {
                     _wait.Close();
                     _wait = null;
@@ -109,9 +109,9 @@ namespace BytesRoad.Net.Sockets.Advanced
         void dumpActivityException()
         {
             Exception e = Exception;
-            if(null == e)
+            if (null == e)
                 return;
-            
+
             int tid = Thread.CurrentThread.GetHashCode();
             string msg = string.Format("{0} ---------- Start Exception Info -----------------------------\n", tid);
             msg += string.Format("{0} Activity: {1}\n", tid, ActivityName);
@@ -124,9 +124,9 @@ namespace BytesRoad.Net.Sockets.Advanced
 
 
         #region Attributes
-        virtual internal string ActivityName 
-        { 
-            get { return GetType().FullName; } 
+        virtual internal string ActivityName
+        {
+            get { return GetType().FullName; }
         }
 
         internal AsyncCallback CallBack
@@ -144,9 +144,9 @@ namespace BytesRoad.Net.Sockets.Advanced
         {
             get { return _isHandled; }
 
-            set 
-            { 
-                if(value)
+            set
+            {
+                if (value)
                 {
                     CloseWaitHandle();
                     _callerState = null;
@@ -157,7 +157,7 @@ namespace BytesRoad.Net.Sockets.Advanced
                     NSTrace.WriteLineError("IsHandled assigned 'false'");
                 }
 
-                _isHandled = value; 
+                _isHandled = value;
             }
         }
         #endregion
@@ -177,9 +177,9 @@ namespace BytesRoad.Net.Sockets.Advanced
         {
             get
             {
-                lock(this) // sync with 'SetCompleted' method
+                lock (this) // sync with 'SetCompleted' method
                 {
-                    if(null == _wait)
+                    if (null == _wait)
                         _wait = new ManualResetEvent(IsCompleted);
                 }
 

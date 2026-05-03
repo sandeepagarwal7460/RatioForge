@@ -35,9 +35,9 @@ namespace BytesRoad.Net.Sockets
     public abstract class SocketBase : AsyncBase, IDisposable
     {
         protected Socket _socket = null;
-        
+
         NetworkStream _stream = null;
-        static Random _rand = new Random(unchecked((int)DateTime.Now.Ticks)); 
+        static Random _rand = new Random(unchecked((int)DateTime.Now.Ticks));
 
         bool _disposed = false;
 
@@ -55,9 +55,9 @@ namespace BytesRoad.Net.Sockets
         }
 
         protected SocketBase(
-            string proxyServer, 
-            int proxyPort, 
-            byte[] proxyUser, 
+            string proxyServer,
+            int proxyPort,
+            byte[] proxyUser,
             byte[] proxyPassword)
         {
             _proxyServer = proxyServer;
@@ -69,7 +69,7 @@ namespace BytesRoad.Net.Sockets
 
         protected SocketBase(Socket systemSocket)
         {
-            if(null == systemSocket)
+            if (null == systemSocket)
                 throw new ArgumentNullException("systemSocket");
 
             _socket = systemSocket;
@@ -91,7 +91,7 @@ namespace BytesRoad.Net.Sockets
         {
             get
             {
-                if(null == _stream)
+                if (null == _stream)
                     _stream = new NetworkStream(_socket, false);
                 return _stream;
             }
@@ -110,7 +110,7 @@ namespace BytesRoad.Net.Sockets
 
         abstract internal ProxyType ProxyType { get; }
 
-        abstract internal EndPoint LocalEndPoint { get; } 
+        abstract internal EndPoint LocalEndPoint { get; }
 
         abstract internal EndPoint RemoteEndPoint { get; }
 
@@ -156,7 +156,7 @@ namespace BytesRoad.Net.Sockets
         #region Helpers
         static internal IPEndPoint ConstructEndPoint(IPHostEntry host, int port)
         {
-            if(0 >= host.AddressList.Length)
+            if (0 >= host.AddressList.Length)
             {
                 NSTrace.WriteLineError("Provided host structure do not contains addresses.");
                 throw new ArgumentException("Provided host structure do not contains addresses.", "host");
@@ -167,13 +167,13 @@ namespace BytesRoad.Net.Sockets
                 if (addr.AddressFamily == AddressFamily.InterNetwork)
                     return new IPEndPoint(addr, port);
             }
-            
+
             return new IPEndPoint(IPAddress.Parse("127.0.0.1"), port);
         }
 
         protected void CheckDisposed()
         {
-            if(_disposed)
+            if (_disposed)
                 throw new ObjectDisposedException(GetType().FullName);
         }
         #endregion
@@ -196,7 +196,7 @@ namespace BytesRoad.Net.Sockets
             NSTrace.WriteLineInfo(msg);
 
             IPHostEntry host = GetHostByName(hostName);
-            if(null == host)
+            if (null == host)
             {
                 NSTrace.WriteLineInfo("S: Hostname not found, throwing exception...");
                 throw new SocketException(SockErrors.WSAHOST_NOT_FOUND);
@@ -221,7 +221,7 @@ namespace BytesRoad.Net.Sockets
 
         abstract internal IAsyncResult BeginBind(SocketBase socket, AsyncCallback callback, object state);
 
-        abstract internal void EndBind(IAsyncResult ar); 
+        abstract internal void EndBind(IAsyncResult ar);
         #endregion
 
         #region Listen function (abstract)
@@ -302,7 +302,7 @@ namespace BytesRoad.Net.Sockets
             )
         {
             CheckDisposed();
-            return _socket.BeginSend(buffer, offset, size, 
+            return _socket.BeginSend(buffer, offset, size,
                 SocketFlags.None, callback, state);
         }
 
@@ -366,9 +366,9 @@ namespace BytesRoad.Net.Sockets
 
         protected virtual void Dispose(bool disposing)
         {
-            lock(this)
+            lock (this)
             {
-                if(disposing)
+                if (disposing)
                 {
                 }
 

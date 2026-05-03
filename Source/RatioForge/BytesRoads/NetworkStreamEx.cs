@@ -82,9 +82,9 @@ namespace BytesRoad.Net.Sockets
 
             internal Read_SO(
                 byte[] buffer,
-                int offset, 
-                int size, 
-                AsyncCallback cb, 
+                int offset,
+                int size,
+                AsyncCallback cb,
                 object state) : base(cb, state)
             {
                 _buffer = buffer;
@@ -123,9 +123,9 @@ namespace BytesRoad.Net.Sockets
 
             internal Write_SO(
                 byte[] buffer,
-                int offset, 
-                int size, 
-                AsyncCallback cb, 
+                int offset,
+                int size,
+                AsyncCallback cb,
                 object state) : base(cb, state)
             {
                 _buffer = buffer;
@@ -355,12 +355,12 @@ namespace BytesRoad.Net.Sockets
         /// There is no way to change them after instance of the 
         /// <b>NetworkStreamEx</b> initialized.
         /// </remarks>
-        public override bool CanRead 
-        { 
-            get 
-            { 
-                return (_access & FileAccess.Read) == FileAccess.Read; 
-            } 
+        public override bool CanRead
+        {
+            get
+            {
+                return (_access & FileAccess.Read) == FileAccess.Read;
+            }
         }
 
         /// <summary>
@@ -373,9 +373,9 @@ namespace BytesRoad.Net.Sockets
         /// <remarks>
         /// Always return <b>false</b>.
         /// </remarks>
-        public override bool CanSeek 
-        { 
-            get { return false; } 
+        public override bool CanSeek
+        {
+            get { return false; }
         }
 
         /// <summary>
@@ -394,12 +394,12 @@ namespace BytesRoad.Net.Sockets
         /// There is no way to change them after instance of the 
         /// <b>NetworkStreamEx</b> initialized.
         /// </remarks>
-        public override bool CanWrite 
-        { 
-            get 
-            { 
-                return (_access & FileAccess.Write) == FileAccess.Write;  
-            } 
+        public override bool CanWrite
+        {
+            get
+            {
+                return (_access & FileAccess.Write) == FileAccess.Write;
+            }
         }
 
         /// <summary>
@@ -427,21 +427,21 @@ namespace BytesRoad.Net.Sockets
         /// An error occurred when attempting to access
         /// the socket which is used to complete the requested operation.
         /// </exception>
-        public virtual bool DataAvailable 
+        public virtual bool DataAvailable
         {
-            get 
-            { 
+            get
+            {
                 CheckDisposed();
                 try
                 {
-                    return _socket.Available > 0; 
+                    return _socket.Available > 0;
                 }
                 catch
                 {
                     CheckDisposed();
                     throw;
                 }
-            } 
+            }
         }
 
         /// <summary>
@@ -475,7 +475,7 @@ namespace BytesRoad.Net.Sockets
         /// <exception cref="System.NotSupportedException">
         /// any access to the property.
         /// </exception>        
-        public override long Position 
+        public override long Position
         {
             get { ThrowPropUnsupported("Position"); return 0; }
             set { ThrowPropUnsupported("Position"); }
@@ -503,7 +503,7 @@ namespace BytesRoad.Net.Sockets
 
         void CheckDisposed()
         {
-            if(_disposed)
+            if (_disposed)
                 throw GetDisposedException();
         }
         #endregion
@@ -571,7 +571,7 @@ namespace BytesRoad.Net.Sockets
             {
                 int read = 0;
                 int num = 1;
-                while((num > 0) && (read < size))
+                while ((num > 0) && (read < size))
                 {
                     num = _socket.Receive(buffer, offset + read, size - read);
                     read += num;
@@ -668,18 +668,18 @@ namespace BytesRoad.Net.Sockets
             try
             {
                 Read_SO stateObj = new Read_SO(
-                    buffer, 
-                    offset, 
+                    buffer,
+                    offset,
                     size,
                     callback,
                     state);
 
                 return _socket.BeginReceive(
-                    buffer, 
-                    offset, 
-                    size, 
+                    buffer,
+                    offset,
+                    size,
                     new AsyncCallback(Read_End),
-                    stateObj); 
+                    stateObj);
             }
             catch
             {
@@ -699,23 +699,23 @@ namespace BytesRoad.Net.Sockets
                 int read = _socket.EndReceive(ar);
 
                 stateObj.Read += read;
-                if((read > 0) && (stateObj.Read < stateObj.Size))
+                if ((read > 0) && (stateObj.Read < stateObj.Size))
                 {
                     _socket.BeginReceive(
-                        stateObj.Buffer, 
-                        stateObj.Offset + stateObj.Read, 
-                        stateObj.Size - stateObj.Read, 
+                        stateObj.Buffer,
+                        stateObj.Offset + stateObj.Read,
+                        stateObj.Size - stateObj.Read,
                         new AsyncCallback(Read_End),
-                        stateObj); 
+                        stateObj);
                 }
                 else
                 {
                     stateObj.SetCompleted();
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                if(_disposed)
+                if (_disposed)
                     stateObj.Exception = GetDisposedException();
                 else
                     stateObj.Exception = e;
@@ -847,11 +847,11 @@ namespace BytesRoad.Net.Sockets
             try
             {
                 int sent = 0;
-                while(sent < size)
+                while (sent < size)
                 {
                     sent += _socket.Send(
-                        buffer, 
-                        offset + sent, 
+                        buffer,
+                        offset + sent,
                         size - sent);
                 }
             }
@@ -939,16 +939,16 @@ namespace BytesRoad.Net.Sockets
             _asyncCtx.SetProgress(true);
             try
             {
-                Write_SO stateObj =  new Write_SO(
+                Write_SO stateObj = new Write_SO(
                     buffer,
                     offset,
-                    size, 
-                    callback, 
+                    size,
+                    callback,
                     state);
 
                 return _socket.BeginSend(
-                    buffer, 
-                    offset, 
+                    buffer,
+                    offset,
                     size,
                     new AsyncCallback(Send_End),
                     stateObj);
@@ -971,23 +971,23 @@ namespace BytesRoad.Net.Sockets
                 int sent = _socket.EndSend(ar);
 
                 stateObj.Sent += sent;
-                if(stateObj.Sent < stateObj.Size)
+                if (stateObj.Sent < stateObj.Size)
                 {
                     _socket.BeginSend(
-                        stateObj.Buffer, 
-                        stateObj.Offset + stateObj.Sent, 
-                        stateObj.Size - stateObj.Sent, 
+                        stateObj.Buffer,
+                        stateObj.Offset + stateObj.Sent,
+                        stateObj.Size - stateObj.Sent,
                         new AsyncCallback(Send_End),
-                        stateObj); 
+                        stateObj);
                 }
                 else
                 {
                     stateObj.SetCompleted();
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                if(_disposed)
+                if (_disposed)
                     stateObj.Exception = GetDisposedException();
                 else
                     stateObj.Exception = e;
@@ -1207,16 +1207,16 @@ namespace BytesRoad.Net.Sockets
         /// </remarks>
         protected virtual void mDispose(bool disposing)
         {
-            lock(this)
+            lock (this)
             {
-                if(!_disposed)
+                if (!_disposed)
                 {
                     _disposed = true;
-                    if(disposing)
+                    if (disposing)
                     {
                     }
 
-                    if(_ownsSocket)
+                    if (_ownsSocket)
                         _socket.Dispose();
                 }
             }

@@ -729,8 +729,8 @@ namespace RatioForge
                         client.Headers = "Host: {host}\r\nUser-Agent: qBittorrent/5.1.2\r\nAccept-Encoding: gzip\r\n";
                         // PeerID format: -qB5120- followed by 12 random bytes. 
                         // Note: Previous versions used -qB5010- etc.
-                        client.PeerID = "-qB5120-" + GenerateIdString("random", 12, true, false); 
-                        
+                        client.PeerID = "-qB5120-" + GenerateIdString("random", 12, true, false);
+
                         // Standard query for modern clients
                         client.Query = "info_hash={infohash}&peer_id={peerid}&port={port}&uploaded={uploaded}&downloaded={downloaded}&left={left}&corrupt=0&key={key}{event}&numwant={numwant}&compact=1&no_peer_id=1&supportcrypto=1&redundant=0";
                         client.DefNumWant = 200;
@@ -749,8 +749,8 @@ namespace RatioForge
                         client.Key = GenerateIdString("hex", 8, false, true);
                         client.Headers = "Host: {host}\r\nUser-Agent: uTorrent/3600(46590)\r\nAccept-Encoding: gzip\r\n";
                         // PeerID format: -UT3600- followed by random bytes (often with special encoding but random works for spoofing)
-                        client.PeerID = "-UT3600-" + GenerateIdString("random", 12, true, false); 
-                        
+                        client.PeerID = "-UT3600-" + GenerateIdString("random", 12, true, false);
+
                         client.Query = "info_hash={infohash}&peer_id={peerid}&port={port}&uploaded={uploaded}&downloaded={downloaded}&left={left}&corrupt=0&key={key}{event}&numwant={numwant}&compact=1&no_peer_id=1";
                         client.DefNumWant = 200;
                         client.Parse = true;

@@ -49,7 +49,7 @@ namespace BytesRoad.Diag
         {
         }
 
-    
+
         #region thunks for compilator
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace BytesRoad.Diag
         /// and is not intended to be used directly from your code.
         /// </summary>
         /// <exclude/>
-        virtual public bool IsSynchronized 
+        virtual public bool IsSynchronized
         {
             get { return false; }
         }
@@ -67,7 +67,7 @@ namespace BytesRoad.Diag
         /// and is not intended to be used directly from your code.
         /// </summary>
         /// <exclude/>
-        virtual public bool IsFixedSize 
+        virtual public bool IsFixedSize
         {
             get { return false; }
         }
@@ -77,7 +77,7 @@ namespace BytesRoad.Diag
         /// and is not intended to be used directly from your code.
         /// </summary>
         /// <exclude/>
-        virtual public bool IsReadOnly 
+        virtual public bool IsReadOnly
         {
             get { return false; }
         }
@@ -87,7 +87,7 @@ namespace BytesRoad.Diag
         /// and is not intended to be used directly from your code.
         /// </summary>
         /// <exclude/>
-        object ICollection.SyncRoot 
+        object ICollection.SyncRoot
         {
             get { return this; }
         }
@@ -148,7 +148,7 @@ namespace BytesRoad.Diag
         /// and is not intended to be used directly from your code.
         /// </summary>
         /// <exclude/>
-        object IList.this[int index] 
+        object IList.this[int index]
         {
             get { return this[index]; }
             set { this[index] = (TraceListener)value; }
@@ -184,7 +184,7 @@ namespace BytesRoad.Diag
         /// <remarks>
         /// Note that the index is zero-based. 
         /// </remarks>
-        public TraceListener this[int index] 
+        public TraceListener this[int index]
         {
             get { return (TraceListener)_listeners[index]; }
             set { _listeners[index] = value; }
@@ -207,20 +207,20 @@ namespace BytesRoad.Diag
         /// Note that the <b>Item</b> property is case-sensitive 
         /// when searching for names.
         /// </remarks>
-        public TraceListener this[string name] 
+        public TraceListener this[string name]
         {
-            get 
-            { 
-                lock(_listeners)
+            get
+            {
+                lock (_listeners)
                 {
-                    foreach(TraceListener tl in _listeners)
+                    foreach (TraceListener tl in _listeners)
                     {
-                        if(name.Equals(tl.Name))
+                        if (name.Equals(tl.Name))
                             return tl;
                     }
                 }
 
-                return null; 
+                return null;
             }
         }
 
@@ -299,7 +299,7 @@ namespace BytesRoad.Diag
         {
             _listeners.Clear();
         }
- 
+
         /// <summary>
         /// Checks whether the list contains the specified listener.
         /// </summary>
@@ -346,7 +346,7 @@ namespace BytesRoad.Diag
         /// <param name="index"></param>
         /// <exclude/>
         public void CopyTo(Array array, int index)
-        {}
+        { }
 
         /// <summary>
         /// Gets an enumerator for this list.
@@ -417,7 +417,7 @@ namespace BytesRoad.Diag
         /// </exception>
         public void Remove(TraceListener listener)
         {
-            if(false == Contains(listener))
+            if (false == Contains(listener))
                 throw new ArgumentException("The listener does not exist in the list.", "listener");
             _listeners.Remove(listener);
         }
@@ -438,7 +438,7 @@ namespace BytesRoad.Diag
         public void Remove(string name)
         {
             TraceListener tl = this[name];
-            if(null == tl)
+            if (null == tl)
                 throw new ArgumentException("A listener with the given name does not exist in the list.", "name");
             _listeners.Remove(tl);
         }

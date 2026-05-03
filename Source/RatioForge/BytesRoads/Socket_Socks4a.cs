@@ -46,7 +46,7 @@ namespace BytesRoad.Net.Sockets
                 EndPoint remoteEndPoint,
                 string hostName,
                 int hostPort,
-                AsyncCallback cb, 
+                AsyncCallback cb,
                 object state) : base(cb, state)
             {
                 _remoteEndPoint = remoteEndPoint;
@@ -85,7 +85,7 @@ namespace BytesRoad.Net.Sockets
 
             internal Bind_SO(
                 Socket_Socks4a baseSocket,
-                AsyncCallback cb, 
+                AsyncCallback cb,
                 object state) : base(cb, state)
             {
                 _baseSocket = baseSocket;
@@ -114,7 +114,7 @@ namespace BytesRoad.Net.Sockets
             int _readBytes = 0;
 
             internal Accept_SO(
-                AsyncCallback cb, 
+                AsyncCallback cb,
                 object state) : base(cb, state)
             {
             }
@@ -144,29 +144,29 @@ namespace BytesRoad.Net.Sockets
         internal Socket_Socks4a(
             string proxyServer,
             int proxyPort,
-            byte[] proxyUser) 
+            byte[] proxyUser)
             : base(
-                proxyServer, 
-        proxyPort, 
+                proxyServer,
+        proxyPort,
         proxyUser,
         null)
-    {
-    }
+        {
+        }
 
         #region Attributes
-        override internal ProxyType ProxyType 
-        { 
-            get { return ProxyType.Socks4a; } 
+        override internal ProxyType ProxyType
+        {
+            get { return ProxyType.Socks4a; }
         }
 
-        override internal EndPoint LocalEndPoint 
-        { 
-            get { return _localEndPoint; } 
+        override internal EndPoint LocalEndPoint
+        {
+            get { return _localEndPoint; }
         }
 
-        override internal EndPoint RemoteEndPoint 
-        { 
-            get { return _remoteEndPoint; } 
+        override internal EndPoint RemoteEndPoint
+        {
+            get { return _remoteEndPoint; }
         }
         #endregion
 
@@ -180,7 +180,7 @@ namespace BytesRoad.Net.Sockets
             // Verify reply format. Pass 4 even it
             // against the RFC.
             //
-            if((_response[0] != 0) && (_response[0] != 4))
+            if ((_response[0] != 0) && (_response[0] != 4))
             {
                 msg = string.Format("Socks4a: Reply format is unknown ({0}).", _response[0]);
                 throw new ProtocolViolationException(msg);
@@ -189,23 +189,23 @@ namespace BytesRoad.Net.Sockets
             //------------------------------------
             // Verify the response
             //
-            if(_response[1] != 90)
+            if (_response[1] != 90)
             {
                 byte err = _response[1];
-                if(91 == err)
+                if (91 == err)
                     msg = string.Format("Socks4a: Request rejected or failed ({0}).", err);
-                else if(92 == err)
+                else if (92 == err)
                     msg = string.Format("Socks4a: Request rejected because SOCKS server cannot connect to identd on the client ({0}).", err);
-                else if(93 == err)
+                else if (93 == err)
                     msg = string.Format("Socks4a: Request rejected because the client program and identd report different user-ids ({0}).", err);
                 else
                     msg = string.Format("Socks4a: Socks server return unknown error code ({0}).", err);
             }
 
-            if(null != msg)
+            if (null != msg)
                 throw new SocketException(SockErrors.WSAECONNREFUSED);
 
-                // throw new ProxyErrorException(msg);
+            // throw new ProxyErrorException(msg);
         }
 
 
@@ -239,15 +239,15 @@ namespace BytesRoad.Net.Sockets
 
         byte[] PrepareCmd(string remoteHost, int remotePort, byte cmdVal)
         {
-            if(null == remoteHost)
+            if (null == remoteHost)
                 throw new ArgumentNullException("remoteHost", "The value cannot be null.");
 
             int userLength = 0;
-            if(_proxyUser != null)
+            if (_proxyUser != null)
                 userLength = _proxyUser.Length;
 
             int hostLength = 0;
-            if(remoteHost != null)
+            if (remoteHost != null)
                 hostLength = remoteHost.Length;
 
             byte[] cmd = new byte[8 + userLength + 1 + hostLength + 1];
@@ -255,7 +255,7 @@ namespace BytesRoad.Net.Sockets
             cmd[1] = cmdVal;
             cmd[2] = (byte)((remotePort & 0xFF00) >> 8);
             cmd[3] = (byte)(remotePort & 0xFF);
-            
+
             // set IP to 0.0.0.x
             cmd[4] = 0;
             cmd[5] = 0;
@@ -263,7 +263,7 @@ namespace BytesRoad.Net.Sockets
             cmd[7] = 1;
 
             // add user name
-            if(userLength > 0)
+            if (userLength > 0)
                 Array.Copy(_proxyUser, 0, cmd, 8, userLength);
             cmd[8 + userLength] = 0; // set NULL after user name
 
@@ -271,8 +271,8 @@ namespace BytesRoad.Net.Sockets
             Array.Copy(
                 Encoding.Default.GetBytes(remoteHost),
                 0,
-                cmd, 
-                8 + userLength + 1, 
+                cmd,
+                8 + userLength + 1,
                 hostLength);
             cmd[8 + userLength + 1 + hostLength] = 0; // set NULL after server name
             return cmd;
@@ -281,9 +281,9 @@ namespace BytesRoad.Net.Sockets
 
         byte[] PrepareBindCmd(Socket_Socks4a baseSocket)
         {
-            if(null != baseSocket.RemoteEndPoint)
+            if (null != baseSocket.RemoteEndPoint)
                 return PrepareCmd(baseSocket.RemoteEndPoint, 2);
-            else if(null != baseSocket._remoteHost)
+            else if (null != baseSocket._remoteHost)
                 return PrepareCmd(baseSocket._remoteHost, baseSocket._remotePort, 2);
             else
                 throw new InvalidOperationException("Unable to prepare bind command because of insufficient information.");
@@ -291,9 +291,9 @@ namespace BytesRoad.Net.Sockets
 
         byte[] PrepareConnectCmd(EndPoint remoteEP, string hostName, int hostPort)
         {
-            if(null != remoteEP)
+            if (null != remoteEP)
                 return PrepareCmd(remoteEP, 1);
-            else if(null != hostName)
+            else if (null != hostName)
                 return PrepareCmd(hostName, hostPort, 1);
             else
                 throw new InvalidOperationException("Unable to prepare connect command because of insufficient information.");
@@ -301,7 +301,7 @@ namespace BytesRoad.Net.Sockets
 
         IPEndPoint ConstructBindEndPoint(IPAddress proxyIP)
         {
-            int port = (_response[2] << 8) | _response[3] ;
+            int port = (_response[2] << 8) | _response[3];
             long ip = (_response[7] << 24) |
                 (_response[6] << 16) |
                 (_response[5] << 8) |
@@ -312,7 +312,7 @@ namespace BytesRoad.Net.Sockets
             // if ip addr all zeros we need to 
             // substitute address of the proxy
             // server
-            if(0 == ip)
+            if (0 == ip)
                 return new IPEndPoint(proxyIP, port);
 
             return new IPEndPoint(new IPAddress(ip), port);
@@ -329,11 +329,11 @@ namespace BytesRoad.Net.Sockets
             try
             {
                 int read = 0;
-                while(read < 8)
+                while (read < 8)
                 {
                     read += NStream.Read(
-                        _response, 
-                        read, 
+                        _response,
+                        read,
                         _response.Length - read);
                 }
 
@@ -348,7 +348,7 @@ namespace BytesRoad.Net.Sockets
         }
 
         override internal IAsyncResult BeginAccept(
-            AsyncCallback callback, 
+            AsyncCallback callback,
             object state)
         {
             CheckDisposed();
@@ -363,9 +363,9 @@ namespace BytesRoad.Net.Sockets
                 // Read the second response from proxy server. 
                 //
                 NStream.BeginRead(
-                    _response, 
-                    0, 
-                    8, 
+                    _response,
+                    0,
+                    8,
                     new AsyncCallback(Accept_Read_End),
                     stateObj);
             }
@@ -386,15 +386,15 @@ namespace BytesRoad.Net.Sockets
                 stateObj.UpdateContext();
                 stateObj.ReadBytes += NStream.EndRead(ar);
 
-                if(stateObj.ReadBytes < 8)
+                if (stateObj.ReadBytes < 8)
                 {
                     //------------------------------------
                     // Continue read the response from proxy server. 
                     //
                     NStream.BeginRead(
-                        _response, 
-                        stateObj.ReadBytes, 
-                        8 - stateObj.ReadBytes, 
+                        _response,
+                        stateObj.ReadBytes,
+                        8 - stateObj.ReadBytes,
                         new AsyncCallback(Accept_Read_End),
                         stateObj);
                 }
@@ -404,7 +404,7 @@ namespace BytesRoad.Net.Sockets
                     stateObj.SetCompleted();
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 stateObj.Exception = e;
                 stateObj.SetCompleted();
@@ -417,24 +417,24 @@ namespace BytesRoad.Net.Sockets
             HandleAsyncEnd(asyncResult, true);
             return this;
         }
-        
+
         #endregion
 
         #region Connect functions (overriden)
         override internal void Connect(string hostName, int hostPort)
         {
-            if(null == hostName)
+            if (null == hostName)
                 throw new ArgumentNullException("hostName", "The value cannot be null.");
 
-            if(hostPort < IPEndPoint.MinPort || hostPort > IPEndPoint.MaxPort)
-                throw new ArgumentOutOfRangeException("hostPort", "Value, specified for the port is out of the valid range."); 
+            if (hostPort < IPEndPoint.MinPort || hostPort > IPEndPoint.MaxPort)
+                throw new ArgumentOutOfRangeException("hostPort", "Value, specified for the port is out of the valid range.");
 
             Connect(null, hostName, hostPort);
         }
 
         override internal void Connect(EndPoint remoteEP)
         {
-            if(null == remoteEP)
+            if (null == remoteEP)
                 throw new ArgumentNullException("remoteEP", "The value cannot be null.");
 
             Connect(remoteEP, null, -1);
@@ -446,27 +446,27 @@ namespace BytesRoad.Net.Sockets
             SetProgress(true);
             try
             {
-                if(null == remoteEP)
+                if (null == remoteEP)
                 {
-                    if(_resolveHostEnabled)
+                    if (_resolveHostEnabled)
                     {
                         IPHostEntry host = GetHostByName(hostName);
-                        if(null != host)
+                        if (null != host)
                             remoteEP = ConstructEndPoint(host, port);
                     }
 
-                    if((null == hostName) && (null == remoteEP))
+                    if ((null == hostName) && (null == remoteEP))
                         throw new ArgumentNullException("hostName", "The value cannot be null.");
                 }
 
                 //------------------------------------
                 // Get end point for the proxy server
                 //
-                IPHostEntry  proxyEntry = GetHostByName(_proxyServer);
-                if(null == proxyEntry)
+                IPHostEntry proxyEntry = GetHostByName(_proxyServer);
+                if (null == proxyEntry)
                     throw new SocketException(SockErrors.WSAHOST_NOT_FOUND);
 
-                    // throw new HostNotFoundException("Unable to resolve proxy name.");
+                // throw new HostNotFoundException("Unable to resolve proxy name.");
 
                 IPEndPoint proxyEndPoint = ConstructEndPoint(proxyEntry, _proxyPort);
 
@@ -488,11 +488,11 @@ namespace BytesRoad.Net.Sockets
                 // Read the response from proxy the server. 
                 //
                 int read = 0;
-                while(read < 8)
+                while (read < 8)
                 {
                     read += NStream.Read(
-                        _response, 
-                        read, 
+                        _response,
+                        read,
                         _response.Length - read);
                 }
 
@@ -502,7 +502,7 @@ namespace BytesRoad.Net.Sockets
                 // I we unable to resolve remote host then
                 // store information - it will required
                 // later for BIND command.
-                if(null == remoteEP)
+                if (null == remoteEP)
                 {
                     _remotePort = port;
                     _remoteHost = hostName;
@@ -513,27 +513,27 @@ namespace BytesRoad.Net.Sockets
                 SetProgress(false);
             }
         }
-    
+
         override internal IAsyncResult BeginConnect(
             string hostName,
-            int hostPort, 
+            int hostPort,
             AsyncCallback callback,
             object state)
         {
             CheckDisposed();
 
-            if(null == hostName)
+            if (null == hostName)
                 throw new ArgumentNullException("hostName", "The value cannot be null.");
 
-            if(hostPort < IPEndPoint.MinPort || hostPort > IPEndPoint.MaxPort)
-                throw new ArgumentOutOfRangeException("hostPort", "Value, specified for the port is out of the valid range."); 
+            if (hostPort < IPEndPoint.MinPort || hostPort > IPEndPoint.MaxPort)
+                throw new ArgumentOutOfRangeException("hostPort", "Value, specified for the port is out of the valid range.");
 
             Connect_SO stateObj = null;
             SetProgress(true);
             try
             {
                 stateObj = new Connect_SO(null, hostName, hostPort, callback, state);
-                if(_resolveHostEnabled)
+                if (_resolveHostEnabled)
                 {
                     //--------------------------------------
                     // Trying to resolve host name locally
@@ -553,7 +553,7 @@ namespace BytesRoad.Net.Sockets
                         stateObj);
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 SetProgress(false);
                 throw e;
@@ -569,7 +569,7 @@ namespace BytesRoad.Net.Sockets
             {
                 stateObj.UpdateContext();
                 IPHostEntry host = EndGetHostByName(ar);
-                if(null != host)
+                if (null != host)
                     stateObj.RemoteEndPoint = ConstructEndPoint(host, stateObj.HostPort);
 
                 //------------------------------------
@@ -580,7 +580,7 @@ namespace BytesRoad.Net.Sockets
                     new AsyncCallback(Connect_GetHost_Proxy_End),
                     stateObj);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 stateObj.Exception = e;
                 stateObj.SetCompleted();
@@ -590,7 +590,7 @@ namespace BytesRoad.Net.Sockets
         override internal IAsyncResult BeginConnect(EndPoint remoteEP, AsyncCallback callback, object state)
         {
             CheckDisposed();
-            if(null == remoteEP)
+            if (null == remoteEP)
                 throw new ArgumentNullException("remoteEP", "The value cannot be null.");
 
             Connect_SO stateObj = null;
@@ -607,7 +607,7 @@ namespace BytesRoad.Net.Sockets
                     new AsyncCallback(Connect_GetHost_Proxy_End),
                     stateObj);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 SetProgress(false);
                 throw ex;
@@ -623,10 +623,10 @@ namespace BytesRoad.Net.Sockets
             {
                 stateObj.UpdateContext();
                 IPHostEntry host = EndGetHostByName(ar);
-                if(null == host)
+                if (null == host)
                     throw new SocketException(SockErrors.WSAHOST_NOT_FOUND);
 
-                    // throw new HostNotFoundException("Unable to resolve proxy name.");
+                // throw new HostNotFoundException("Unable to resolve proxy name.");
 
                 IPEndPoint proxyEndPoint = ConstructEndPoint(host, _proxyPort);
 
@@ -634,11 +634,11 @@ namespace BytesRoad.Net.Sockets
                 // Connect to proxy server
                 //
                 _socket.BeginConnect(
-                    proxyEndPoint, 
+                    proxyEndPoint,
                     new AsyncCallback(Connect_Connect_End),
                     stateObj);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 stateObj.Exception = e;
                 stateObj.SetCompleted();
@@ -665,13 +665,13 @@ namespace BytesRoad.Net.Sockets
                     stateObj.HostPort);
 
                 NStream.BeginWrite(
-                    cmd, 
-                    0, 
+                    cmd,
+                    0,
                     cmd.Length,
                     new AsyncCallback(Connect_Write_End),
                     stateObj);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 stateObj.Exception = e;
                 stateObj.SetCompleted();
@@ -690,13 +690,13 @@ namespace BytesRoad.Net.Sockets
                 // Read the response from proxy server. 
                 //
                 NStream.BeginRead(
-                    _response, 
-                    0, 
-                    8, 
+                    _response,
+                    0,
+                    8,
                     new AsyncCallback(Connect_Read_End),
                     stateObj);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 stateObj.Exception = e;
                 stateObj.SetCompleted();
@@ -712,15 +712,15 @@ namespace BytesRoad.Net.Sockets
                 int num = NStream.EndRead(ar);
                 stateObj.ReadBytes += num;
 
-                if(stateObj.ReadBytes < 8)
+                if (stateObj.ReadBytes < 8)
                 {
                     //------------------------------------
                     // Read the response from proxy server. 
                     //
                     NStream.BeginRead(
-                        _response, 
-                        stateObj.ReadBytes, 
-                        8 - stateObj.ReadBytes, 
+                        _response,
+                        stateObj.ReadBytes,
+                        8 - stateObj.ReadBytes,
                         new AsyncCallback(Connect_Read_End),
                         stateObj);
                 }
@@ -732,7 +732,7 @@ namespace BytesRoad.Net.Sockets
                     // I we unable to resolve remote host then
                     // store information - it will required
                     // later for BIND command.
-                    if(null == stateObj.RemoteEndPoint)
+                    if (null == stateObj.RemoteEndPoint)
                     {
                         _remotePort = stateObj.HostPort;
                         _remoteHost = stateObj.HostName;
@@ -741,7 +741,7 @@ namespace BytesRoad.Net.Sockets
                     stateObj.SetCompleted();
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 stateObj.Exception = e;
                 stateObj.SetCompleted();
@@ -766,10 +766,10 @@ namespace BytesRoad.Net.Sockets
                 // Get end point for the proxy server
                 //
                 IPHostEntry host = GetHostByName(_proxyServer);
-                if(host == null)
+                if (host == null)
                     throw new SocketException(SockErrors.WSAHOST_NOT_FOUND);
 
-                    // throw new HostNotFoundException("Unable to resolve proxy host name.");
+                // throw new HostNotFoundException("Unable to resolve proxy host name.");
 
                 IPEndPoint proxyEndPoint = ConstructEndPoint(host, _proxyPort);
 
@@ -788,17 +788,17 @@ namespace BytesRoad.Net.Sockets
                 // Read the response from the proxy server. 
                 //
                 int read = 0;
-                while(read < 8)
+                while (read < 8)
                 {
                     read += NStream.Read(
-                        _response, 
-                        read, 
+                        _response,
+                        read,
                         _response.Length - read);
                 }
 
                 VerifyResponse();
                 _localEndPoint = ConstructBindEndPoint(proxyEndPoint.Address);
-            
+
                 // remote end point doesn't provided for BIND command
                 _remoteEndPoint = null;
             }
@@ -810,13 +810,13 @@ namespace BytesRoad.Net.Sockets
 
 
         override internal IAsyncResult BeginBind(
-            SocketBase baseSocket, 
-            AsyncCallback callback, 
+            SocketBase baseSocket,
+            AsyncCallback callback,
             object state)
         {
             CheckDisposed();
 
-            if(null == baseSocket)
+            if (null == baseSocket)
                 throw new ArgumentNullException("baseSocket", "The value cannot be null");
 
             Bind_SO stateObj = null;
@@ -833,7 +833,7 @@ namespace BytesRoad.Net.Sockets
                     new AsyncCallback(Bind_GetHost_End),
                     stateObj);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 SetProgress(false);
                 throw ex;
@@ -849,10 +849,10 @@ namespace BytesRoad.Net.Sockets
             {
                 stateObj.UpdateContext();
                 IPHostEntry host = EndGetHostByName(ar);
-                if(host == null)
+                if (host == null)
                     throw new SocketException(SockErrors.WSAHOST_NOT_FOUND);
 
-                    // throw new HostNotFoundException("Unable to resolve proxy host name.");
+                // throw new HostNotFoundException("Unable to resolve proxy host name.");
 
                 IPEndPoint proxyEndPoint = ConstructEndPoint(host, _proxyPort);
                 stateObj.ProxyIP = proxyEndPoint.Address;
@@ -861,11 +861,11 @@ namespace BytesRoad.Net.Sockets
                 // Connect to proxy server
                 //
                 _socket.BeginConnect(
-                    proxyEndPoint, 
+                    proxyEndPoint,
                     new AsyncCallback(Bind_Connect_End),
                     stateObj);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 stateObj.Exception = e;
                 stateObj.SetCompleted();
@@ -886,13 +886,13 @@ namespace BytesRoad.Net.Sockets
                 byte[] cmd = PrepareBindCmd(stateObj.BaseSocket);
 
                 NStream.BeginWrite(
-                    cmd, 
-                    0, 
+                    cmd,
+                    0,
                     cmd.Length,
                     new AsyncCallback(Bind_Write_End),
                     stateObj);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 stateObj.Exception = e;
                 stateObj.SetCompleted();
@@ -911,13 +911,13 @@ namespace BytesRoad.Net.Sockets
                 // Read the response from proxy server. 
                 //
                 NStream.BeginRead(
-                    _response, 
-                    0, 
-                    8, 
+                    _response,
+                    0,
+                    8,
                     new AsyncCallback(Bind_Read_End),
                     stateObj);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 stateObj.Exception = e;
                 stateObj.SetCompleted();
@@ -933,15 +933,15 @@ namespace BytesRoad.Net.Sockets
                 int num = NStream.EndRead(ar);
                 stateObj.ReadBytes += num;
 
-                if(stateObj.ReadBytes < 8)
+                if (stateObj.ReadBytes < 8)
                 {
                     //------------------------------------
                     // Read the response from proxy server. 
                     //
                     NStream.BeginRead(
-                        _response, 
-                        stateObj.ReadBytes, 
-                        8 - stateObj.ReadBytes, 
+                        _response,
+                        stateObj.ReadBytes,
+                        8 - stateObj.ReadBytes,
                         new AsyncCallback(Bind_Read_End),
                         stateObj);
                 }
@@ -953,7 +953,7 @@ namespace BytesRoad.Net.Sockets
                     stateObj.SetCompleted();
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 stateObj.Exception = e;
                 stateObj.SetCompleted();
@@ -972,7 +972,7 @@ namespace BytesRoad.Net.Sockets
         override internal void Listen(int backlog)
         {
             CheckDisposed();
-            if(null == _localEndPoint)
+            if (null == _localEndPoint)
                 throw new ArgumentException("Attempt to listen on socket which has not been bound with Bind.");
         }
         #endregion

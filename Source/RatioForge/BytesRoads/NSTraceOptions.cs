@@ -79,7 +79,7 @@ namespace BytesRoad.Diag
         static NSTraceListeners _listeners = new NSTraceListeners();
         static TraceLevel _level = TraceLevel.Off;
         static bool _autoFlush = false;
-        
+
         private NSTraceOptions()
         {
         }
@@ -102,7 +102,7 @@ namespace BytesRoad.Diag
         {
             get
             {
-                return (_level == TraceLevel.Error) || 
+                return (_level == TraceLevel.Error) ||
                     (_level == TraceLevel.Warning) ||
                     (_level == TraceLevel.Info) ||
                     (_level == TraceLevel.Verbose);
@@ -145,7 +145,7 @@ namespace BytesRoad.Diag
         {
             get
             {
-                return     (_level == TraceLevel.Info) ||
+                return (_level == TraceLevel.Info) ||
                     (_level == TraceLevel.Verbose);
             }
         }
@@ -164,7 +164,7 @@ namespace BytesRoad.Diag
         {
             get
             {
-                return     (_level == TraceLevel.Verbose);
+                return (_level == TraceLevel.Verbose);
             }
         }
 

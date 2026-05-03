@@ -84,7 +84,7 @@ namespace BytesRoad.Diag
 
             set
             {
-                foreach(TraceListener tl in Listeners)
+                foreach (TraceListener tl in Listeners)
                     tl.IndentLevel = value;
             }
         }
@@ -98,7 +98,7 @@ namespace BytesRoad.Diag
 
             set
             {
-                foreach(TraceListener tl in Listeners)
+                foreach (TraceListener tl in Listeners)
                     tl.IndentSize = value;
             }
         }
@@ -113,11 +113,11 @@ namespace BytesRoad.Diag
 
         internal static void FlushIfNeeded()
         {
-            if(AutoFlush)
+            if (AutoFlush)
                 Flush();
         }
 
-        
+
         #region System functions
         /// <summary>
         /// Calls Flush on each listener in the 
@@ -127,10 +127,10 @@ namespace BytesRoad.Diag
         [Conditional("TRACE")]
         public static void Close()
         {
-            if(NSTraceOptions.UseSystemTrace)
+            if (NSTraceOptions.UseSystemTrace)
                 Trace.Flush();
 
-            foreach(TraceListener tl in Listeners)
+            foreach (TraceListener tl in Listeners)
             {
                 tl.Flush();
                 tl.Close();
@@ -147,10 +147,10 @@ namespace BytesRoad.Diag
         [Conditional("TRACE")]
         public static void Flush()
         {
-            if(NSTraceOptions.UseSystemTrace)
+            if (NSTraceOptions.UseSystemTrace)
                 Trace.Flush();
 
-            foreach(TraceListener tl in Listeners)
+            foreach (TraceListener tl in Listeners)
                 tl.Flush();
         }
         #endregion
@@ -163,10 +163,10 @@ namespace BytesRoad.Diag
         [Conditional("TRACE")]
         public static void Indent()
         {
-            if(NSTraceOptions.UseSystemTrace)
+            if (NSTraceOptions.UseSystemTrace)
                 Trace.Indent();
 
-            foreach(TraceListener tl in Listeners)
+            foreach (TraceListener tl in Listeners)
                 tl.IndentLevel = tl.IndentLevel + 1;
         }
 
@@ -176,10 +176,10 @@ namespace BytesRoad.Diag
         [Conditional("TRACE")]
         public static void Unindent()
         {
-            if(NSTraceOptions.UseSystemTrace)
+            if (NSTraceOptions.UseSystemTrace)
                 Trace.Unindent();
 
-            foreach(TraceListener tl in Listeners)
+            foreach (TraceListener tl in Listeners)
                 tl.IndentLevel = tl.IndentLevel - 1;
         }
         #endregion
@@ -197,10 +197,10 @@ namespace BytesRoad.Diag
         [Conditional("TRACE")]
         public static void Write(object value)
         {
-            if(NSTraceOptions.UseSystemTrace)
+            if (NSTraceOptions.UseSystemTrace)
                 Trace.Write(value);
 
-            foreach(TraceListener tl in Listeners)
+            foreach (TraceListener tl in Listeners)
                 tl.Write(value);
 
             FlushIfNeeded();
@@ -211,12 +211,12 @@ namespace BytesRoad.Diag
         [Conditional("TRACE")]
         public static void Write(string message)
         {
-            if(NSTraceOptions.UseSystemTrace)
+            if (NSTraceOptions.UseSystemTrace)
                 Trace.Write(message);
 
-            foreach(TraceListener tl in Listeners)
+            foreach (TraceListener tl in Listeners)
                 tl.Write(message);
-            
+
             FlushIfNeeded();
         }
 
@@ -225,10 +225,10 @@ namespace BytesRoad.Diag
         [Conditional("TRACE")]
         public static void Write(object value, string category)
         {
-            if(NSTraceOptions.UseSystemTrace)
+            if (NSTraceOptions.UseSystemTrace)
                 Trace.Write(value, category);
 
-            foreach(TraceListener tl in Listeners)
+            foreach (TraceListener tl in Listeners)
                 tl.Write(value, category);
 
             FlushIfNeeded();
@@ -239,12 +239,12 @@ namespace BytesRoad.Diag
         [Conditional("TRACE")]
         public static void Write(string message, string category)
         {
-            if(NSTraceOptions.UseSystemTrace)
+            if (NSTraceOptions.UseSystemTrace)
                 Trace.Write(message, category);
 
-            foreach(TraceListener tl in Listeners)
+            foreach (TraceListener tl in Listeners)
                 tl.Write(message, category);
-            
+
             FlushIfNeeded();
         }
 
@@ -262,12 +262,12 @@ namespace BytesRoad.Diag
         [Conditional("TRACE")]
         public static void WriteLine(object value)
         {
-            if(NSTraceOptions.UseSystemTrace)
+            if (NSTraceOptions.UseSystemTrace)
                 Trace.WriteLine(value);
 
-            foreach(TraceListener tl in Listeners)
+            foreach (TraceListener tl in Listeners)
                 tl.WriteLine(value);
-            
+
             FlushIfNeeded();
         }
 
@@ -276,12 +276,12 @@ namespace BytesRoad.Diag
         [Conditional("TRACE")]
         public static void WriteLine(string message)
         {
-            if(NSTraceOptions.UseSystemTrace)
+            if (NSTraceOptions.UseSystemTrace)
                 Trace.WriteLine(message);
 
-            foreach(TraceListener tl in Listeners)
+            foreach (TraceListener tl in Listeners)
                 tl.WriteLine(message);
-            
+
             FlushIfNeeded();
         }
 
@@ -290,12 +290,12 @@ namespace BytesRoad.Diag
         [Conditional("TRACE")]
         public static void WriteLine(object value, string category)
         {
-            if(NSTraceOptions.UseSystemTrace)
+            if (NSTraceOptions.UseSystemTrace)
                 Trace.WriteLine(value, category);
 
-            foreach(TraceListener tl in Listeners)
+            foreach (TraceListener tl in Listeners)
                 tl.WriteLine(value, category);
-            
+
             FlushIfNeeded();
         }
 
@@ -304,12 +304,12 @@ namespace BytesRoad.Diag
         [Conditional("TRACE")]
         public static void WriteLine(string message, string category)
         {
-            if(NSTraceOptions.UseSystemTrace)
+            if (NSTraceOptions.UseSystemTrace)
                 Trace.WriteLine(message, category);
 
-            foreach(TraceListener tl in Listeners)
+            foreach (TraceListener tl in Listeners)
                 tl.WriteLine(message, category);
-            
+
             FlushIfNeeded();
         }
         #endregion
@@ -326,7 +326,7 @@ namespace BytesRoad.Diag
         [Conditional("TRACE")]
         public static void WriteIf(bool condition, object value)
         {
-            if(condition)
+            if (condition)
                 Write(value);
         }
 
@@ -335,7 +335,7 @@ namespace BytesRoad.Diag
         [Conditional("TRACE")]
         public static void WriteIf(bool condition, string message)
         {
-            if(condition)
+            if (condition)
                 Write(condition, message);
         }
 
@@ -344,7 +344,7 @@ namespace BytesRoad.Diag
         [Conditional("TRACE")]
         public static void WriteIf(bool condition, object value, string category)
         {
-            if(condition)
+            if (condition)
                 Write(value, category);
         }
 
@@ -353,7 +353,7 @@ namespace BytesRoad.Diag
         [Conditional("TRACE")]
         public static void WriteIf(bool condition, string message, string category)
         {
-            if(condition)
+            if (condition)
                 Write(message, category);
         }
         #endregion
@@ -370,7 +370,7 @@ namespace BytesRoad.Diag
         [Conditional("TRACE")]
         public static void WriteLineIf(bool condition, object value)
         {
-            if(condition)
+            if (condition)
                 WriteLine(value);
         }
 
@@ -379,7 +379,7 @@ namespace BytesRoad.Diag
         [Conditional("TRACE")]
         public static void WriteLineIf(bool condition, string message)
         {
-            if(condition)
+            if (condition)
                 WriteLine(message);
         }
 
@@ -388,7 +388,7 @@ namespace BytesRoad.Diag
         [Conditional("TRACE")]
         public static void WriteLineIf(bool condition, object value, string category)
         {
-            if(condition)
+            if (condition)
                 WriteLine(value, category);
         }
 
@@ -397,7 +397,7 @@ namespace BytesRoad.Diag
         [Conditional("TRACE")]
         public static void WriteLineIf(bool condition, string message, string category)
         {
-            if(condition)
+            if (condition)
                 WriteLine(message, category);
         }
         #endregion
@@ -416,7 +416,7 @@ namespace BytesRoad.Diag
         [Conditional("TRACE")]
         public static void WriteLineError(object value)
         {
-            if(NSTraceOptions.TraceError)
+            if (NSTraceOptions.TraceError)
                 WriteLine(value);
         }
 
@@ -425,7 +425,7 @@ namespace BytesRoad.Diag
         [Conditional("TRACE")]
         public static void WriteLineError(string message)
         {
-            if(NSTraceOptions.TraceError)
+            if (NSTraceOptions.TraceError)
                 WriteLine(message);
         }
 
@@ -434,7 +434,7 @@ namespace BytesRoad.Diag
         [Conditional("TRACE")]
         public static void WriteLineError(object value, string category)
         {
-            if(NSTraceOptions.TraceError)
+            if (NSTraceOptions.TraceError)
                 WriteLine(value, category);
         }
 
@@ -443,7 +443,7 @@ namespace BytesRoad.Diag
         [Conditional("TRACE")]
         public static void WriteLineError(string message, string category)
         {
-            if(NSTraceOptions.TraceError)
+            if (NSTraceOptions.TraceError)
                 WriteLine(message, category);
         }
         #endregion
@@ -461,7 +461,7 @@ namespace BytesRoad.Diag
         [Conditional("TRACE")]
         public static void WriteLineWarning(object value)
         {
-            if(NSTraceOptions.TraceWarning)
+            if (NSTraceOptions.TraceWarning)
                 WriteLine(value);
         }
 
@@ -470,7 +470,7 @@ namespace BytesRoad.Diag
         [Conditional("TRACE")]
         public static void WriteLineWarning(string message)
         {
-            if(NSTraceOptions.TraceWarning)
+            if (NSTraceOptions.TraceWarning)
                 WriteLine(message);
         }
 
@@ -479,7 +479,7 @@ namespace BytesRoad.Diag
         [Conditional("TRACE")]
         public static void WriteLineWarning(object value, string category)
         {
-            if(NSTraceOptions.TraceWarning)
+            if (NSTraceOptions.TraceWarning)
                 WriteLine(value, category);
         }
 
@@ -488,7 +488,7 @@ namespace BytesRoad.Diag
         [Conditional("TRACE")]
         public static void WriteLineWarning(string message, string category)
         {
-            if(NSTraceOptions.TraceWarning)
+            if (NSTraceOptions.TraceWarning)
                 WriteLine(message, category);
         }
         #endregion
@@ -506,7 +506,7 @@ namespace BytesRoad.Diag
         [Conditional("TRACE")]
         public static void WriteLineInfo(object value)
         {
-            if(NSTraceOptions.TraceInfo)
+            if (NSTraceOptions.TraceInfo)
                 WriteLine(value);
         }
 
@@ -515,7 +515,7 @@ namespace BytesRoad.Diag
         [Conditional("TRACE")]
         public static void WriteLineInfo(string message)
         {
-            if(NSTraceOptions.TraceInfo)
+            if (NSTraceOptions.TraceInfo)
                 WriteLine(message);
         }
 
@@ -524,7 +524,7 @@ namespace BytesRoad.Diag
         [Conditional("TRACE")]
         public static void WriteLineInfo(object value, string category)
         {
-            if(NSTraceOptions.TraceInfo)
+            if (NSTraceOptions.TraceInfo)
                 WriteLine(value, category);
         }
 
@@ -533,7 +533,7 @@ namespace BytesRoad.Diag
         [Conditional("TRACE")]
         public static void WriteLineInfo(string message, string category)
         {
-            if(NSTraceOptions.TraceInfo)
+            if (NSTraceOptions.TraceInfo)
                 WriteLine(message, category);
         }
         #endregion
@@ -551,7 +551,7 @@ namespace BytesRoad.Diag
         [Conditional("TRACE")]
         public static void WriteLineVerbose(object value)
         {
-            if(NSTraceOptions.TraceVerbose)
+            if (NSTraceOptions.TraceVerbose)
                 WriteLine(value);
         }
 
@@ -560,16 +560,16 @@ namespace BytesRoad.Diag
         [Conditional("TRACE")]
         public static void WriteLineVerbose(string message)
         {
-            if(NSTraceOptions.TraceVerbose)
+            if (NSTraceOptions.TraceVerbose)
                 WriteLine(message);
         }
 
         /// <summary>
         /// </summary>
         [Conditional("TRACE")]
-        public static void WriteLineVerbose( object value, string category)
+        public static void WriteLineVerbose(object value, string category)
         {
-            if(NSTraceOptions.TraceVerbose)
+            if (NSTraceOptions.TraceVerbose)
                 WriteLine(value, category);
         }
 
@@ -579,7 +579,7 @@ namespace BytesRoad.Diag
         [Conditional("TRACE")]
         public static void WriteLineVerbose(string message, string category)
         {
-            if(NSTraceOptions.TraceVerbose)
+            if (NSTraceOptions.TraceVerbose)
                 WriteLine(message, category);
         }
         #endregion

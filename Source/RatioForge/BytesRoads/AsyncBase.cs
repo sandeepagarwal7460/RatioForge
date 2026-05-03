@@ -36,15 +36,15 @@ namespace BytesRoad.Net.Sockets.Advanced
         {
         }
         */
-        
+
         virtual internal void SetProgress(bool progress)
         {
             // prevent from nested calls
-            lock(this)
+            lock (this)
             {
-                if(progress)
+                if (progress)
                 {
-                    if(inProgress)
+                    if (inProgress)
                         throw new InvalidOperationException("Attempt to start operation which is already in the progress");
                     inProgress = true;
                 }
@@ -57,65 +57,65 @@ namespace BytesRoad.Net.Sockets.Advanced
 
         virtual internal void CheckProgress()
         {
-            lock(this)
+            lock (this)
             {
-                if(inProgress)
+                if (inProgress)
                     throw new InvalidOperationException("Attempt to start operation which is already in the progress");
             }
         }
 
-/*        virtual internal void HandleAsyncEnd(IAsyncResult ar, Type arType, bool turnProgressOff)
-        {
-            HandleAsyncEnd(ar, arType, null, turnProgressOff);
-        }*/
+        /*        virtual internal void HandleAsyncEnd(IAsyncResult ar, Type arType, bool turnProgressOff)
+                {
+                    HandleAsyncEnd(ar, arType, null, turnProgressOff);
+                }*/
 
         static internal void VerifyAsyncResult(
-            IAsyncResult ar, 
+            IAsyncResult ar,
             Type arType)
         {
             VerifyAsyncResult(ar, arType, null);
         }
 
         static internal void VerifyAsyncResult(
-            IAsyncResult ar, 
+            IAsyncResult ar,
             Type arType,
             string metName)
         {
-            if(null == ar)
+            if (null == ar)
                 throw new ArgumentNullException("asyncResult", "The value cannot be null.");
 
-            if(null == metName)
+            if (null == metName)
                 metName = "End*";
 
-            if(false == ar.GetType().Equals(arType))
+            if (false == ar.GetType().Equals(arType))
                 throw new ArgumentException(
-                    "asyncResult was not returned by a call to the " + 
+                    "asyncResult was not returned by a call to the " +
                     metName + " method.", "asyncResult");
 
             AsyncResultBase stateObj = (AsyncResultBase)ar;
-            if(stateObj.IsHandled)
+            if (stateObj.IsHandled)
                 throw new InvalidOperationException(metName + " was previously called for the asynchronous operation.");
         }
 
         virtual internal void HandleAsyncEnd(IAsyncResult ar, bool turnProgressOff)
         {
-            if((false == ar.GetType().IsSubclassOf(typeof(AsyncResultBase))) &&
+            if ((false == ar.GetType().IsSubclassOf(typeof(AsyncResultBase))) &&
                 (false == ar.GetType().Equals(typeof(AsyncResultBase))))
                 throw new ArgumentException("asyncResult was not returned by a call to End* method.", "asyncResult");
 
             AsyncResultBase stateObj = (AsyncResultBase)ar;
-            if(stateObj.IsHandled)
+            if (stateObj.IsHandled)
                 throw new InvalidOperationException("End* method was previously called for the asynchronous operation.");
 
-            if(false == stateObj.IsCompleted)
+            if (false == stateObj.IsCompleted)
                 stateObj.AsyncWaitHandle.WaitOne();
 
             stateObj.IsHandled = true;
 
-            if(turnProgressOff)
-                SetProgress(false);    
+            if (turnProgressOff)
+                SetProgress(false);
 
-            if(null != stateObj.Exception)
+            if (null != stateObj.Exception)
             {
                 // dumpActivityException(stateObj);
                 throw stateObj.Exception;
