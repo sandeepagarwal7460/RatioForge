@@ -374,7 +374,7 @@ namespace RatioForge
 
         internal void cmbClient_SelectedIndexChanged(object sender, EventArgs e)
         {
-            bool shouldRefreshCustomValues = getnew && chkNewValues.Checked;
+            bool shouldRefreshCustomValues = (getnew && chkNewValues.Checked) || ShouldRefreshCustomValuesFromSelectedClient();
             suppressCustomValueRefresh = true;
             cmbVersion.Items.Clear();
             try
@@ -576,10 +576,30 @@ namespace RatioForge
                 return;
             }
 
-            if (chkNewValues.Checked)
+            if (chkNewValues.Checked || ShouldRefreshCustomValuesFromSelectedClient())
             {
                 RefreshCustomValuesFromSelectedClient();
             }
+        }
+
+        private bool ShouldRefreshCustomValuesFromSelectedClient()
+        {
+            if (currentClient == null)
+            {
+                return true;
+            }
+
+            if (string.IsNullOrWhiteSpace(customPeerID.Text) || string.IsNullOrWhiteSpace(customKey.Text))
+            {
+                return true;
+            }
+
+            if (customPeerID.Text == currentClient.PeerID || customKey.Text == currentClient.Key)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         private void RefreshCustomValuesFromSelectedClient()
