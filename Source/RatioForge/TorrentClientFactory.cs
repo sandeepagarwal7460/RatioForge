@@ -290,7 +290,7 @@ namespace RatioForge
                         client.HashUpperCase = false;
                         client.Key = GenerateIdString("hex", 8, false, true);
                         client.Headers = "Host: {host}\r\nUser-Agent: uTorrent/3200\r\nAccept-Encoding: gzip\r\n";
-                        client.PeerID = "-UT3200-z8\0." + GenerateIdString("random", 10, true, false);
+                        client.PeerID = "-UT3200-" + GenerateIdString("random", 12, true, false);
                         client.Query = "info_hash={infohash}&peer_id={peerid}&port={port}&uploaded={uploaded}&downloaded={downloaded}&left={left}&corrupt=0&key={key}{event}&numwant={numwant}&compact=1&no_peer_id=1";
                         client.DefNumWant = 200;
                         client.Parse = true;

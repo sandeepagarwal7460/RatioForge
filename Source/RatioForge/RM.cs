@@ -25,6 +25,7 @@ namespace RatioForge
         // Variables
         #region Variables
         private bool getnew = true;
+        private bool suppressCustomValueRefresh;
         private readonly Random rand = new Random(((int)DateTime.Now.Ticks));
         private int remWork = 0;
         internal string DefaultDirectory = "";
@@ -373,21 +374,25 @@ namespace RatioForge
 
         internal void cmbClient_SelectedIndexChanged(object sender, EventArgs e)
         {
+            bool shouldRefreshCustomValues = getnew && chkNewValues.Checked;
+            suppressCustomValueRefresh = true;
             cmbVersion.Items.Clear();
-            switch (cmbClient.SelectedItem.ToString())
+            try
             {
-                case "BitComet":
-                    {
-                        cmbVersion.Items.Add("1.20");
-                        cmbVersion.Items.Add("1.03");
-                        cmbVersion.Items.Add("0.98");
-                        cmbVersion.Items.Add("0.96");
-                        cmbVersion.Items.Add("0.93");
-                        cmbVersion.Items.Add("0.92");
-                        cmbVersion.SelectedItem = "1.20";
-                        if (customPeersNum.Text == "0" || customPeersNum.Text == "") customPeersNum.Text = "200";
-                        break;
-                    }
+                switch (cmbClient.SelectedItem.ToString())
+                {
+                    case "BitComet":
+                        {
+                            cmbVersion.Items.Add("1.20");
+                            cmbVersion.Items.Add("1.03");
+                            cmbVersion.Items.Add("0.98");
+                            cmbVersion.Items.Add("0.96");
+                            cmbVersion.Items.Add("0.93");
+                            cmbVersion.Items.Add("0.92");
+                            cmbVersion.SelectedItem = "1.20";
+                            if (customPeersNum.Text == "0" || customPeersNum.Text == "") customPeersNum.Text = "200";
+                            break;
+                        }
 
                 case "Vuze":
                     {
@@ -539,19 +544,32 @@ namespace RatioForge
                         break;
                     }
 
-                default:
-                    {
-                        cmbClient.SelectedItem = DefaultClient;
-                        if (customPeersNum.Text == "0" || customPeersNum.Text == "") customPeersNum.Text = "200";
-                        break;
-                    }
+                    default:
+                        {
+                            cmbClient.SelectedItem = DefaultClient;
+                            if (customPeersNum.Text == "0" || customPeersNum.Text == "") customPeersNum.Text = "200";
+                            break;
+                        }
+                }
+            }
+            finally
+            {
+                suppressCustomValueRefresh = false;
             }
 
-            // getCurrentClient(GetClientName());
+            if (shouldRefreshCustomValues)
+            {
+                RefreshCustomValuesFromSelectedClient();
+            }
         }
 
         private void cmbVersion_SelectedValueChanged(object sender, EventArgs e)
         {
+            if (suppressCustomValueRefresh)
+            {
+                return;
+            }
+
             if (getnew == false)
             {
                 getnew = true;
@@ -559,6 +577,15 @@ namespace RatioForge
             }
 
             if (chkNewValues.Checked)
+            {
+                RefreshCustomValuesFromSelectedClient();
+            }
+        }
+
+        private void RefreshCustomValuesFromSelectedClient()
+        {
+            // Keep the visible Peer ID/key in sync with the selected emulation profile.
+            if (cmbClient.SelectedItem != null && cmbVersion.SelectedItem != null)
             {
                 SetCustomValues();
             }
