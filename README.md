@@ -69,14 +69,12 @@ dotnet test Source/RatioForge.sln
 
 For detailed usage instructions, see the built-in help menu.
 
-## What's New in 1.0.0 (RatioForge)
+## What's New in 1.0.6 (RatioForge)
 
-- **Complete Rename**: RatioMaster.NET → RatioForge
-- **.NET 8 Migration**: Modernized from .NET Framework 4.0
-- **Improved Performance**: Leveraging latest .NET runtime optimizations
-- **Updated Dependencies**: All packages upgraded to latest versions
-- **Modern Codebase**: C# 12 features and nullable reference types
-- **Better Maintainability**: SDK-style project format
+- **Release Pipeline**: Tagged releases now validate `version.txt` before publishing
+- **Version Metadata**: Project, assembly, runtime display, and release artifact versions are centralized
+- **Test Coverage**: Added automated coverage for version display and torrent client peer IDs
+- **Modernized Foundation**: Preserves the RatioMaster.NET functionality on .NET 8 and Windows Forms
 
 See [CHANGELOG.md](CHANGELOG.md) for full version history.
 

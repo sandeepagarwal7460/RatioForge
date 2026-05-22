@@ -285,7 +285,7 @@ namespace RatioForge
 
         private void jOINToOurForumPleaseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Links.OpenUrl(Links.PayPal);
+            Links.OpenUrl(Links.SupportPage);
         }
 
         private void lblCodedBy_Click(object sender, EventArgs e)

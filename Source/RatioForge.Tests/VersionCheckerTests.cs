@@ -1,7 +1,5 @@
 namespace RatioForge.Tests
 {
-    using System;
-
     using NUnit.Framework;
 
     using RatioForge;
@@ -10,12 +8,24 @@ namespace RatioForge.Tests
     public class VersionCheckerTests
     {
         [Test]
-        public void GetServerVersionIdShouldReturnExactlyFourCharacters()
+        public void CheckNewVersionShouldDetectNewerSemanticVersion()
         {
-            var versionChecker = new VersionChecker(string.Empty);
-            var serverVersion = versionChecker.GetServerVersionId();
-            Console.WriteLine(serverVersion);
-            Assert.That(serverVersion.Length, Is.EqualTo(5));
+            var versionChecker = new VersionChecker(string.Empty, () => "1.0.10");
+
+            var hasNewVersion = versionChecker.CheckNewVersion();
+
+            Assert.That(hasNewVersion, Is.True);
+        }
+
+        [Test]
+        public void CheckNewVersionShouldRejectInvalidRemoteVersion()
+        {
+            var versionChecker = new VersionChecker(string.Empty, () => "invalid");
+
+            var hasNewVersion = versionChecker.CheckNewVersion();
+
+            Assert.That(hasNewVersion, Is.False);
+            Assert.That(versionChecker.RemoteVersion, Is.EqualTo("error"));
         }
 
         [Test]

@@ -67,12 +67,12 @@ namespace RatioForge.Tests
         {
             TorrentClient client = TorrentClientFactory.GetClient(clientName);
 
-            Assert.Multiple(() =>
+            Assert.Multiple((Action)(() =>
             {
                 Assert.That(client.Name, Is.EqualTo(clientName));
                 Assert.That(client.PeerID, Does.StartWith(ExpectedPeerIdPrefixes[clientName]));
                 Assert.That(DecodeUrlEncodedPeerId(client.PeerID), Has.Length.EqualTo(20));
-            });
+            }));
         }
 
         private static byte[] DecodeUrlEncodedPeerId(string peerId)

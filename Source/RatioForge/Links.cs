@@ -10,12 +10,8 @@ namespace RatioForge
 
         public const string OriginalProjectPage = "https://github.com/NikolayIT/RatioMaster.NET";
 
-        // Contact information - update with your own
-        public const string ContactEmail = "contact@example.com";
+        public const string SupportPage = "https://github.com/tsautier/RatioForge";
 
-        public const string MailToContact = "mailto:" + ContactEmail;
-
-        public const string PayPal = "https://github.com/tsautier/RatioForge"; // TODO: Update with valid donation link if needed
         public const string AuthorPage = "https://github.com/tsautier/";
 
         public static void OpenUrl(string url)

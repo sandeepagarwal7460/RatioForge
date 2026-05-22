@@ -352,8 +352,8 @@ namespace RatioForge
             this.jOINToOurForumPleaseToolStripMenuItem.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.jOINToOurForumPleaseToolStripMenuItem.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
             this.jOINToOurForumPleaseToolStripMenuItem.Name = "jOINToOurForumPleaseToolStripMenuItem";
-            this.jOINToOurForumPleaseToolStripMenuItem.Size = new System.Drawing.Size(161, 20);
-            this.jOINToOurForumPleaseToolStripMenuItem.Text = "We need your donation :)";
+            this.jOINToOurForumPleaseToolStripMenuItem.Size = new System.Drawing.Size(118, 20);
+            this.jOINToOurForumPleaseToolStripMenuItem.Text = "Support project";
             this.jOINToOurForumPleaseToolStripMenuItem.Click += new System.EventHandler(this.jOINToOurForumPleaseToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem

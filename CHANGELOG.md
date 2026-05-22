@@ -5,6 +5,17 @@ All notable changes to RatioForge will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+- **Version Check**: Compare remote and local versions as semantic versions instead of ordinal strings.
+- **Tests**: Removed the live network dependency from version checker tests.
+
+### Changed
+- **Dependencies**: Updated NuGet packages to the latest versions available from the configured NuGet source.
+- **Docs**: Aligned README and website version references with version 1.0.6.
+- **Links**: Replaced obsolete donation/contact placeholders with the project support page.
+
 ## [1.0.6] - 2026-05-22
 
 ### Fixed
