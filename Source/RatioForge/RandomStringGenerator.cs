@@ -55,17 +55,16 @@ namespace RatioForge
 
         public string Generate(string inputString, bool upperCase)
         {
-            // TODO: Use StringBuilder
-            string result = string.Empty;
+            var stringBuilder = new StringBuilder(inputString.Length);
             for (int i = 0; i < inputString.Length; i = i + 1)
             {
                 if (char.IsLetterOrDigit(inputString[i]) && inputString[i] < 127)
                 {
-                    result += inputString[i];
+                    stringBuilder.Append(inputString[i]);
                 }
                 else
                 {
-                    result += "%";
+                    stringBuilder.Append('%');
                     string temp = Convert.ToString(inputString[i], 16);
                     if (upperCase)
                     {
@@ -74,16 +73,17 @@ namespace RatioForge
 
                     if (temp.Length == 1)
                     {
-                        result += "0" + temp;
+                        stringBuilder.Append('0');
+                        stringBuilder.Append(temp);
                     }
                     else
                     {
-                        result += temp;
+                        stringBuilder.Append(temp);
                     }
                 }
             }
 
-            return result;
+            return stringBuilder.ToString();
         }
     }
 }

@@ -69,11 +69,11 @@ dotnet test Source/RatioForge.sln
 
 For detailed usage instructions, see the built-in help menu.
 
-## What's New in 1.0.6 (RatioForge)
+## What's New in 1.0.7 (RatioForge)
 
-- **Release Pipeline**: Tagged releases now validate `version.txt` before publishing
-- **Version Metadata**: Project, assembly, runtime display, and release artifact versions are centralized
-- **Test Coverage**: Added automated coverage for version display and torrent client peer IDs
+- **CI Maintenance**: GitHub Actions now use Node 24-compatible official actions and a pinned Windows 2025 runner
+- **Version Check**: Remote and local versions are compared as semantic versions
+- **Maintenance**: Removed remaining StringBuilder TODOs in version logging and URL-safe random string generation
 - **Modernized Foundation**: Preserves the RatioMaster.NET functionality on .NET 8 and Windows Forms
 
 See [CHANGELOG.md](CHANGELOG.md) for full version history.

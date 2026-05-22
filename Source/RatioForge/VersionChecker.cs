@@ -4,10 +4,12 @@ namespace RatioForge
     using System.IO;
     using System.Net;
     using System.Reflection;
+    using System.Text;
 
     public class VersionChecker
     {
         private readonly Func<string> getServerVersion;
+        private readonly StringBuilder logBuilder;
         public static readonly string LocalVersion = GetAssemblyVersion();
         public static readonly string PublicVersion = LocalVersion;
         public const string ReleaseDate = "22-05-2026";
@@ -25,10 +27,10 @@ namespace RatioForge
             this.userAgent = "RatioForge"
                              + $"/{LocalVersion} ({Environment.OSVersion}; .NET CLR {Environment.Version}; {Environment.UserName}.{Environment.ProcessorCount})";
             this.getServerVersion = getServerVersion ?? this.GetServerVersionId;
-            this.Log = log;
+            this.logBuilder = new StringBuilder(log ?? string.Empty);
+            this.Log = this.logBuilder.ToString();
         }
 
-        // TODO: Replace with StringBuilder
         public string Log { get; private set; }
 
         internal string RemoteVersion { get; private set; }
@@ -38,8 +40,8 @@ namespace RatioForge
             try
             {
                 bool result = false;
-                this.Log = this.Log + ("Local Version: " + LocalVersion + "\n");
-                this.Log = this.Log + ("Checking for new version..." + "\n");
+                this.AppendLog("Local Version: " + LocalVersion + "\n");
+                this.AppendLog("Checking for new version..." + "\n");
                 this.RemoteVersion = this.getServerVersion();
                 //// mainForm.txtRemote.Text = remoteVersion;
                 Version remoteVersion;
@@ -47,11 +49,11 @@ namespace RatioForge
                 if (!Version.TryParse(this.RemoteVersion, out remoteVersion) || !Version.TryParse(LocalVersion, out localVersion))
                 {
                     this.RemoteVersion = "error";
-                    this.Log = this.Log + ("Error checking new version!!!" + "\n" + "\n");
+                    this.AppendLog("Error checking new version!!!" + "\n" + "\n");
                     return false;
                 }
 
-                this.Log = this.Log + ("Remote Version: " + this.RemoteVersion + "\n" + "\n");
+                this.AppendLog("Remote Version: " + this.RemoteVersion + "\n" + "\n");
                 if (remoteVersion > localVersion)
                 {
                     result = true;
@@ -61,7 +63,7 @@ namespace RatioForge
             }
             catch (Exception exception1)
             {
-                this.Log = this.Log + ("Error checking for new version:\n" + exception1.Message + "\n");
+                this.AppendLog("Error checking for new version:\n" + exception1.Message + "\n");
                 return false;
             }
         }
@@ -85,10 +87,16 @@ namespace RatioForge
             }
             catch (Exception exception1)
             {
-                this.Log = this.Log + "Error in GetVersion(string url):\n" + exception1.Message + "\n";
+                this.AppendLog("Error in GetVersion(string url):\n" + exception1.Message + "\n");
             }
 
             return string.Empty;
+        }
+
+        private void AppendLog(string value)
+        {
+            this.logBuilder.Append(value);
+            this.Log = this.logBuilder.ToString();
         }
 
         private static string GetAssemblyVersion()

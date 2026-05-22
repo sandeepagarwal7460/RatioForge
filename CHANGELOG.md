@@ -5,15 +5,17 @@ All notable changes to RatioForge will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.0.7] - 2026-05-22
 
 ### Fixed
 - **Version Check**: Compare remote and local versions as semantic versions instead of ordinal strings.
 - **Tests**: Removed the live network dependency from version checker tests.
+- **Maintenance**: Replaced remaining StringBuilder TODOs in version logging and URL-safe random string generation.
 
 ### Changed
+- **CI**: Updated GitHub Actions to Node 24-compatible official action versions and pinned the Windows runner to `windows-2025`.
 - **Dependencies**: Updated NuGet packages to the latest versions available from the configured NuGet source.
-- **Docs**: Aligned README and website version references with version 1.0.6.
+- **Docs**: Aligned README and website version references with version 1.0.7.
 - **Links**: Replaced obsolete donation/contact placeholders with the project support page.
 
 ## [1.0.6] - 2026-05-22
@@ -147,6 +149,7 @@ For complete historical changelog, see [HISTORY.TXT](HISTORY.TXT)
 
 ---
 
+[1.0.7]: https://github.com/tsautier/RatioForge/releases/tag/v1.0.7
 [1.0.6]: https://github.com/tsautier/RatioForge/releases/tag/v1.0.6
 [1.0.5]: https://github.com/tsautier/RatioForge/releases/tag/v1.0.5
 [1.0.4]: https://github.com/tsautier/RatioForge/releases/tag/v1.0.4
