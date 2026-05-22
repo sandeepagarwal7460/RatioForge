@@ -5,6 +5,16 @@ All notable changes to RatioForge will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.6] - 2026-05-22
+
+### Fixed
+- **Emulation**: Refresh peer ID data when the selected torrent client or client version changes.
+- **Emulation**: Fixed the uTorrent 3.2.0 peer ID profile so it resolves to a valid 20-byte peer ID.
+- **Build**: Cleaned the Release build so it completes without compiler warnings.
+
+### Changed
+- **Release**: Centralized project version metadata and aligned `version.txt`, assembly metadata, runtime display, tests, and tagged release artifacts.
+
 ## [1.0.5] - 2026-03-19
 
 ### Fixed
@@ -126,5 +136,10 @@ For complete historical changelog, see [HISTORY.TXT](HISTORY.TXT)
 
 ---
 
+[1.0.6]: https://github.com/tsautier/RatioForge/releases/tag/v1.0.6
+[1.0.5]: https://github.com/tsautier/RatioForge/releases/tag/v1.0.5
+[1.0.4]: https://github.com/tsautier/RatioForge/releases/tag/v1.0.4
+[1.0.3]: https://github.com/tsautier/RatioForge/releases/tag/v1.0.3
+[1.0.2]: https://github.com/tsautier/RatioForge/releases/tag/v1.0.2
 [1.0.0]: https://github.com/tsautier/RatioForge/releases/tag/v1.0.0
 [0.43]: https://github.com/NikolayIT/RatioMaster.NET/releases/tag/v0.43

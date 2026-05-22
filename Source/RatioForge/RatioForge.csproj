@@ -13,7 +13,12 @@
     <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
     <ProjectGuid>{C732F44B-C910-4C9B-A97F-38DFFAB3C957}</ProjectGuid>
     <NoWin32Manifest>true</NoWin32Manifest>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AssemblyTitle>RatioForge</AssemblyTitle>
+    <Description>The most powerful torrent client simulator - Modernized for .NET 8</Description>
+    <Company>Thomas SAUTIER</Company>
+    <Product>RatioForge</Product>
+    <Copyright>Copyright © 2006-2016 Nikolay Kostov, 2026-present Thomas SAUTIER</Copyright>
+    <NeutralLanguage>en</NeutralLanguage>
     <NoWarn>$(NoWarn);CS0618;CS1690;CS8632;CS8981;SYSLIB0014;SYSLIB0021;CA1001;CA1033;CA1060;CA1063;CA2002;CA2200;CA2213</NoWarn>
   </PropertyGroup>
 

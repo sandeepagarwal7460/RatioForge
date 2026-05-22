@@ -3,12 +3,13 @@ namespace RatioForge
     using System;
     using System.IO;
     using System.Net;
+    using System.Reflection;
 
     public class VersionChecker
     {
-        public const string LocalVersion = "1.0.5";
-        public const string PublicVersion = "1.0.5";
-        public const string ReleaseDate = "19-03-2026";
+        public static readonly string LocalVersion = GetAssemblyVersion();
+        public static readonly string PublicVersion = LocalVersion;
+        public const string ReleaseDate = "22-05-2026";
         private const string ProgramPageVersion = "https://raw.githubusercontent.com/tsautier/RatioForge/master/version.txt";
 
         private readonly string userAgent;
@@ -80,6 +81,14 @@ namespace RatioForge
             }
 
             return string.Empty;
+        }
+
+        private static string GetAssemblyVersion()
+        {
+            var attribute = typeof(VersionChecker).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
+            var version = attribute?.InformationalVersion ?? typeof(VersionChecker).Assembly.GetName().Version?.ToString(3) ?? "0.0.0";
+            var metadataIndex = version.IndexOf('+');
+            return metadataIndex >= 0 ? version.Substring(0, metadataIndex) : version;
         }
     }
 }
