@@ -48,6 +48,32 @@ jobs:
       - name: Publish win-x64
         run: dotnet publish Source/RatioForge/RatioForge.csproj --configuration Release --runtime win-x64 --self-contained false --output artifacts/RatioForge-${{ steps.version.outputs.version }}-win-x64
 
+      - name: Smoke check Windows release build
+        shell: pwsh
+        run: |
+          $version = "${{ steps.version.outputs.version }}"
+          $publishDir = "artifacts/RatioForge-$version-win-x64"
+          $exe = Join-Path $publishDir "RatioForge.exe"
+
+          if (!(Test-Path $exe)) {
+            throw "Missing GUI executable: $exe"
+          }
+
+          $fileVersion = (Get-Item $exe).VersionInfo.FileVersion
+          if ($fileVersion -ne "$version.0") {
+            throw "Expected RatioForge.exe file version '$version.0', got '$fileVersion'"
+          }
+
+          $requiredFiles = @("RatioForge.dll", "RatioForge.dll.config")
+          foreach ($file in $requiredFiles) {
+            $path = Join-Path $publishDir $file
+            if (!(Test-Path $path)) {
+              throw "Missing required published file: $path"
+            }
+          }
+
+          Copy-Item -LiteralPath $exe -Destination "artifacts/RatioForge-$version-win-x64.exe" -Force
+
       - name: Package release artifact
         shell: pwsh
         run: |
@@ -56,11 +82,30 @@ jobs:
             -DestinationPath "artifacts/RatioForge-${{ steps.version.outputs.version }}-win-x64.zip" `
             -Force
 
+      - name: Generate SHA256 checksums
+        shell: pwsh
+        run: |
+          $version = "${{ steps.version.outputs.version }}"
+          $files = @(
+            "artifacts/RatioForge-$version-win-x64.zip",
+            "artifacts/RatioForge-$version-win-x64.exe"
+          )
+
+          $checksums = foreach ($file in $files) {
+            $hash = Get-FileHash -Algorithm SHA256 -Path $file
+            "$($hash.Hash.ToLowerInvariant())  $([System.IO.Path]::GetFileName($file))"
+          }
+
+          $checksums | Set-Content -Encoding ascii "artifacts/RatioForge-$version-win-x64.sha256"
+
       - name: Upload release artifact
         uses: actions/upload-artifact@v7
         with:
           name: RatioForge-${{ steps.version.outputs.version }}-win-x64
-          path: artifacts/RatioForge-${{ steps.version.outputs.version }}-win-x64.zip
+          path: |
+            artifacts/RatioForge-${{ steps.version.outputs.version }}-win-x64.zip
+            artifacts/RatioForge-${{ steps.version.outputs.version }}-win-x64.exe
+            artifacts/RatioForge-${{ steps.version.outputs.version }}-win-x64.sha256
           if-no-files-found: error
 
       - name: Create GitHub release
@@ -71,6 +116,33 @@ jobs:
         run: |
           gh release create "$env:GITHUB_REF_NAME" `
             "artifacts/RatioForge-${{ steps.version.outputs.version }}-win-x64.zip" `
+            "artifacts/RatioForge-${{ steps.version.outputs.version }}-win-x64.exe" `
+            "artifacts/RatioForge-${{ steps.version.outputs.version }}-win-x64.sha256" `
             --title "RatioForge ${{ steps.version.outputs.version }}" `
             --notes "See CHANGELOG.md for the release notes." `
             --verify-tag
+
+      - name: Verify GitHub release assets
+        if: github.ref_type == 'tag'
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $version = "${{ steps.version.outputs.version }}"
+          $expectedAssets = @(
+            "RatioForge-$version-win-x64.zip",
+            "RatioForge-$version-win-x64.exe",
+            "RatioForge-$version-win-x64.sha256"
+          )
+
+          $release = gh release view "$env:GITHUB_REF_NAME" --json assets | ConvertFrom-Json
+          foreach ($assetName in $expectedAssets) {
+            $asset = $release.assets | Where-Object { $_.name -eq $assetName }
+            if ($null -eq $asset) {
+              throw "Missing release asset: $assetName"
+            }
+
+            if ($asset.size -le 0) {
+              throw "Release asset is empty: $assetName"
+            }
+          }

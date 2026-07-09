@@ -5,6 +5,18 @@ All notable changes to RatioForge will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- **CI**: Build workflow now publishes Windows artifacts with smoke checks and SHA256 checksums.
+- **Release**: Release workflow now uploads the zip archive, raw GUI executable, and checksum file to GitHub Releases.
+- **Release**: Release workflow now verifies uploaded GitHub release assets after publication.
+- **Docs**: Added release checklist covering versioning, verification, tagging, rollback, and PyInstaller applicability.
+- **Docs**: Added a practical roadmap with short-, mid-, and long-term work.
+
+### Changed
+- **Docs**: Added a README badge for the release workflow status.
+
 ## [1.0.7] - 2026-05-22
 
 ### Fixed

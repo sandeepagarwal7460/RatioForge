@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ "master" ]
 
+permissions:
+  contents: read
+
 jobs:
   build:
 
@@ -18,6 +21,17 @@ jobs:
       uses: actions/setup-dotnet@v5
       with:
         dotnet-version: 8.0.x
+
+    - name: Read and validate version
+      id: version
+      shell: pwsh
+      run: |
+        $version = (Get-Content version.txt -Raw).Trim()
+        if ($version -notmatch '^\d+\.\d+\.\d+$') {
+          throw "version.txt must contain a SemVer core version. Current value: '$version'"
+        }
+
+        "version=$version" >> $env:GITHUB_OUTPUT
         
     - name: Restore dependencies
       run: dotnet restore Source/RatioForge.sln
@@ -27,3 +41,67 @@ jobs:
       
     - name: Test
       run: dotnet test Source/RatioForge.sln --no-build --configuration Release --verbosity normal
+
+    - name: Publish Windows GUI executable
+      run: dotnet publish Source/RatioForge/RatioForge.csproj --configuration Release --runtime win-x64 --self-contained false --output artifacts/RatioForge-${{ steps.version.outputs.version }}-win-x64
+
+    - name: Smoke check Windows build
+      shell: pwsh
+      run: |
+        $version = "${{ steps.version.outputs.version }}"
+        $publishDir = "artifacts/RatioForge-$version-win-x64"
+        $exe = Join-Path $publishDir "RatioForge.exe"
+
+        if (!(Test-Path $exe)) {
+          throw "Missing GUI executable: $exe"
+        }
+
+        $fileVersion = (Get-Item $exe).VersionInfo.FileVersion
+        if ($fileVersion -ne "$version.0") {
+          throw "Expected RatioForge.exe file version '$version.0', got '$fileVersion'"
+        }
+
+        $requiredFiles = @("RatioForge.dll", "RatioForge.dll.config")
+        foreach ($file in $requiredFiles) {
+          $path = Join-Path $publishDir $file
+          if (!(Test-Path $path)) {
+            throw "Missing required published file: $path"
+          }
+        }
+
+        Copy-Item -LiteralPath $exe -Destination "artifacts/RatioForge-$version-win-x64.exe" -Force
+
+    - name: Package Windows build
+      shell: pwsh
+      run: |
+        $version = "${{ steps.version.outputs.version }}"
+        Compress-Archive `
+          -Path "artifacts/RatioForge-$version-win-x64/*" `
+          -DestinationPath "artifacts/RatioForge-$version-win-x64.zip" `
+          -Force
+
+    - name: Generate SHA256 checksums
+      shell: pwsh
+      run: |
+        $version = "${{ steps.version.outputs.version }}"
+        $files = @(
+          "artifacts/RatioForge-$version-win-x64.zip",
+          "artifacts/RatioForge-$version-win-x64.exe"
+        )
+
+        $checksums = foreach ($file in $files) {
+          $hash = Get-FileHash -Algorithm SHA256 -Path $file
+          "$($hash.Hash.ToLowerInvariant())  $([System.IO.Path]::GetFileName($file))"
+        }
+
+        $checksums | Set-Content -Encoding ascii "artifacts/RatioForge-$version-win-x64.sha256"
+
+    - name: Upload Windows build artifacts
+      uses: actions/upload-artifact@v7
+      with:
+        name: RatioForge-${{ steps.version.outputs.version }}-win-x64
+        path: |
+          artifacts/RatioForge-${{ steps.version.outputs.version }}-win-x64.zip
+          artifacts/RatioForge-${{ steps.version.outputs.version }}-win-x64.exe
+          artifacts/RatioForge-${{ steps.version.outputs.version }}-win-x64.sha256
+        if-no-files-found: error

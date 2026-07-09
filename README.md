@@ -1,6 +1,7 @@
 # RatioForge
 
 [![Build RatioForge](https://github.com/tsautier/RatioForge/actions/workflows/build.yml/badge.svg)](https://github.com/tsautier/RatioForge/actions/workflows/build.yml)
+[![Release RatioForge](https://github.com/tsautier/RatioForge/actions/workflows/release.yml/badge.svg)](https://github.com/tsautier/RatioForge/actions/workflows/release.yml)
 
 **RatioForge** is amodern, .NET 8-powered torrent client simulator that allows you to fake upload and download statistics to almost all BitTorrent trackers.
 
