@@ -31,7 +31,7 @@ namespace RatioForge.Tests
         [Test]
         public void PublicVersionShouldComeFromAssemblyMetadata()
         {
-            Assert.That(VersionChecker.PublicVersion, Is.EqualTo("1.0.7"));
+            Assert.That(VersionChecker.PublicVersion, Is.EqualTo("1.0.8"));
         }
     }
 }

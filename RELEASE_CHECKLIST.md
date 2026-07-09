@@ -24,11 +24,12 @@ Use this checklist before creating and pushing a release tag.
 - [ ] Generate and verify SHA256 checksums for the zip archive and raw GUI executable.
 - [ ] Remove local generated `artifacts\` output before committing.
 
-## PyInstaller Status
+## Windows Executable Build
 
-- [ ] Confirm whether the repository contains a Python entry point (`.py`, `.spec`, or `pyproject.toml`).
-- [ ] If a Python GUI or CLI target exists, build it with PyInstaller and add it to the release assets.
-- [ ] If no Python entry point exists, do not create a PyInstaller release asset. Current RatioForge is a .NET Windows Forms application, so the release executable is built with `dotnet publish`.
+- [ ] Build the Windows Forms executable with `dotnet publish`.
+- [ ] Publish the raw GUI executable as `RatioForge-<version>-win-x64.exe`.
+- [ ] Publish the full runtime-dependent zip archive as `RatioForge-<version>-win-x64.zip`.
+- [ ] Do not add packaging tools for languages that are not used by the application.
 
 ## Commit And Tag
 
@@ -48,7 +49,7 @@ Use this checklist before creating and pushing a release tag.
   - `RatioForge-<version>-win-x64.exe`
   - `RatioForge-<version>-win-x64.sha256`
 - [ ] Confirm the checksum file includes both the zip archive and raw GUI executable.
-- [ ] Confirm no CLI executable is expected unless a dedicated CLI project exists.
+- [ ] Confirm no CLI executable is expected unless a dedicated .NET CLI project exists.
 
 ## Rollback
 
