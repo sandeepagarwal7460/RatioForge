@@ -43,7 +43,7 @@ jobs:
       run: dotnet test Source/RatioForge.sln --no-build --configuration Release --verbosity normal
 
     - name: Publish Windows GUI executable
-      run: dotnet publish Source/RatioForge/RatioForge.csproj --configuration Release --runtime win-x64 --self-contained false --output artifacts/RatioForge-${{ steps.version.outputs.version }}-win-x64
+      run: dotnet publish Source/RatioForge/RatioForge.csproj --configuration Release --runtime win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:IncludeAllContentForSelfExtract=true --output artifacts/RatioForge-${{ steps.version.outputs.version }}-win-x64
 
     - name: Smoke check Windows build
       shell: pwsh
@@ -61,11 +61,16 @@ jobs:
           throw "Expected RatioForge.exe file version '$version.0', got '$fileVersion'"
         }
 
-        $requiredFiles = @("RatioForge.dll", "RatioForge.dll.config")
-        foreach ($file in $requiredFiles) {
-          $path = Join-Path $publishDir $file
-          if (!(Test-Path $path)) {
-            throw "Missing required published file: $path"
+        $process = Start-Process -FilePath $exe -PassThru
+        try {
+          Start-Sleep -Seconds 5
+          if ($process.HasExited) {
+            throw "RatioForge exited during the startup smoke check with code $($process.ExitCode)."
+          }
+        }
+        finally {
+          if (!$process.HasExited) {
+            Stop-Process -Id $process.Id -Force
           }
         }
 

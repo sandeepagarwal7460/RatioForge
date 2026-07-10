@@ -18,9 +18,10 @@ Use this checklist before creating and pushing a release tag.
 - [ ] Run `dotnet restore Source\RatioForge.sln`.
 - [ ] Run `dotnet build Source\RatioForge.sln --configuration Release --no-restore`.
 - [ ] Run `dotnet test Source\RatioForge.sln --configuration Release --no-build`.
-- [ ] Run `dotnet publish Source\RatioForge\RatioForge.csproj --configuration Release --runtime win-x64 --self-contained false --output artifacts\RatioForge-<version>-win-x64`.
+- [ ] Run `dotnet publish Source\RatioForge\RatioForge.csproj --configuration Release --runtime win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:IncludeAllContentForSelfExtract=true --output artifacts\RatioForge-<version>-win-x64`.
 - [ ] Confirm `artifacts\RatioForge-<version>-win-x64\RatioForge.exe` exists.
 - [ ] Confirm `RatioForge.exe` file version matches `<version>.0`.
+- [ ] Confirm the raw executable starts on a clean Windows 10/11 machine without a separately installed .NET runtime.
 - [ ] Generate and verify SHA256 checksums for the zip archive and raw GUI executable.
 - [ ] Remove local generated `artifacts\` output before committing.
 
@@ -28,7 +29,7 @@ Use this checklist before creating and pushing a release tag.
 
 - [ ] Build the Windows Forms executable with `dotnet publish`.
 - [ ] Publish the raw GUI executable as `RatioForge-<version>-win-x64.exe`.
-- [ ] Publish the full runtime-dependent zip archive as `RatioForge-<version>-win-x64.zip`.
+- [ ] Publish the full self-contained single-file archive as `RatioForge-<version>-win-x64.zip`.
 - [ ] Do not add packaging tools for languages that are not used by the application.
 
 ## Commit And Tag

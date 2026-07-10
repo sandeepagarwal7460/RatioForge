@@ -46,7 +46,7 @@ jobs:
         run: dotnet test Source/RatioForge.sln --no-build --configuration Release --verbosity normal
 
       - name: Publish win-x64
-        run: dotnet publish Source/RatioForge/RatioForge.csproj --configuration Release --runtime win-x64 --self-contained false --output artifacts/RatioForge-${{ steps.version.outputs.version }}-win-x64
+        run: dotnet publish Source/RatioForge/RatioForge.csproj --configuration Release --runtime win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:IncludeAllContentForSelfExtract=true --output artifacts/RatioForge-${{ steps.version.outputs.version }}-win-x64
 
       - name: Smoke check Windows release build
         shell: pwsh
@@ -64,11 +64,16 @@ jobs:
             throw "Expected RatioForge.exe file version '$version.0', got '$fileVersion'"
           }
 
-          $requiredFiles = @("RatioForge.dll", "RatioForge.dll.config")
-          foreach ($file in $requiredFiles) {
-            $path = Join-Path $publishDir $file
-            if (!(Test-Path $path)) {
-              throw "Missing required published file: $path"
+          $process = Start-Process -FilePath $exe -PassThru
+          try {
+            Start-Sleep -Seconds 5
+            if ($process.HasExited) {
+              throw "RatioForge exited during the startup smoke check with code $($process.ExitCode)."
+            }
+          }
+          finally {
+            if (!$process.HasExited) {
+              Stop-Process -Id $process.Id -Force
             }
           }
 
@@ -144,5 +149,28 @@ jobs:
 
             if ($asset.size -le 0) {
               throw "Release asset is empty: $assetName"
+            }
+          }
+
+          New-Item -ItemType Directory -Path "release-verification" -Force | Out-Null
+          foreach ($assetName in $expectedAssets) {
+            gh release download "$env:GITHUB_REF_NAME" --pattern $assetName --dir "release-verification" --clobber
+          }
+
+          $checksumPath = "release-verification/RatioForge-$version-win-x64.sha256"
+          foreach ($line in Get-Content $checksumPath) {
+            if ($line -notmatch '^([0-9a-f]{64})  (.+)$') {
+              throw "Invalid checksum entry: $line"
+            }
+
+            $expectedHash = $Matches[1]
+            $assetPath = Join-Path "release-verification" $Matches[2]
+            if (!(Test-Path $assetPath)) {
+              throw "Checksum references a missing release asset: $assetPath"
+            }
+
+            $actualHash = (Get-FileHash -Algorithm SHA256 -Path $assetPath).Hash.ToLowerInvariant()
+            if ($actualHash -ne $expectedHash) {
+              throw "SHA256 mismatch for $assetPath. Expected $expectedHash, got $actualHash."
             }
           }

@@ -6,9 +6,9 @@ This roadmap is intentionally practical: it separates near-term maintenance from
 
 - Harden GitHub Actions release automation with asset verification, checksums, and repeatable smoke checks.
 - Keep NuGet dependencies current and verify release builds on every tagged version.
-- Expand tests around version checking, torrent parsing, and tracker URL generation.
+- Extend the existing torrent parsing and tracker URL tests with additional malformed and edge-case fixtures.
 - Document release, rollback, and verification steps so releases are reproducible.
-- Review legacy website pages and remove obsolete links or stale historical calls to action.
+- Decide whether the refreshed legacy website should remain maintained or be replaced by GitHub Pages.
 
 ## Mid Term
 
@@ -16,12 +16,12 @@ This roadmap is intentionally practical: it separates near-term maintenance from
 - Add structured logging for tracker communication, version checks, and proxy failures.
 - Improve error handling around network, proxy, and malformed torrent files.
 - Add sample torrent fixtures for parser and tracker behavior tests.
-- Evaluate self-contained Windows publishing for users without a local .NET runtime.
+- Monitor self-contained single-file release size and startup behavior.
 - Add a signed release path if code-signing certificates become available.
 
 ## Long Term
 
-- Separate core torrent/tracker logic from Windows Forms UI into reusable libraries.
+- Move the extracted tracker URL builder and torrent parser into a dedicated reusable core library.
 - Consider a modern UI refresh while preserving the existing lightweight workflow.
 - Add a documented plugin or profile system for torrent client emulation data.
 - Build a dedicated .NET CLI executable if command-line workflows become part of the product.

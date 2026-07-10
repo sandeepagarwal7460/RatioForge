@@ -1092,67 +1092,9 @@ namespace RatioForge
             }
         }
 
-        private static long RoundByDenominator(long value, long denominator)
-        {
-            return (denominator * (value / denominator));
-        }
-
         private string getUrlString(TorrentInfo torrentInfo, string eventType)
         {
-            // Random random = new Random();
-            string uploaded = "0";
-            if (torrentInfo.uploaded > 0)
-            {
-                torrentInfo.uploaded = RoundByDenominator(torrentInfo.uploaded, 0x4000);
-                uploaded = torrentInfo.uploaded.ToString();
-
-                // uploaded = Convert.ToString(torrentInfo.uploaded + random.Next(1, 1023));
-            }
-
-            string downloaded = "0";
-            if (torrentInfo.downloaded > 0)
-            {
-                torrentInfo.downloaded = RoundByDenominator(torrentInfo.downloaded, 0x10);
-                downloaded = torrentInfo.downloaded.ToString();
-
-                // downloaded = Convert.ToString(torrentInfo.downloaded + random.Next(1, 1023));
-            }
-
-            if (torrentInfo.left > 0)
-            {
-                torrentInfo.left = torrentInfo.totalsize - torrentInfo.downloaded;
-            }
-
-            string left = torrentInfo.left.ToString();
-            string key = torrentInfo.key;
-            string port = torrentInfo.port;
-            string peerID = torrentInfo.peerID;
-            string urlString;
-            urlString = torrentInfo.tracker;
-            if (urlString.Contains("?"))
-            {
-                urlString += "&";
-            }
-            else
-            {
-                urlString += "?";
-            }
-
-            if (eventType.Contains("started")) urlString = urlString.Replace("&natmapped=1&localip={localip}", "");
-            if (!eventType.Contains("stopped")) urlString = urlString.Replace("&trackerid=48", "");
-            urlString += currentClient.Query;
-            urlString = urlString.Replace("{infohash}", HashUrlEncode(torrentInfo.hash, currentClient.HashUpperCase));
-            urlString = urlString.Replace("{peerid}", peerID);
-            urlString = urlString.Replace("{port}", port);
-            urlString = urlString.Replace("{uploaded}", uploaded);
-            urlString = urlString.Replace("{downloaded}", downloaded);
-            urlString = urlString.Replace("{left}", left);
-            urlString = urlString.Replace("{event}", eventType);
-            if ((torrentInfo.numberOfPeers == "0") && !eventType.ToLower().Contains("stopped")) torrentInfo.numberOfPeers = "200";
-            urlString = urlString.Replace("{numwant}", torrentInfo.numberOfPeers);
-            urlString = urlString.Replace("{key}", key);
-            urlString = urlString.Replace("{localip}", Functions.GetIp());
-            return urlString;
+            return TrackerUrlBuilder.BuildAnnounce(torrentInfo, currentClient, eventType, Functions.GetIp());
         }
 
         #endregion
@@ -1217,25 +1159,7 @@ namespace RatioForge
 
         internal string getScrapeUrlString(TorrentInfo torrentInfo)
         {
-            string urlString = torrentInfo.tracker;
-            int index = urlString.ToLower().LastIndexOf("announce");
-            if (index == -1)
-            {
-                return "";
-            }
-
-            urlString = urlString.Substring(0, index) + "scrape" + urlString.Substring(index + 8);
-            string hash = HashUrlEncode(torrentInfo.hash, currentClient.HashUpperCase);
-            if (urlString.Contains("?"))
-            {
-                urlString = urlString + "&";
-            }
-            else
-            {
-                urlString = urlString + "?";
-            }
-
-            return (urlString + "info_hash=" + hash);
+            return TrackerUrlBuilder.BuildScrape(torrentInfo, currentClient);
         }
 
         #endregion
@@ -1560,27 +1484,15 @@ namespace RatioForge
 
         internal string HashUrlEncode(string decoded, bool upperCase)
         {
-            StringBuilder ret = new StringBuilder();
-            RandomStringGenerator stringGen = new RandomStringGenerator();
             try
             {
-                for (int i = 0; i < decoded.Length; i = i + 2)
-                {
-                    char tempChar;
-
-                    // the only case in which something should not be escaped, is when it is alphanum,
-                    // or it's in marks
-                    // in all other cases, encode it.
-                    tempChar = (char)Convert.ToUInt16(decoded.Substring(i, 2), 16);
-                    ret.Append(tempChar);
-                }
+                return TrackerUrlBuilder.EncodeHash(decoded, upperCase);
             }
             catch (Exception ex)
             {
                 AddLogLine(ex.ToString());
+                return string.Empty;
             }
-
-            return stringGen.Generate(ret.ToString(), upperCase);
         }
 
         #endregion

@@ -144,6 +144,8 @@ namespace BitTorrent
         internal bool OpenTorrent(string localFilename)
         {
             data = null; // clear any old data
+            torrentFiles = new Collection<TorrentFile>();
+            _totalLength = 0;
             bool hasOpened = false;
             localTorrentFile = localFilename;
             data = new ValueDictionary();

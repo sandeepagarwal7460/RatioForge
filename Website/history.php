@@ -1,8 +1,13 @@
-<?
+<?php
 require_once("header.php");
 require_once("news.php");
 ?>
 <td valign="top"> <h1>Program changelog:</h1>
+<p><b>---=== 1.0.9 (10-07-2026) ===---</b><br>
+- Added self-contained single-file Windows releases<br>
+- Added torrent parser and tracker URL tests<br>
+- Extracted tracker URL generation from the Windows Forms UI<br>
+- Refreshed the legacy project website</p>
 <p><b>---=== 0.43 (08-01-2016) ===---</b><br>
 - Global: The program is now open source and the source is available in <a href="https://github.com/NikolayIT/RatioMaster.NET">https://github.com/NikolayIT/RatioMaster.NET</a><br>
 - Global: Program built for .NET Framework version 4.0<br>
@@ -41,8 +46,8 @@ require_once("news.php");
 - RM: Added new client emulation: "Deluge 0.5.8.7"<br>
 - RM: Added new client emulation: "Deluge 0.5.8.6"<br>
 - RM: Default client is now "uTorrent 1.8.0"</p>
-<a href="https://raw.githubusercontent.com/NikolayIT/RatioMaster.NET/master/HISTORY.TXT"><center>Full changelog here</center></a>
+<a href="https://github.com/tsautier/RatioForge/blob/master/CHANGELOG.md"><center>Full changelog here</center></a>
 <p>&nbsp;</p></td>
-<?
+<?php
 require_once("footer.php");
 ?>

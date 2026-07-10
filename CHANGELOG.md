@@ -5,6 +5,25 @@ All notable changes to RatioForge will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.9] - 2026-07-10
+
+### Added
+- **Tests**: Added single-file, multi-file, and malformed torrent fixtures with parser coverage.
+- **Tests**: Added tracker announce, scrape, counter normalization, and hash encoding coverage.
+- **CI**: Added a controlled application startup smoke check for published Windows builds.
+
+### Changed
+- **Architecture**: Extracted tracker announce, scrape, and hash URL generation from Windows Forms into a dedicated builder.
+- **Release**: Windows artifacts are now self-contained single-file executables that do not require a separate .NET runtime.
+- **Release**: Post-upload verification now downloads release assets and validates their SHA256 checksums.
+- **Website**: Refreshed project, download, news, and history content and removed obsolete analytics, social scripts, and downloads.
+- **Docs**: Updated the release checklist and roadmap to reflect completed work and remaining architecture steps.
+
+### Fixed
+- **Parser**: Register the Windows-1252 encoding provider in the BEncode parser instead of relying on UI startup.
+- **Parser**: Preserve declared torrent file lengths without accessing nonexistent payload files on disk.
+- **Parser**: Reset accumulated file and size state when reopening a torrent.
+
 ## [1.0.8] - 2026-07-09
 
 ### Added
@@ -161,6 +180,7 @@ For complete historical changelog, see [HISTORY.TXT](HISTORY.TXT)
 
 ---
 
+[1.0.9]: https://github.com/tsautier/RatioForge/releases/tag/v1.0.9
 [1.0.8]: https://github.com/tsautier/RatioForge/releases/tag/v1.0.8
 [1.0.7]: https://github.com/tsautier/RatioForge/releases/tag/v1.0.7
 [1.0.6]: https://github.com/tsautier/RatioForge/releases/tag/v1.0.6

@@ -3,7 +3,7 @@
 [![Build RatioForge](https://github.com/tsautier/RatioForge/actions/workflows/build.yml/badge.svg)](https://github.com/tsautier/RatioForge/actions/workflows/build.yml)
 [![Release RatioForge](https://github.com/tsautier/RatioForge/actions/workflows/release.yml/badge.svg)](https://github.com/tsautier/RatioForge/actions/workflows/release.yml)
 
-**RatioForge** is amodern, .NET 8-powered torrent client simulator that allows you to fake upload and download statistics to almost all BitTorrent trackers.
+**RatioForge** is a modern, .NET 8-powered torrent client simulator that allows you to simulate upload and download statistics with BitTorrent trackers.
 
 > **Note**: This project is a fork and modernization of [RatioMaster.NET](https://github.com/NikolayIT/RatioMaster.NET) by Nikolay Kostov. See [NOTICE.md](NOTICE.md) for full attribution.
 
@@ -23,12 +23,12 @@
 ## Requirements
 
 - **Windows 10/11** (64-bit recommended)
-- **.NET 8 Runtime** ([Download here](https://dotnet.microsoft.com/download/dotnet/8.0))
+- No separate .NET runtime is required for the self-contained win-x64 release.
 
 ## Installation
 
-1. Download the latest release from the [Releases](https://github.com/tsautier/RatioForge/releases) page
-2. Extract the archive
+1. Download the latest raw executable or zip archive from the [Releases](https://github.com/tsautier/RatioForge/releases) page
+2. Extract the archive when using the zip package
 3. Run `RatioForge.exe`
 
 ## Building from Source
@@ -70,12 +70,13 @@ dotnet test Source/RatioForge.sln
 
 For detailed usage instructions, see the built-in help menu.
 
-## What's New in 1.0.8 (RatioForge)
+## What's New in 1.0.9 (RatioForge)
 
-- **Release Automation**: GitHub Actions now publish Windows zip, raw GUI executable, and SHA256 artifacts
-- **Release Verification**: Tagged releases verify uploaded GitHub release assets after publication
-- **Release Docs**: Added a .NET-focused release checklist and roadmap
-- **Modernized Foundation**: Preserves the RatioMaster.NET functionality on .NET 8 and Windows Forms
+- **Portable Release**: Windows builds are now self-contained, single-file executables
+- **Core Tests**: Added torrent parser fixtures and tracker announce/scrape URL tests
+- **Architecture**: Extracted tracker URL generation from the Windows Forms code
+- **Release Verification**: Tagged releases download uploaded assets and verify their SHA256 checksums
+- **Website**: Refreshed the legacy website and removed obsolete downloads and external scripts
 
 See [CHANGELOG.md](CHANGELOG.md) for full version history.
 

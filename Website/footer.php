@@ -5,7 +5,7 @@
   </tr>
   <tr> 
     <td height="17" colspan="3" align="right" valign="bottom">
-        <a href="http://nikolay.it" target="_blank" class="style1"><font size="1" face="Arial, Helvetica, sans-serif">Nikolay.IT 2005-2016</font></a>
+		<font size="1" face="Arial, Helvetica, sans-serif">RatioForge 2026-present, based on RatioMaster.NET 2006-2016</font>
 	</td>
     <td background="images/rightsidebg.gif">&nbsp;</td>
   </tr>

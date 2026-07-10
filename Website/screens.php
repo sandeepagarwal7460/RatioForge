@@ -1,14 +1,12 @@
-<?
+<?php
 require_once("header.php");
 require_once("news.php");
 ?>
 <td valign="top"> <h1>Program screenshots:</h1>
 
-<p>
-<img width="500" src="http://www.softpedia.com/screenshots/NRPG-RatioMaster_2.png"><br /><br />
-<img width="500" src="http://linux.softpedia.com/screenshots/NRPG-RatioMaster_1.png"><br /><br />
-<img width="500" src="http://www.softpedia.com/screenshots/NRPG-RatioMaster_1.png"><br /><br />
-</p><p>&nbsp;</p></td>
-<?
+<p>The historical screenshots referenced by the original RatioMaster.NET site are no longer maintained.</p>
+<p>Current release information is available on the <a href="https://github.com/tsautier/RatioForge">RatioForge repository</a>.</p>
+<p>&nbsp;</p></td>
+<?php
 require_once("footer.php");
 ?>

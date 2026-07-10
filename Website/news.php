@@ -10,13 +10,17 @@
         <tr> 
           <td width="20">&nbsp;</td>
           <td><h1>Latest News</h1>
+              <p><span class="sidelinks">10 / July / 2026<br>
+              <strong>RatioForge 1.0.9</strong><br></span>Self-contained Windows release, expanded parser and tracker URL tests, and refreshed release automation.<br>
+			  Download: <a href="https://github.com/tsautier/RatioForge/releases/latest">HERE</a><br>
+			  Changelog: <a href="history.php">HERE</a></p>
+
               <p><span class="sidelinks">08 / January / 2016<br>
               <strong>RatioMaster.NET 0.43</strong><br></span>New version released!<br>
-			  Download: <a href="https://github.com/NikolayIT/RatioMaster.NET/releases/download/0.43/RatioMaster.NET_0.43.zip">HERE</a><br>
 			  Changelog: <a href="history.php">HERE</a></p>
               
               <p><span class="sidelinks">24 / November / 2013<br>
-              <strong>Open sourced!</strong><br></span>The project is now completely open source! You can find the source here: <a href="https://github.com/NikolayIT/RatioMaster.NET">https://github.com/NikolayIT/RatioMaster.NET</a> You can help with the future development by adding pull requests to the project.</p>
+              <strong>Open sourced!</strong><br></span>The original project became open source. Its history is preserved in the <a href="https://github.com/NikolayIT/RatioMaster.NET">RatioMaster.NET repository</a>.</p>
               
               <p><span class="sidelinks">19 / April / 2010<br>
               <strong>RatioMaster.NET 0.42</strong><br></span>New version released!<br>

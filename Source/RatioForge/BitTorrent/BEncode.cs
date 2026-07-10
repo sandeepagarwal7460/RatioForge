@@ -274,6 +274,11 @@ namespace BitTorrent
 
     internal class BEncode
     {
+        static BEncode()
+        {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        }
+
         internal BEncode()
         {
         }
