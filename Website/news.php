@@ -10,6 +10,11 @@
         <tr> 
           <td width="20">&nbsp;</td>
           <td><h1>Latest News</h1>
+              <p><span class="sidelinks">11 / August / 2026<br>
+              <strong>RatioForge 1.0.10</strong><br></span>Added Deluge 1.3.15 and 2.2.0 plus qBittorrent 4.2.3, 4.4.5, 4.5.5, 4.6.3, and 5.1.3 client profiles.<br>
+			  Download: <a href="https://github.com/tsautier/RatioForge/releases/latest">HERE</a><br>
+			  Changelog: <a href="history.php">HERE</a></p>
+
               <p><span class="sidelinks">10 / July / 2026<br>
               <strong>RatioForge 1.0.9</strong><br></span>Self-contained Windows release, expanded parser and tracker URL tests, and refreshed release automation.<br>
 			  Download: <a href="https://github.com/tsautier/RatioForge/releases/latest">HERE</a><br>

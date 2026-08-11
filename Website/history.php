@@ -3,6 +3,11 @@ require_once("header.php");
 require_once("news.php");
 ?>
 <td valign="top"> <h1>Program changelog:</h1>
+<p><b>---=== 1.0.10 (11-08-2026) ===---</b><br>
+- Added Deluge 1.3.15 and 2.2.0 client IDs<br>
+- Added qBittorrent 4.2.3, 4.4.5, 4.5.5, 4.6.3, and 5.1.3 client IDs<br>
+- Fixed duplicated Deluge tracker event parameters<br>
+- Added profile and announce URL tests</p>
 <p><b>---=== 1.0.9 (10-07-2026) ===---</b><br>
 - Added self-contained single-file Windows releases<br>
 - Added torrent parser and tracker URL tests<br>

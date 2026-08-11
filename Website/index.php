@@ -2,7 +2,7 @@
 require_once("header.php");
 require_once("news.php");
 ?>
-<td valign="top"> <h1>RatioForge 1.0.9</h1>
+<td valign="top"> <h1>RatioForge 1.0.10</h1>
 
 <p>RatioForge is a Windows application that simulates upload and download statistics for BitTorrent trackers.<br>
 It does not rely on a locally running BitTorrent client and does not transfer torrent payload data.<br>

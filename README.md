@@ -70,13 +70,12 @@ dotnet test Source/RatioForge.sln
 
 For detailed usage instructions, see the built-in help menu.
 
-## What's New in 1.0.9 (RatioForge)
+## What's New in 1.0.10 (RatioForge)
 
-- **Portable Release**: Windows builds are now self-contained, single-file executables
-- **Core Tests**: Added torrent parser fixtures and tracker announce/scrape URL tests
-- **Architecture**: Extracted tracker URL generation from the Windows Forms code
-- **Release Verification**: Tagged releases download uploaded assets and verify their SHA256 checksums
-- **Website**: Refreshed the legacy website and removed obsolete downloads and external scripts
+- **Deluge Profiles**: Added client IDs for Deluge 1.3.15 and 2.2.0
+- **qBittorrent Profiles**: Added client IDs for qBittorrent 4.2.3, 4.4.5, 4.5.5, 4.6.3, and 5.1.3
+- **Tracker Events**: Fixed duplicated Deluge announce event parameters
+- **Tests**: Added exact peer ID, User-Agent, and announce URL coverage for the new profiles
 
 See [CHANGELOG.md](CHANGELOG.md) for full version history.
 

@@ -637,6 +637,23 @@ namespace RatioForge
                     }
                 #endregion
                 #region Deluge
+                case "Deluge 2.2.0":
+                    {
+                        ConfigureDelugeClient(
+                            client,
+                            "Deluge 2.2.0",
+                            "-DE220s-",
+                            "Deluge/2.2.0 libtorrent/2.0.11.0",
+                            "HTTP/1.1");
+                        break;
+                    }
+
+                case "Deluge 1.3.15":
+                    {
+                        ConfigureDelugeClient(client, "Deluge 1.3.15", "-DE13F0-", "Deluge 1.3.15", "HTTP/1.0");
+                        break;
+                    }
+
                 case "Deluge 1.2.0":
                     {
                         client.Name = "Deluge 1.2.0";
@@ -645,7 +662,7 @@ namespace RatioForge
                         client.Key = GenerateIdString("alphanumeric", 8, false, false);
                         client.Headers = "Host: {host}\r\nUser-Agent: Deluge 1.2.0\r\nConnection: close\r\nAccept-Encoding: gzip\r\n";
                         client.PeerID = "-DE1200-" + GenerateIdString("alphanumeric", 12, false, false);
-                        client.Query = "info_hash={infohash}&peer_id={peerid}&port={port}&uploaded={uploaded}&downloaded={downloaded}&left={left}&event={event}&key={key}&compact=1&numwant={numwant}&supportcrypto=1&no_peer_id=1";
+                        client.Query = "info_hash={infohash}&peer_id={peerid}&port={port}&uploaded={uploaded}&downloaded={downloaded}&left={left}{event}&key={key}&compact=1&numwant={numwant}&supportcrypto=1&no_peer_id=1";
                         client.DefNumWant = 200;
                         client.Parse = false;
                         client.SearchString = "-DE1200-";
@@ -663,7 +680,7 @@ namespace RatioForge
                         client.Key = GenerateIdString("alphanumeric", 8, false, true);
                         client.Headers = "Host: {host}\r\nAccept-Encoding: gzip\r\nUser-Agent: Deluge 0.5.8.7\r\n";
                         client.PeerID = "-DE0587-" + GenerateIdString("alphanumeric", 12, false, false);
-                        client.Query = "info_hash={infohash}&peer_id={peerid}&port={port}&uploaded={uploaded}&downloaded={downloaded}&left={left}&event={event}&key={key}&compact=1&numwant={numwant}&supportcrypto=1&no_peer_id=1";
+                        client.Query = "info_hash={infohash}&peer_id={peerid}&port={port}&uploaded={uploaded}&downloaded={downloaded}&left={left}{event}&key={key}&compact=1&numwant={numwant}&supportcrypto=1&no_peer_id=1";
                         client.DefNumWant = 200;
                         client.Parse = false;
                         client.SearchString = "-DE0587-";
@@ -681,7 +698,7 @@ namespace RatioForge
                         client.Key = GenerateIdString("alphanumeric", 8, false, true);
                         client.Headers = "Host: {host}\r\nAccept-Encoding: gzip\r\nUser-Agent: Deluge 0.5.8.6\r\n";
                         client.PeerID = "-DE0586-" + GenerateIdString("alphanumeric", 12, false, false);
-                        client.Query = "info_hash={infohash}&peer_id={peerid}&port={port}&uploaded={uploaded}&downloaded={downloaded}&left={left}&event={event}&key={key}&compact=1&numwant={numwant}&supportcrypto=1&no_peer_id=1";
+                        client.Query = "info_hash={infohash}&peer_id={peerid}&port={port}&uploaded={uploaded}&downloaded={downloaded}&left={left}{event}&key={key}&compact=1&numwant={numwant}&supportcrypto=1&no_peer_id=1";
                         client.DefNumWant = 200;
                         client.Parse = false;
                         client.SearchString = "-DE0586-";
@@ -720,23 +737,39 @@ namespace RatioForge
                     }
                 #endregion
                 #region qBittorrent
+                case "qBittorrent 5.1.3":
+                    {
+                        ConfigureQBittorrentClient(client, "5.1.3", "-qB5130-");
+                        break;
+                    }
+
                 case "qBittorrent 5.1.2":
                     {
-                        client.Name = "qBittorrent 5.1.2";
-                        client.HttpProtocol = "HTTP/1.1";
-                        client.HashUpperCase = false;
-                        client.Key = GenerateIdString("hex", 8, false, false); // qB uses hex keys often, usually 8 chars
-                        client.Headers = "Host: {host}\r\nUser-Agent: qBittorrent/5.1.2\r\nAccept-Encoding: gzip\r\n";
-                        // PeerID format: -qB5120- followed by 12 random bytes. 
-                        // Note: Previous versions used -qB5010- etc.
-                        client.PeerID = "-qB5120-" + GenerateIdString("random", 12, true, false);
+                        ConfigureQBittorrentClient(client, "5.1.2", "-qB5120-");
+                        break;
+                    }
 
-                        // Standard query for modern clients
-                        client.Query = "info_hash={infohash}&peer_id={peerid}&port={port}&uploaded={uploaded}&downloaded={downloaded}&left={left}&corrupt=0&key={key}{event}&numwant={numwant}&compact=1&no_peer_id=1&supportcrypto=1&redundant=0";
-                        client.DefNumWant = 200;
-                        client.Parse = true;
-                        client.SearchString = "&peer_id=-qB5120-";
-                        client.ProcessName = "qbittorrent";
+                case "qBittorrent 4.6.3":
+                    {
+                        ConfigureQBittorrentClient(client, "4.6.3", "-qB4630-");
+                        break;
+                    }
+
+                case "qBittorrent 4.5.5":
+                    {
+                        ConfigureQBittorrentClient(client, "4.5.5", "-qB4550-");
+                        break;
+                    }
+
+                case "qBittorrent 4.4.5":
+                    {
+                        ConfigureQBittorrentClient(client, "4.4.5", "-qB4450-");
+                        break;
+                    }
+
+                case "qBittorrent 4.2.3":
+                    {
+                        ConfigureQBittorrentClient(client, "4.2.3", "-qB4230-");
                         break;
                     }
                 #endregion
@@ -779,6 +812,43 @@ namespace RatioForge
             }
 
             return client;
+        }
+
+        private static void ConfigureDelugeClient(
+            TorrentClient client,
+            string name,
+            string peerIdPrefix,
+            string userAgent,
+            string httpProtocol)
+        {
+            client.Name = name;
+            client.HttpProtocol = httpProtocol;
+            client.HashUpperCase = false;
+            client.Key = GenerateIdString("alphanumeric", 8, false, false);
+            client.Headers = "Host: {host}\r\nUser-Agent: " + userAgent + "\r\nConnection: close\r\nAccept-Encoding: gzip\r\n";
+            client.PeerID = peerIdPrefix + GenerateIdString("alphanumeric", 12, false, false);
+            client.Query = "info_hash={infohash}&peer_id={peerid}&port={port}&uploaded={uploaded}&downloaded={downloaded}&left={left}{event}&key={key}&compact=1&numwant={numwant}&supportcrypto=1&no_peer_id=1";
+            client.DefNumWant = 200;
+            client.Parse = false;
+            client.SearchString = peerIdPrefix;
+            client.ProcessName = "deluge";
+            client.StartOffset = 0;
+            client.MaxOffset = 100000000;
+        }
+
+        private static void ConfigureQBittorrentClient(TorrentClient client, string version, string peerIdPrefix)
+        {
+            client.Name = "qBittorrent " + version;
+            client.HttpProtocol = "HTTP/1.1";
+            client.HashUpperCase = false;
+            client.Key = GenerateIdString("hex", 8, false, false);
+            client.Headers = "Host: {host}\r\nUser-Agent: qBittorrent/" + version + "\r\nAccept-Encoding: gzip\r\n";
+            client.PeerID = peerIdPrefix + GenerateIdString("random", 12, true, false);
+            client.Query = "info_hash={infohash}&peer_id={peerid}&port={port}&uploaded={uploaded}&downloaded={downloaded}&left={left}&corrupt=0&key={key}{event}&numwant={numwant}&compact=1&no_peer_id=1&supportcrypto=1&redundant=0";
+            client.DefNumWant = 200;
+            client.Parse = true;
+            client.SearchString = "&peer_id=" + peerIdPrefix;
+            client.ProcessName = "qbittorrent";
         }
 
         private static string GenerateIdString(string keyType, int keyLength, bool urlencoding, bool upperCase = false)

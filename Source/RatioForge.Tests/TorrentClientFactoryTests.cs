@@ -49,12 +49,19 @@ namespace RatioForge.Tests
             ["BitTyrant 1.1"] = "AZ2500BT",
             ["BitSpirit 3.6.0.200"] = "%2dSP3602",
             ["BitSpirit 3.1.0.077"] = "%00%03BS",
+            ["Deluge 2.2.0"] = "-DE220s-",
+            ["Deluge 1.3.15"] = "-DE13F0-",
             ["Deluge 1.2.0"] = "-DE1200-",
             ["Deluge 0.5.8.7"] = "-DE0587-",
             ["Deluge 0.5.8.6"] = "-DE0586-",
             ["KTorrent 2.2.1"] = "-KT2210-",
             ["Gnome BT 0.0.28-1"] = "M3-4-2--",
+            ["qBittorrent 5.1.3"] = "-qB5130-",
             ["qBittorrent 5.1.2"] = "-qB5120-",
+            ["qBittorrent 4.6.3"] = "-qB4630-",
+            ["qBittorrent 4.5.5"] = "-qB4550-",
+            ["qBittorrent 4.4.5"] = "-qB4450-",
+            ["qBittorrent 4.2.3"] = "-qB4230-",
         };
 
         public static IEnumerable<string> ClientNames()
@@ -73,6 +80,21 @@ namespace RatioForge.Tests
                 Assert.That(client.PeerID, Does.StartWith(ExpectedPeerIdPrefixes[clientName]));
                 Assert.That(DecodeUrlEncodedPeerId(client.PeerID), Has.Length.EqualTo(20));
             }));
+        }
+
+        [TestCase("Deluge 2.2.0", "Deluge/2.2.0 libtorrent/2.0.11.0")]
+        [TestCase("Deluge 1.3.15", "Deluge 1.3.15")]
+        [TestCase("qBittorrent 5.1.3", "qBittorrent/5.1.3")]
+        [TestCase("qBittorrent 5.1.2", "qBittorrent/5.1.2")]
+        [TestCase("qBittorrent 4.6.3", "qBittorrent/4.6.3")]
+        [TestCase("qBittorrent 4.5.5", "qBittorrent/4.5.5")]
+        [TestCase("qBittorrent 4.4.5", "qBittorrent/4.4.5")]
+        [TestCase("qBittorrent 4.2.3", "qBittorrent/4.2.3")]
+        public void GetClientShouldUseVersionSpecificUserAgent(string clientName, string userAgent)
+        {
+            TorrentClient client = TorrentClientFactory.GetClient(clientName);
+
+            Assert.That(client.Headers, Does.Contain("User-Agent: " + userAgent));
         }
 
         private static byte[] DecodeUrlEncodedPeerId(string peerId)

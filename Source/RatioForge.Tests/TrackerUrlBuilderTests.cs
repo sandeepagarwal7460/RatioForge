@@ -29,6 +29,25 @@ namespace RatioForge.Tests
             }));
         }
 
+        [TestCase("Deluge 2.2.0")]
+        [TestCase("Deluge 1.3.15")]
+        [TestCase("Deluge 1.2.0")]
+        [TestCase("Deluge 0.5.8.7")]
+        [TestCase("Deluge 0.5.8.6")]
+        public void DelugeAnnounceShouldInsertEventExactlyOnce(string clientName)
+        {
+            TorrentClient client = TorrentClientFactory.GetClient(clientName);
+            var torrent = CreateTorrentInfo("https://tracker.example/announce");
+
+            string result = TrackerUrlBuilder.BuildAnnounce(torrent, client, "&event=started", "192.0.2.10");
+
+            Assert.Multiple((Action)(() =>
+            {
+                Assert.That(result, Does.Contain("&event=started"));
+                Assert.That(result, Does.Not.Contain("event=&event="));
+            }));
+        }
+
         [Test]
         public void ScrapeShouldReplaceLastAnnounceSegmentAndPreservePasskey()
         {

@@ -5,6 +5,16 @@ All notable changes to RatioForge will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.10] - 2026-08-11
+
+### Added
+- **Emulation**: Added Deluge 1.3.15 and 2.2.0 client IDs.
+- **Emulation**: Added qBittorrent 4.2.3, 4.4.5, 4.5.5, 4.6.3, and 5.1.3 client IDs while retaining 5.1.2.
+- **Tests**: Added peer ID length, prefix, and User-Agent coverage for the new client profiles.
+
+### Fixed
+- **Emulation**: Fixed Deluge announce URLs so tracker events are inserted exactly once.
+
 ## [1.0.9] - 2026-07-10
 
 ### Added
@@ -180,6 +190,7 @@ For complete historical changelog, see [HISTORY.TXT](HISTORY.TXT)
 
 ---
 
+[1.0.10]: https://github.com/tsautier/RatioForge/releases/tag/v1.0.10
 [1.0.9]: https://github.com/tsautier/RatioForge/releases/tag/v1.0.9
 [1.0.8]: https://github.com/tsautier/RatioForge/releases/tag/v1.0.8
 [1.0.7]: https://github.com/tsautier/RatioForge/releases/tag/v1.0.7

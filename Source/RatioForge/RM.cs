@@ -512,10 +512,12 @@ namespace RatioForge
 
                     case "Deluge":
                         {
+                            cmbVersion.Items.Add("2.2.0");
+                            cmbVersion.Items.Add("1.3.15");
                             cmbVersion.Items.Add("1.2.0");
                             cmbVersion.Items.Add("0.5.8.7");
                             cmbVersion.Items.Add("0.5.8.6");
-                            cmbVersion.SelectedItem = "1.2.0";
+                            cmbVersion.SelectedItem = "2.2.0";
                             if (customPeersNum.Text == "0" || customPeersNum.Text == "") customPeersNum.Text = "200";
                             break;
                         }
@@ -539,8 +541,13 @@ namespace RatioForge
 
                     case "qBittorrent":
                         {
+                            cmbVersion.Items.Add("5.1.3");
                             cmbVersion.Items.Add("5.1.2");
-                            cmbVersion.SelectedItem = "5.1.2";
+                            cmbVersion.Items.Add("4.6.3");
+                            cmbVersion.Items.Add("4.5.5");
+                            cmbVersion.Items.Add("4.4.5");
+                            cmbVersion.Items.Add("4.2.3");
+                            cmbVersion.SelectedItem = "5.1.3";
                             if (customPeersNum.Text == "0" || customPeersNum.Text == "") customPeersNum.Text = "200";
                             break;
                         }
