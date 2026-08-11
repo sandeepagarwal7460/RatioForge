@@ -6,16 +6,17 @@ Use this checklist before creating and pushing a release tag.
 
 - [ ] Decide the next SemVer version.
 - [ ] Update `version.txt`.
-- [ ] Update `Website/version.html`.
 - [ ] Update `Source/Directory.Build.props`.
 - [ ] Update version assertions in tests.
 - [ ] Update `CHANGELOG.md` with the release date and notable changes.
 - [ ] Update `README.md` if the current release highlights changed.
+- [ ] Do not update the archived `Website/` PHP pages; see `docs/decisions/0001-archive-legacy-website.md`.
 
 ## Local Verification
 
 - [ ] Confirm the worktree is clean before starting release edits.
 - [ ] Run `dotnet restore Source\RatioForge.sln`.
+- [ ] Run `build\Test-NuGetSecurity.ps1`.
 - [ ] Run `dotnet build Source\RatioForge.sln --configuration Release --no-restore`.
 - [ ] Run `dotnet test Source\RatioForge.sln --configuration Release --no-build`.
 - [ ] Run `dotnet publish Source\RatioForge\RatioForge.csproj --configuration Release --runtime win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:IncludeAllContentForSelfExtract=true --output artifacts\RatioForge-<version>-win-x64`.

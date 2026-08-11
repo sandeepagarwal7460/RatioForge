@@ -12,7 +12,7 @@ namespace RatioForge
         private readonly StringBuilder logBuilder;
         public static readonly string LocalVersion = GetAssemblyVersion();
         public static readonly string PublicVersion = LocalVersion;
-        public const string ReleaseDate = "22-05-2026";
+        public const string ReleaseDate = "11-08-2026";
         private const string ProgramPageVersion = "https://raw.githubusercontent.com/tsautier/RatioForge/master/version.txt";
 
         private readonly string userAgent;

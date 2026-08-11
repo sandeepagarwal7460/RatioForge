@@ -3,6 +3,7 @@ namespace BitTorrent
     using System;
     using System.Collections;
     using System.Collections.ObjectModel;
+    using System.Globalization;
     using System.IO;
     using System.Text;
 
@@ -65,12 +66,12 @@ namespace BitTorrent
 
         public void Parse(Stream s)
         {
-            byte current = (byte)s.ReadByte();
+            int current = BEncode.ReadRequiredByte(s, "list value or terminator");
             while ((char)current != 'e')
             {
-                IBEncodeValue value = BEncode.Parse(s, current);
+                IBEncodeValue value = BEncode.Parse(s, (byte)current);
                 values.Add(value);
-                current = (byte)s.ReadByte();
+                current = BEncode.ReadRequiredByte(s, "list value or terminator");
             }
         }
 
@@ -135,7 +136,7 @@ namespace BitTorrent
         {
             get
             {
-                return v.Length;
+                return data.Length;
             }
         }
 
@@ -163,7 +164,7 @@ namespace BitTorrent
 
         public byte[] Encode()
         {
-            string prefix = v.Length.ToString() + ":";
+            string prefix = data.Length.ToString(CultureInfo.InvariantCulture) + ":";
             byte[] tempBytes = Encoding.GetEncoding(1252).GetBytes(prefix);
 
             byte[] newBytes = new Byte[prefix.Length + data.Length];
@@ -189,19 +190,43 @@ namespace BitTorrent
 
         public void Parse(Stream s, byte firstByte)
         {
-            string q = ((char)firstByte).ToString();
-            if (!Char.IsNumber(q[0])) throw new TorrentException("\"" + q + "\" is not a string length number.");
-
-            char current = (char)s.ReadByte();
-            while (current != ':')
+            char firstCharacter = (char)firstByte;
+            if (firstCharacter < '0' || firstCharacter > '9')
             {
-                q += current.ToString();
-                current = (char)s.ReadByte();
+                throw new TorrentException("\"" + firstCharacter + "\" is not a string length number.");
             }
 
-            int length = Int32.Parse(q);
+            var lengthText = new StringBuilder(firstCharacter.ToString());
+            int current = BEncode.ReadRequiredByte(s, "string length separator");
+            while ((char)current != ':')
+            {
+                if (current < '0' || current > '9')
+                {
+                    throw new TorrentException("Invalid character in string length.");
+                }
+
+                lengthText.Append((char)current);
+                current = BEncode.ReadRequiredByte(s, "string length separator");
+            }
+
+            if (!Int32.TryParse(lengthText.ToString(), NumberStyles.None, CultureInfo.InvariantCulture, out int length))
+            {
+                throw new TorrentException("Invalid or unsupported string length.");
+            }
+
             data = new Byte[length];
-            s.Read(data, 0, length);
+            int offset = 0;
+            while (offset < length)
+            {
+                int bytesRead = s.Read(data, offset, length - offset);
+                if (bytesRead == 0)
+                {
+                    throw new TorrentException("Unexpected end of data while reading a string value.");
+                }
+
+                offset += bytesRead;
+            }
+
             v = Encoding.GetEncoding(1252).GetString(data); // store string also
         }
     }
@@ -230,12 +255,12 @@ namespace BitTorrent
         {
             get
             {
-                return Int64.Parse(v);
+                return Int64.Parse(v, CultureInfo.InvariantCulture);
             }
 
             set
             {
-                String = value.ToString();
+                String = value.ToString(CultureInfo.InvariantCulture);
             }
         }
 
@@ -250,8 +275,7 @@ namespace BitTorrent
 
         internal ValueNumber(Int64 number)
         {
-            v = number.ToString();
-            String = v;
+            String = number.ToString(CultureInfo.InvariantCulture);
         }
 
         internal ValueNumber()
@@ -260,15 +284,20 @@ namespace BitTorrent
 
         public void Parse(Stream s)
         {
-            string buffer = String.Empty;
-            char current = (char)s.ReadByte();
-            while (current != 'e') // discard when end of integer
+            var buffer = new StringBuilder();
+            int current = BEncode.ReadRequiredByte(s, "integer value or terminator");
+            while ((char)current != 'e') // discard when end of integer
             {
-                buffer += current.ToString();
-                current = (char)s.ReadByte();
+                buffer.Append((char)current);
+                current = BEncode.ReadRequiredByte(s, "integer value or terminator");
             }
 
-            String = Int64.Parse(buffer).ToString();
+            if (!Int64.TryParse(buffer.ToString(), NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out long value))
+            {
+                throw new TorrentException("Invalid integer value.");
+            }
+
+            String = value.ToString(CultureInfo.InvariantCulture);
         }
     }
 
@@ -285,7 +314,7 @@ namespace BitTorrent
 
         internal static IBEncodeValue Parse(Stream d)
         {
-            return Parse(d, (byte)d.ReadByte());
+            return Parse(d, (byte)ReadRequiredByte(d, "bencoded value"));
         }
 
         internal static string String(IBEncodeValue v)
@@ -308,6 +337,17 @@ namespace BitTorrent
             if (v is ValueString) ((ValueString)v).Parse(d, (byte)first);
             else v.Parse(d);
             return v;
+        }
+
+        internal static int ReadRequiredByte(Stream stream, string context)
+        {
+            int value = stream.ReadByte();
+            if (value == -1)
+            {
+                throw new TorrentException("Unexpected end of data while reading " + context + ".");
+            }
+
+            return value;
         }
     }
 }

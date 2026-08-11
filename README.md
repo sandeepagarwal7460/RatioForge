@@ -70,12 +70,13 @@ dotnet test Source/RatioForge.sln
 
 For detailed usage instructions, see the built-in help menu.
 
-## What's New in 1.0.10 (RatioForge)
+## What's New in 1.0.11 (RatioForge)
 
-- **Deluge Profiles**: Added client IDs for Deluge 1.3.15 and 2.2.0
-- **qBittorrent Profiles**: Added client IDs for qBittorrent 4.2.3, 4.4.5, 4.5.5, 4.6.3, and 5.1.3
-- **Tracker Events**: Fixed duplicated Deluge announce event parameters
-- **Tests**: Added exact peer ID, User-Agent, and announce URL coverage for the new profiles
+- **Short Term Complete**: Every near-term roadmap objective is implemented and linked to evidence
+- **Parser Hardening**: Truncated and malformed torrent data is rejected deterministically
+- **Dependency Maintenance**: NuGet packages are current, Dependabot runs weekly, and CI audits vulnerabilities
+- **Release Reliability**: Build and release workflows share mandatory security, test, smoke, checksum, and artifact checks
+- **Website Decision**: The legacy PHP website is preserved as an archive while GitHub remains canonical
 
 See [CHANGELOG.md](CHANGELOG.md) for full version history.
 

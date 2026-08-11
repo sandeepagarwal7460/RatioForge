@@ -35,6 +35,10 @@ jobs:
         
     - name: Restore dependencies
       run: dotnet restore Source/RatioForge.sln
+
+    - name: Audit NuGet dependencies
+      shell: pwsh
+      run: ./build/Test-NuGetSecurity.ps1
       
     - name: Build
       run: dotnet build Source/RatioForge.sln --no-restore --configuration Release
@@ -110,3 +114,4 @@ jobs:
           artifacts/RatioForge-${{ steps.version.outputs.version }}-win-x64.exe
           artifacts/RatioForge-${{ steps.version.outputs.version }}-win-x64.sha256
         if-no-files-found: error
+        retention-days: 14

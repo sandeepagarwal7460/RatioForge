@@ -5,6 +5,25 @@ All notable changes to RatioForge will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.11] - 2026-08-11
+
+### Added
+- **Dependencies**: Added weekly Dependabot checks for NuGet packages and GitHub Actions.
+- **Security**: Added a shared NuGet vulnerability audit that blocks build and release workflows on known direct or transitive vulnerabilities.
+- **Tests**: Added malformed torrent fixtures for missing trackers, damaged piece hashes, truncated strings, and unterminated integers.
+- **Tests**: Added tracker URL edge cases for case-insensitive scrape rewriting and malformed hexadecimal hashes.
+- **Docs**: Added an architecture decision that archives the legacy PHP website and identifies the canonical project surfaces.
+
+### Changed
+- **Dependencies**: Updated all direct NuGet packages to the latest versions available from NuGet.org on 2026-08-11.
+- **CI**: Added explicit artifact retention periods to build and release workflows.
+- **Docs**: Marked every Short Term roadmap objective as Done with links to its implementation evidence.
+- **Release**: Removed the archived website version file from the active release checklist.
+
+### Fixed
+- **Parser**: Reject truncated BEncode strings, integers, lists, and dictionaries instead of accepting partial data or reading indefinitely.
+- **Parser**: Encode and report byte-string lengths from their byte count using invariant numeric formatting.
+
 ## [1.0.10] - 2026-08-11
 
 ### Added
@@ -190,6 +209,7 @@ For complete historical changelog, see [HISTORY.TXT](HISTORY.TXT)
 
 ---
 
+[1.0.11]: https://github.com/tsautier/RatioForge/releases/tag/v1.0.11
 [1.0.10]: https://github.com/tsautier/RatioForge/releases/tag/v1.0.10
 [1.0.9]: https://github.com/tsautier/RatioForge/releases/tag/v1.0.9
 [1.0.8]: https://github.com/tsautier/RatioForge/releases/tag/v1.0.8

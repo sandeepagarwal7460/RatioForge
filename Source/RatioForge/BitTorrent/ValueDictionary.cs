@@ -55,15 +55,15 @@ namespace BitTorrent
 
         public void Parse(Stream s)
         {
-            for (byte num1 = (byte)s.ReadByte(); num1 != 0x65; num1 = (byte)s.ReadByte())
+            for (int current = BEncode.ReadRequiredByte(s, "dictionary key or terminator"); current != 0x65; current = BEncode.ReadRequiredByte(s, "dictionary key or terminator"))
             {
-                if (!char.IsNumber((char)num1))
+                if (current < '0' || current > '9')
                 {
                     throw new TorrentException("Key expected to be a string.");
                 }
 
                 ValueString text1 = new ValueString();
-                text1.Parse(s, num1);
+                text1.Parse(s, (byte)current);
                 IBEncodeValue value1 = BEncode.Parse(s);
                 if (dict.ContainsKey(text1.String))
                 {

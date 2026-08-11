@@ -2,20 +2,22 @@
 
 This roadmap is intentionally practical: it separates near-term maintenance from larger product and architecture work.
 
-## Short Term
+## Short Term - Done
 
-- Harden GitHub Actions release automation with asset verification, checksums, and repeatable smoke checks.
-- Keep NuGet dependencies current and verify release builds on every tagged version.
-- Extend the existing torrent parsing and tracker URL tests with additional malformed and edge-case fixtures.
-- Document release, rollback, and verification steps so releases are reproducible.
-- Decide whether the refreshed legacy website should remain maintained or be replaced by GitHub Pages.
+Completed on 2026-08-11.
+
+- [x] **Done - Release automation:** Build and tagged-release workflows run tests, create self-contained Windows artifacts, launch the executable, generate SHA256 checksums, upload artifacts, and re-download release assets for checksum verification. See [build.yml](.github/workflows/build.yml) and [release.yml](.github/workflows/release.yml).
+- [x] **Done - Dependency maintenance:** Direct NuGet dependencies are current, Dependabot checks NuGet and GitHub Actions weekly, and CI rejects known direct or transitive NuGet vulnerabilities. See [dependabot.yml](.github/dependabot.yml) and [Test-NuGetSecurity.ps1](build/Test-NuGetSecurity.ps1).
+- [x] **Done - Parser and URL edge cases:** Automated fixtures cover single-file, multi-file, missing metadata, damaged piece hashes, truncated strings, and unterminated integers; tracker tests cover announce events, scrape rewriting, query preservation, and malformed hashes. See [RatioForge.Tests](Source/RatioForge.Tests).
+- [x] **Done - Reproducible releases:** Versioning, local verification, packaging, tagging, GitHub asset checks, and rollback are documented in [RELEASE_CHECKLIST.md](RELEASE_CHECKLIST.md).
+- [x] **Done - Legacy website decision:** The PHP website is retained as an undeployed historical archive; README, changelog, `version.txt`, and GitHub Releases are canonical. See [ADR 0001](docs/decisions/0001-archive-legacy-website.md).
 
 ## Mid Term
 
 - Add a dedicated .NET CLI project if command-line automation is needed.
 - Add structured logging for tracker communication, version checks, and proxy failures.
 - Improve error handling around network, proxy, and malformed torrent files.
-- Add sample torrent fixtures for parser and tracker behavior tests.
+- Completed early: sample torrent fixtures now cover parser and tracker behavior; continue extending them when regressions are found.
 - Monitor self-contained single-file release size and startup behavior.
 - Add a signed release path if code-signing certificates become available.
 

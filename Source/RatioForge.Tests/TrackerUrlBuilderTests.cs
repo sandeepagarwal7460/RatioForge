@@ -70,6 +70,25 @@ namespace RatioForge.Tests
             Assert.That(TrackerUrlBuilder.BuildScrape(torrent, client), Is.Empty);
         }
 
+        [Test]
+        public void ScrapeShouldReplaceAnnounceCaseInsensitively()
+        {
+            TorrentClient client = TorrentClientFactory.GetClient("qBittorrent 5.1.3");
+            var torrent = CreateTorrentInfo("https://tracker.example/ANNOUNCE?token=abc");
+
+            string result = TrackerUrlBuilder.BuildScrape(torrent, client);
+
+            Assert.That(result, Does.StartWith("https://tracker.example/scrape?token=abc&info_hash="));
+        }
+
+        [Test]
+        public void EncodeHashShouldRejectOddLengthHexadecimalInput()
+        {
+            Assert.That(
+                (Action)(() => { TrackerUrlBuilder.EncodeHash("abc", false); }),
+                Throws.TypeOf<FormatException>());
+        }
+
         private static TorrentInfo CreateTorrentInfo(string tracker)
         {
             return new TorrentInfo(16385, 47)

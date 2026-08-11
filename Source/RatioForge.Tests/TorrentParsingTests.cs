@@ -54,6 +54,31 @@ namespace RatioForge.Tests
                 Throws.TypeOf<IncompleteTorrentData>().With.Message.EqualTo("No piece hash data"));
         }
 
+        [Test]
+        public void MissingAnnounceShouldBeRejected()
+        {
+            Assert.That(
+                (Action)(() => new Torrent(FixturePath("missing-announce.torrent"))),
+                Throws.TypeOf<IncompleteTorrentData>().With.Message.EqualTo("No tracker URL"));
+        }
+
+        [Test]
+        public void DamagedPieceHashesShouldBeRejected()
+        {
+            Assert.That(
+                (Action)(() => new Torrent(FixturePath("damaged-pieces.torrent"))),
+                Throws.TypeOf<IncompleteTorrentData>().With.Message.EqualTo("Missing or damaged piece hash codes"));
+        }
+
+        [TestCase("truncated-string.torrent")]
+        [TestCase("unterminated-integer.torrent")]
+        public void TruncatedBencodeShouldBeRejected(string fileName)
+        {
+            Assert.That(
+                (Action)(() => new Torrent(FixturePath(fileName))),
+                Throws.TypeOf<TorrentException>().With.Message.Contains("Unexpected end of data"));
+        }
+
         private static string FixturePath(string fileName)
         {
             return Path.Combine(TestContext.CurrentContext.TestDirectory, "Fixtures", fileName);
