@@ -18,7 +18,7 @@ Completed on 2026-08-11.
 - Add structured logging for tracker communication, version checks, and proxy failures.
 - Improve error handling around network, proxy, and malformed torrent files.
 - Completed early: sample torrent fixtures now cover parser and tracker behavior; continue extending them when regressions are found.
-- Monitor self-contained single-file release size and startup behavior.
+- Active: CI enforces startup checks and size budgets for the compressed self-contained and Lite single-file releases.
 - Add a signed release path if code-signing certificates become available.
 
 ## Long Term

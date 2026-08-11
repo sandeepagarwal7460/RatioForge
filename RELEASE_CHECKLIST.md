@@ -19,18 +19,21 @@ Use this checklist before creating and pushing a release tag.
 - [ ] Run `build\Test-NuGetSecurity.ps1`.
 - [ ] Run `dotnet build Source\RatioForge.sln --configuration Release --no-restore`.
 - [ ] Run `dotnet test Source\RatioForge.sln --configuration Release --no-build`.
-- [ ] Run `dotnet publish Source\RatioForge\RatioForge.csproj --configuration Release --runtime win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:IncludeAllContentForSelfExtract=true --output artifacts\RatioForge-<version>-win-x64`.
+- [ ] Publish the compressed self-contained executable with the command used by `.github/workflows/release.yml`.
+- [ ] Publish the framework-dependent Lite executable with the command used by `.github/workflows/release.yml`.
 - [ ] Confirm `artifacts\RatioForge-<version>-win-x64\RatioForge.exe` exists.
-- [ ] Confirm `RatioForge.exe` file version matches `<version>.0`.
-- [ ] Confirm the raw executable starts on a clean Windows 10/11 machine without a separately installed .NET runtime.
-- [ ] Generate and verify SHA256 checksums for the zip archive and raw GUI executable.
+- [ ] Confirm both executable file versions match `<version>.0` and both pass the startup smoke check.
+- [ ] Confirm the self-contained executable is at most 100 MiB and starts without a separately installed .NET runtime.
+- [ ] Confirm the Lite executable is at most 10 MiB and starts with the .NET 8 Desktop Runtime installed.
+- [ ] Generate and verify SHA256 checksums for the zip archive and both raw GUI executables.
 - [ ] Remove local generated `artifacts\` output before committing.
 
 ## Windows Executable Build
 
 - [ ] Build the Windows Forms executable with `dotnet publish`.
-- [ ] Publish the raw GUI executable as `RatioForge-<version>-win-x64.exe`.
-- [ ] Publish the full self-contained single-file archive as `RatioForge-<version>-win-x64.zip`.
+- [ ] Publish the compressed self-contained GUI executable as `RatioForge-<version>-win-x64.exe`.
+- [ ] Publish the framework-dependent GUI executable as `RatioForge-<version>-win-x64-lite.exe`.
+- [ ] Publish the self-contained single-file archive as `RatioForge-<version>-win-x64.zip`.
 - [ ] Do not add packaging tools for languages that are not used by the application.
 
 ## Commit And Tag
@@ -49,8 +52,9 @@ Use this checklist before creating and pushing a release tag.
 - [ ] Confirm these release assets exist and are non-empty:
   - `RatioForge-<version>-win-x64.zip`
   - `RatioForge-<version>-win-x64.exe`
+  - `RatioForge-<version>-win-x64-lite.exe`
   - `RatioForge-<version>-win-x64.sha256`
-- [ ] Confirm the checksum file includes both the zip archive and raw GUI executable.
+- [ ] Confirm the checksum file includes the zip archive and both raw GUI executables.
 - [ ] Confirm no CLI executable is expected unless a dedicated .NET CLI project exists.
 
 ## Rollback

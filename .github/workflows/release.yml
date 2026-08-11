@@ -49,39 +49,58 @@ jobs:
       - name: Test
         run: dotnet test Source/RatioForge.sln --no-build --configuration Release --verbosity normal
 
-      - name: Publish win-x64
-        run: dotnet publish Source/RatioForge/RatioForge.csproj --configuration Release --runtime win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:IncludeAllContentForSelfExtract=true --output artifacts/RatioForge-${{ steps.version.outputs.version }}-win-x64
+      - name: Publish self-contained win-x64
+        run: dotnet publish Source/RatioForge/RatioForge.csproj --configuration Release --runtime win-x64 --self-contained true -p:PublishSingleFile=true -p:EnableCompressionInSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:IncludeAllContentForSelfExtract=true -p:DebugType=None -p:DebugSymbols=false --output artifacts/RatioForge-${{ steps.version.outputs.version }}-win-x64
+
+      - name: Publish Lite win-x64
+        run: dotnet publish Source/RatioForge/RatioForge.csproj --configuration Release --runtime win-x64 --self-contained false -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:DebugType=None -p:DebugSymbols=false --output artifacts/RatioForge-${{ steps.version.outputs.version }}-win-x64-lite
 
       - name: Smoke check Windows release build
         shell: pwsh
         run: |
           $version = "${{ steps.version.outputs.version }}"
-          $publishDir = "artifacts/RatioForge-$version-win-x64"
-          $exe = Join-Path $publishDir "RatioForge.exe"
-
-          if (!(Test-Path $exe)) {
-            throw "Missing GUI executable: $exe"
-          }
-
-          $fileVersion = (Get-Item $exe).VersionInfo.FileVersion
-          if ($fileVersion -ne "$version.0") {
-            throw "Expected RatioForge.exe file version '$version.0', got '$fileVersion'"
-          }
-
-          $process = Start-Process -FilePath $exe -PassThru
-          try {
-            Start-Sleep -Seconds 5
-            if ($process.HasExited) {
-              throw "RatioForge exited during the startup smoke check with code $($process.ExitCode)."
+          $executables = @(
+            @{
+              Source = "artifacts/RatioForge-$version-win-x64/RatioForge.exe"
+              Destination = "artifacts/RatioForge-$version-win-x64.exe"
+              MaximumBytes = 100MB
+            },
+            @{
+              Source = "artifacts/RatioForge-$version-win-x64-lite/RatioForge.exe"
+              Destination = "artifacts/RatioForge-$version-win-x64-lite.exe"
+              MaximumBytes = 10MB
             }
-          }
-          finally {
-            if (!$process.HasExited) {
-              Stop-Process -Id $process.Id -Force
-            }
-          }
+          )
 
-          Copy-Item -LiteralPath $exe -Destination "artifacts/RatioForge-$version-win-x64.exe" -Force
+          foreach ($item in $executables) {
+            if (!(Test-Path $item.Source)) {
+              throw "Missing GUI executable: $($item.Source)"
+            }
+
+            $file = Get-Item $item.Source
+            if ($file.VersionInfo.FileVersion -ne "$version.0") {
+              throw "Expected file version '$version.0', got '$($file.VersionInfo.FileVersion)' for $($item.Source)"
+            }
+
+            if ($file.Length -gt $item.MaximumBytes) {
+              throw "$($item.Source) is $($file.Length) bytes; expected at most $($item.MaximumBytes)."
+            }
+
+            $process = Start-Process -FilePath $file.FullName -PassThru
+            try {
+              Start-Sleep -Seconds 5
+              if ($process.HasExited) {
+                throw "$($item.Source) exited during the startup smoke check with code $($process.ExitCode)."
+              }
+            }
+            finally {
+              if (!$process.HasExited) {
+                Stop-Process -Id $process.Id -Force
+              }
+            }
+
+            Copy-Item -LiteralPath $file.FullName -Destination $item.Destination -Force
+          }
 
       - name: Package release artifact
         shell: pwsh
@@ -97,7 +116,8 @@ jobs:
           $version = "${{ steps.version.outputs.version }}"
           $files = @(
             "artifacts/RatioForge-$version-win-x64.zip",
-            "artifacts/RatioForge-$version-win-x64.exe"
+            "artifacts/RatioForge-$version-win-x64.exe",
+            "artifacts/RatioForge-$version-win-x64-lite.exe"
           )
 
           $checksums = foreach ($file in $files) {
@@ -114,6 +134,7 @@ jobs:
           path: |
             artifacts/RatioForge-${{ steps.version.outputs.version }}-win-x64.zip
             artifacts/RatioForge-${{ steps.version.outputs.version }}-win-x64.exe
+            artifacts/RatioForge-${{ steps.version.outputs.version }}-win-x64-lite.exe
             artifacts/RatioForge-${{ steps.version.outputs.version }}-win-x64.sha256
           if-no-files-found: error
           retention-days: 30
@@ -127,6 +148,7 @@ jobs:
           gh release create "$env:GITHUB_REF_NAME" `
             "artifacts/RatioForge-${{ steps.version.outputs.version }}-win-x64.zip" `
             "artifacts/RatioForge-${{ steps.version.outputs.version }}-win-x64.exe" `
+            "artifacts/RatioForge-${{ steps.version.outputs.version }}-win-x64-lite.exe" `
             "artifacts/RatioForge-${{ steps.version.outputs.version }}-win-x64.sha256" `
             --title "RatioForge ${{ steps.version.outputs.version }}" `
             --notes "See CHANGELOG.md for the release notes." `
@@ -142,6 +164,7 @@ jobs:
           $expectedAssets = @(
             "RatioForge-$version-win-x64.zip",
             "RatioForge-$version-win-x64.exe",
+            "RatioForge-$version-win-x64-lite.exe",
             "RatioForge-$version-win-x64.sha256"
           )
 

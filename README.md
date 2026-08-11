@@ -23,13 +23,15 @@
 ## Requirements
 
 - **Windows 10/11** (64-bit recommended)
-- No separate .NET runtime is required for the self-contained win-x64 release.
+- The standard self-contained executable does not require a separate .NET installation.
+- The much smaller Lite executable requires the [.NET 8 Desktop Runtime for Windows x64](https://dotnet.microsoft.com/download/dotnet/8.0).
 
 ## Installation
 
-1. Download the latest raw executable or zip archive from the [Releases](https://github.com/tsautier/RatioForge/releases) page
-2. Extract the archive when using the zip package
-3. Run `RatioForge.exe`
+1. Download the latest release from the [Releases](https://github.com/tsautier/RatioForge/releases) page.
+2. Choose `RatioForge-<version>-win-x64-lite.exe` for the smallest download when .NET 8 Desktop Runtime is installed.
+3. Choose `RatioForge-<version>-win-x64.exe` or the zip archive for a self-contained build that needs no separate runtime.
+4. Extract the archive when using the zip package, then run the executable.
 
 ## Building from Source
 
@@ -70,13 +72,12 @@ dotnet test Source/RatioForge.sln
 
 For detailed usage instructions, see the built-in help menu.
 
-## What's New in 1.0.11 (RatioForge)
+## What's New in 1.0.12 (RatioForge)
 
-- **Short Term Complete**: Every near-term roadmap objective is implemented and linked to evidence
-- **Parser Hardening**: Truncated and malformed torrent data is rejected deterministically
-- **Dependency Maintenance**: NuGet packages are current, Dependabot runs weekly, and CI audits vulnerabilities
-- **Release Reliability**: Build and release workflows share mandatory security, test, smoke, checksum, and artifact checks
-- **Website Decision**: The legacy PHP website is preserved as an archive while GitHub remains canonical
+- **Lite Executable**: Added a framework-dependent Windows executable of about 1.1 MB
+- **Smaller Standalone Build**: Enabled single-file compression, reducing the self-contained executable from about 162 MB to about 72 MB
+- **Release Guardrails**: CI smoke-tests both variants and enforces maximum sizes of 10 MiB for Lite and 100 MiB for self-contained
+- **Verified Assets**: Both executables, the zip archive, and their SHA256 entries are verified after release upload
 
 See [CHANGELOG.md](CHANGELOG.md) for full version history.
 

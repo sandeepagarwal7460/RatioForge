@@ -5,6 +5,16 @@ All notable changes to RatioForge will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.12] - 2026-08-11
+
+### Added
+- **Release**: Added a framework-dependent `win-x64-lite.exe` for systems with the .NET 8 Desktop Runtime installed.
+- **CI**: Added version, startup, and maximum-size checks for both Windows executable variants.
+
+### Changed
+- **Release**: Enabled .NET single-file compression for the self-contained executable, reducing its measured local size from 161.7 MB to 71.6 MB.
+- **Checksums**: Included the Lite executable in generated SHA256 checksums and post-upload release verification.
+
 ## [1.0.11] - 2026-08-11
 
 ### Added
@@ -209,6 +219,7 @@ For complete historical changelog, see [HISTORY.TXT](HISTORY.TXT)
 
 ---
 
+[1.0.12]: https://github.com/tsautier/RatioForge/releases/tag/v1.0.12
 [1.0.11]: https://github.com/tsautier/RatioForge/releases/tag/v1.0.11
 [1.0.10]: https://github.com/tsautier/RatioForge/releases/tag/v1.0.10
 [1.0.9]: https://github.com/tsautier/RatioForge/releases/tag/v1.0.9

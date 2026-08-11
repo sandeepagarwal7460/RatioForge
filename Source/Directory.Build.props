@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <RatioForgeVersion>1.0.11</RatioForgeVersion>
+    <RatioForgeVersion>1.0.12</RatioForgeVersion>
     <Version>$(RatioForgeVersion)</Version>
     <VersionPrefix>$(RatioForgeVersion)</VersionPrefix>
     <AssemblyVersion>$(RatioForgeVersion).0</AssemblyVersion>
