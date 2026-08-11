@@ -758,6 +758,7 @@ namespace RatioForge
             "BitComet",
             "Azureus",
             "Vuze",
+            "BiglyBT",
             "BitTorrent",
 			"Transmission",
             "ABC",

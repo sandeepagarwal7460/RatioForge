@@ -5,6 +5,16 @@ All notable changes to RatioForge will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.13] - 2026-08-11
+
+### Added
+- **Emulation**: Added source-verified profiles for qBittorrent 5.2.3, Transmission 4.1.3, KTorrent 26.04.3, and BiglyBT 4.1.0.0.
+- **Tests**: Added peer ID length, prefix, and User-Agent coverage for every new profile.
+
+### Changed
+- **UI**: Made the newest verified client versions the default choices in their respective selectors.
+- **Audit**: Confirmed Deluge 2.2.0 remains the latest stable Deluge release; identified BitComet 2.21 but did not add an unverified tracker signature.
+
 ## [1.0.12] - 2026-08-11
 
 ### Added
@@ -219,6 +229,7 @@ For complete historical changelog, see [HISTORY.TXT](HISTORY.TXT)
 
 ---
 
+[1.0.13]: https://github.com/tsautier/RatioForge/releases/tag/v1.0.13
 [1.0.12]: https://github.com/tsautier/RatioForge/releases/tag/v1.0.12
 [1.0.11]: https://github.com/tsautier/RatioForge/releases/tag/v1.0.11
 [1.0.10]: https://github.com/tsautier/RatioForge/releases/tag/v1.0.10

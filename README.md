@@ -13,7 +13,7 @@
 - **No Real Transfer**: Does NOT download/upload actual files - only simulates stats
 - **Wide Client Support**: Hardcoded emulations for popular BitTorrent clients:
   - uTorrent (multiple versions)
-  - BitComet, Azureus/Vuze
+  - BitComet, Azureus/Vuze, BiglyBT
   - ABC, BitLord, BTuga
   - BitTornado, Burst, BitTyrant, BitSpirit
   - Deluge, Transmission, KTorrent
@@ -72,14 +72,14 @@ dotnet test Source/RatioForge.sln
 
 For detailed usage instructions, see the built-in help menu.
 
-## What's New in 1.0.12 (RatioForge)
+## What's New in 1.0.13 (RatioForge)
 
-- **Lite Executable**: Added a framework-dependent Windows executable of about 1.1 MB
-- **Smaller Standalone Build**: Enabled single-file compression, reducing the self-contained executable from about 162 MB to about 72 MB
-- **Release Guardrails**: CI smoke-tests both variants and enforces maximum sizes of 10 MiB for Lite and 100 MiB for self-contained
-- **Verified Assets**: Both executables, the zip archive, and their SHA256 entries are verified after release upload
+- **Current Client IDs**: Added qBittorrent 5.2.3, Transmission 4.1.3, KTorrent 26.04.3, and BiglyBT 4.1.0.0 profiles
+- **Source-Verified Signatures**: Peer ID prefixes and User-Agents are derived from the clients' official tagged source code
+- **Compatibility**: Existing legacy profiles remain available alongside the new defaults
 
 See [CHANGELOG.md](CHANGELOG.md) for full version history.
+The source evidence for current emulation signatures is recorded in the [2026 client profile audit](docs/client-profile-audit-2026-08-11.md).
 
 ## History
 

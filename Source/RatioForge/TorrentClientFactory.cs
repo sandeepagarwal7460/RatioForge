@@ -137,6 +137,25 @@ namespace RatioForge
                         break;
                     }
                 #endregion
+                #region BiglyBT
+                case "BiglyBT 4.1.0.0":
+                    {
+                        client.Name = "BiglyBT 4.1.0.0";
+                        client.HttpProtocol = "HTTP/1.1";
+                        client.HashUpperCase = true;
+                        client.Key = GenerateIdString("alphanumeric", 8, false, false);
+                        client.Headers = "User-Agent: BiglyBT 4.1.0.0\r\nConnection: close\r\nAccept-Encoding: gzip\r\nHost: {host}\r\nAccept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2\r\n";
+                        client.PeerID = "-BI4100-" + GenerateIdString("alphanumeric", 12, false, false);
+                        client.Query = "info_hash={infohash}&peer_id={peerid}&supportcrypto=1&port={port}&azudp={port}&uploaded={uploaded}&downloaded={downloaded}&left={left}&corrupt=0{event}&numwant={numwant}&no_peer_id=1&compact=1&key={key}&azver=3";
+                        client.DefNumWant = 50;
+                        client.Parse = true;
+                        client.SearchString = "&peer_id=-BI4100-";
+                        client.ProcessName = "BiglyBT";
+                        client.StartOffset = 0;
+                        client.MaxOffset = 100000000;
+                        break;
+                    }
+                #endregion
                 #region Azureus
                 case "Azureus 3.1.1.0":
                     {
@@ -483,6 +502,12 @@ namespace RatioForge
                     }
                 #endregion
                 #region Transmission
+                case "Transmission 4.1.3":
+                    {
+                        ConfigureTransmissionClient(client, "4.1.3", "-TR4130-");
+                        break;
+                    }
+
                 case "Transmission 2.82 (14160)":
                     {
                         client.Name = "Transmission 2.82 (14160)";
@@ -709,6 +734,21 @@ namespace RatioForge
                     }
                 #endregion
                 #region KTorrent
+                case "KTorrent 26.04.3":
+                    {
+                        client.Name = "KTorrent 26.04.3";
+                        client.HttpProtocol = "HTTP/1.1";
+                        client.HashUpperCase = false;
+                        client.Key = GenerateIdString("numeric", 10, false, false);
+                        client.Headers = "User-Agent: KTorrent/26.04.3\r\nHost: {host}\r\nConnection: Keep-Alive\r\n";
+                        client.PeerID = "-KT26043-%00" + GenerateIdString("alphanumeric", 10, false, false);
+                        client.Query = "peer_id={peerid}&port={port}&uploaded={uploaded}&downloaded={downloaded}&left={left}&compact=1&numwant={numwant}&key={key}{event}&info_hash={infohash}";
+                        client.DefNumWant = 200;
+                        client.SearchString = "&peer_id=-KT26043-%00";
+                        client.ProcessName = "ktorrent";
+                        break;
+                    }
+
                 case "KTorrent 2.2.1":
                     {
                         client.Name = "KTorrent 2.2.1";
@@ -737,6 +777,12 @@ namespace RatioForge
                     }
                 #endregion
                 #region qBittorrent
+                case "qBittorrent 5.2.3":
+                    {
+                        ConfigureQBittorrentClient(client, "5.2.3", "-qB5230-");
+                        break;
+                    }
+
                 case "qBittorrent 5.1.3":
                     {
                         ConfigureQBittorrentClient(client, "5.1.3", "-qB5130-");
@@ -851,6 +897,20 @@ namespace RatioForge
             client.ProcessName = "qbittorrent";
         }
 
+        private static void ConfigureTransmissionClient(TorrentClient client, string version, string peerIdPrefix)
+        {
+            client.Name = "Transmission " + version;
+            client.HttpProtocol = "HTTP/1.1";
+            client.HashUpperCase = false;
+            client.Key = GenerateIdString("hex", 8, false, true);
+            client.Headers = "User-Agent: Transmission/" + version + "\r\nHost: {host}\r\nAccept: */*\r\nAccept-Encoding: gzip;q=1.0, deflate, identity\r\n";
+            client.PeerID = peerIdPrefix + GenerateIdString("loweralphanumeric", 12, false, false);
+            client.Query = "info_hash={infohash}&peer_id={peerid}&port={port}&uploaded={uploaded}&downloaded={downloaded}&left={left}&numwant={numwant}&key={key}&compact=1&supportcrypto=1{event}";
+            client.DefNumWant = 80;
+            client.SearchString = "&peer_id=" + peerIdPrefix;
+            client.ProcessName = "Transmission";
+        }
+
         private static string GenerateIdString(string keyType, int keyLength, bool urlencoding, bool upperCase = false)
         {
             string text1;
@@ -866,6 +926,12 @@ namespace RatioForge
                 if (text2 == "numeric")
                 {
                     text1 = stringGenerator.Generate(keyLength, "0123456789".ToCharArray());
+                    goto Label_00A2;
+                }
+
+                if (text2 == "loweralphanumeric")
+                {
+                    text1 = stringGenerator.Generate(keyLength, "0123456789abcdefghijklmnopqrstuvwxyz".ToCharArray());
                     goto Label_00A2;
                 }
 

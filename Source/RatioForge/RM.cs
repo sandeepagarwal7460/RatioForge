@@ -403,6 +403,14 @@ namespace RatioForge
                             break;
                         }
 
+                    case "BiglyBT":
+                        {
+                            cmbVersion.Items.Add("4.1.0.0");
+                            cmbVersion.SelectedItem = "4.1.0.0";
+                            if (customPeersNum.Text == "0" || customPeersNum.Text == "") customPeersNum.Text = "50";
+                            break;
+                        }
+
                     case "Azureus":
                         {
                             cmbVersion.Items.Add("3.1.1.0");
@@ -446,9 +454,10 @@ namespace RatioForge
 
                     case "Transmission":
                         {
+                            cmbVersion.Items.Add("4.1.3");
                             cmbVersion.Items.Add("2.82 (14160)");
                             cmbVersion.Items.Add("2.92 (14714)");
-                            cmbVersion.SelectedItem = "2.92 (14714)";
+                            cmbVersion.SelectedItem = "4.1.3";
                             if (customPeersNum.Text == "0" || customPeersNum.Text == "") customPeersNum.Text = "200";
                             break;
                         }
@@ -524,8 +533,9 @@ namespace RatioForge
 
                     case "KTorrent":
                         {
+                            cmbVersion.Items.Add("26.04.3");
                             cmbVersion.Items.Add("2.2.1");
-                            cmbVersion.SelectedItem = "2.2.1";
+                            cmbVersion.SelectedItem = "26.04.3";
                             if (customPeersNum.Text == "0" || customPeersNum.Text == "") customPeersNum.Text = "100";
                             break;
                         }
@@ -541,13 +551,14 @@ namespace RatioForge
 
                     case "qBittorrent":
                         {
+                            cmbVersion.Items.Add("5.2.3");
                             cmbVersion.Items.Add("5.1.3");
                             cmbVersion.Items.Add("5.1.2");
                             cmbVersion.Items.Add("4.6.3");
                             cmbVersion.Items.Add("4.5.5");
                             cmbVersion.Items.Add("4.4.5");
                             cmbVersion.Items.Add("4.2.3");
-                            cmbVersion.SelectedItem = "5.1.3";
+                            cmbVersion.SelectedItem = "5.2.3";
                             if (customPeersNum.Text == "0" || customPeersNum.Text == "") customPeersNum.Text = "200";
                             break;
                         }

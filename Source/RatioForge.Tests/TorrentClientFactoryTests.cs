@@ -19,6 +19,7 @@ namespace RatioForge.Tests
             ["BitComet 0.93"] = "-BC0093-",
             ["BitComet 0.92"] = "-BC0092-",
             ["Vuze 4.2.0.8"] = "-AZ4208-",
+            ["BiglyBT 4.1.0.0"] = "-BI4100-",
             ["Azureus 3.1.1.0"] = "-AZ3110-",
             ["Azureus 3.0.5.0"] = "-AZ3050-",
             ["Azureus 3.0.4.2"] = "-AZ3042-",
@@ -41,6 +42,7 @@ namespace RatioForge.Tests
             ["BitTorrent 6.0.3 (8642)"] = "M6-0-3--",
             ["Transmission 2.82 (14160)"] = "-TR2500-",
             ["Transmission 2.92 (14714)"] = "-TR2920-",
+            ["Transmission 4.1.3"] = "-TR4130-",
             ["ABC 3.1"] = "A310--",
             ["BitLord 1.1"] = "exbc%01%01LORD",
             ["BTuga 2.1.8"] = "R26---",
@@ -55,8 +57,10 @@ namespace RatioForge.Tests
             ["Deluge 0.5.8.7"] = "-DE0587-",
             ["Deluge 0.5.8.6"] = "-DE0586-",
             ["KTorrent 2.2.1"] = "-KT2210-",
+            ["KTorrent 26.04.3"] = "-KT26043-%00",
             ["Gnome BT 0.0.28-1"] = "M3-4-2--",
             ["qBittorrent 5.1.3"] = "-qB5130-",
+            ["qBittorrent 5.2.3"] = "-qB5230-",
             ["qBittorrent 5.1.2"] = "-qB5120-",
             ["qBittorrent 4.6.3"] = "-qB4630-",
             ["qBittorrent 4.5.5"] = "-qB4550-",
@@ -84,6 +88,10 @@ namespace RatioForge.Tests
 
         [TestCase("Deluge 2.2.0", "Deluge/2.2.0 libtorrent/2.0.11.0")]
         [TestCase("Deluge 1.3.15", "Deluge 1.3.15")]
+        [TestCase("BiglyBT 4.1.0.0", "BiglyBT 4.1.0.0")]
+        [TestCase("Transmission 4.1.3", "Transmission/4.1.3")]
+        [TestCase("KTorrent 26.04.3", "KTorrent/26.04.3")]
+        [TestCase("qBittorrent 5.2.3", "qBittorrent/5.2.3")]
         [TestCase("qBittorrent 5.1.3", "qBittorrent/5.1.3")]
         [TestCase("qBittorrent 5.1.2", "qBittorrent/5.1.2")]
         [TestCase("qBittorrent 4.6.3", "qBittorrent/4.6.3")]
