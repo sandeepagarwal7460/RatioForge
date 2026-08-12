@@ -10,8 +10,18 @@ COPY . .
 
 ENV EnableWindowsTargeting=true
 
+
+# ------------------------------------------------------------
+# Restore
+# ------------------------------------------------------------
+
 RUN dotnet restore Source/RatioForge.sln \
     -p:EnableWindowsTargeting=true
+
+
+# ------------------------------------------------------------
+# Publish self-contained Windows x64 application
+# ------------------------------------------------------------
 
 RUN dotnet publish Source/RatioForge/RatioForge.csproj \
     --configuration Release \
@@ -40,7 +50,7 @@ WORKDIR /app
 
 
 # ============================================================
-# 32-bit architecture
+# 32-bit support
 # ============================================================
 
 RUN dpkg --add-architecture i386
@@ -93,27 +103,14 @@ RUN apt-get update && \
 
 
 # ============================================================
-# RatioForge
+# Copy RatioForge
 # ============================================================
 
 COPY --from=builder /publish /app/RatioForge
 
 
 # ============================================================
-# Download Wine Mono
-#
-# IMPORTANT:
-# We only download it during Docker build.
-# We install it when the container starts, after
-# Wine/Xvfb are actually running.
-# ============================================================
-
-RUN wget -O /app/wine-mono.msi \
-    https://dl.winehq.org/wine/wine-mono/10.2.0/wine-mono-10.2.0-x86.msi
-
-
-# ============================================================
-# Startup
+# Startup script
 # ============================================================
 
 COPY start.sh /app/start.sh
