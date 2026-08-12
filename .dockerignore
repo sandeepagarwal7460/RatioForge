@@ -1,0 +1,15 @@
+.git
+.github
+.vscode
+.idea
+
+.gitignore
+
+bin
+obj
+
+*.exe
+*.dll
+*.pdb
+
+__pycache__
