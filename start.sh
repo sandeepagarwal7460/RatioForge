@@ -87,7 +87,7 @@ start_ratioforge() {
     echo " Starting RatioForge"
     echo "=============================================="
 
-    wine "$RATIOFORGE" \
+    WINEDEBUG=+seh,+module,+loaddll wine "$RATIOFORGE" \
         >/tmp/ratioforge.log 2>&1 &
 
     RATIOFORGE_PID=$!
