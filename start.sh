@@ -10,15 +10,16 @@ PORT="${PORT:-10000}"
 RATIOFORGE="/app/RatioForge/RatioForge.exe"
 
 echo "=============================================="
-echo " RatioForge + Wine + Xvfb + noVNC"
+echo " RatioForge + Wine 11 + Xvfb + noVNC"
 echo "=============================================="
 echo "PORT: $PORT"
 echo "DISPLAY: $DISPLAY"
+echo "WINEPREFIX: $WINEPREFIX"
 echo ""
 
 
 # ============================================================
-# 1. START Xvfb
+# 1. START XVFB
 # ============================================================
 
 echo "=============================================="
@@ -39,12 +40,13 @@ sleep 3
 
 if ! kill -0 "$XVFB_PID" 2>/dev/null; then
     echo "ERROR: Xvfb failed to start."
+    echo ""
     cat /tmp/xvfb.log || true
     exit 1
 fi
 
 echo "Xvfb PID: $XVFB_PID"
-echo "Xvfb started."
+echo "Xvfb started successfully."
 
 
 # ============================================================
@@ -58,11 +60,48 @@ echo "=============================================="
 
 wine --version || true
 
-wineboot --init >/tmp/wineboot.log 2>&1 || true
+echo ""
+echo "Starting Wine prefix initialization..."
+echo "Timeout: 30 seconds"
 
-sleep 5
+timeout 30s wineboot --init >/tmp/wineboot.log 2>&1
+WINEBOOT_EXIT=$?
 
-echo "Wine initialized."
+echo ""
+echo "wineboot exit code: $WINEBOOT_EXIT"
+
+if [ "$WINEBOOT_EXIT" -eq 124 ]; then
+
+    echo ""
+    echo "WARNING: wineboot timed out after 30 seconds."
+
+    echo ""
+    echo "Wineboot log:"
+    cat /tmp/wineboot.log || true
+
+    echo ""
+    echo "Continuing startup anyway."
+
+elif [ "$WINEBOOT_EXIT" -ne 0 ]; then
+
+    echo ""
+    echo "WARNING: wineboot returned an error."
+
+    echo ""
+    echo "Wineboot log:"
+    cat /tmp/wineboot.log || true
+
+    echo ""
+    echo "Continuing startup anyway."
+
+else
+
+    echo ""
+    echo "Wine initialized successfully."
+
+fi
+
+sleep 3
 
 
 # ============================================================
@@ -76,17 +115,27 @@ echo "=============================================="
 
 if [ ! -f "$RATIOFORGE" ]; then
 
+    echo ""
     echo "ERROR: RatioForge.exe was not found."
 
     echo ""
-    echo "Files in /app/RatioForge:"
-    find /app/RatioForge -maxdepth 2 -type f -print
+    echo "Contents of /app/RatioForge:"
+
+    find /app/RatioForge \
+        -maxdepth 2 \
+        -type f \
+        -print
 
     exit 1
 fi
 
 echo "RatioForge found:"
 echo "$RATIOFORGE"
+
+echo ""
+echo "RatioForge file information:"
+
+ls -lh "$RATIOFORGE"
 
 
 # ============================================================
@@ -109,10 +158,6 @@ start_ratioforge() {
     rm -f /tmp/ratioforge.log
     rm -f /tmp/ratioforge.pid
 
-    # Detailed Wine diagnostics.
-    #
-    # This intentionally produces more output than normal.
-    # We need it to diagnose the crash.
     WINEDEBUG=+seh,+pid,+tid,+module,+loaddll \
     wine "$RATIOFORGE" \
         >/tmp/ratioforge.log 2>&1 &
@@ -124,8 +169,6 @@ start_ratioforge() {
     echo "RatioForge PID: $RATIOFORGE_PID"
     echo "RatioForge started."
 
-    # Give the application a moment to initialize.
-    sleep 8
 }
 
 
@@ -136,12 +179,33 @@ ratioforge_supervisor() {
         start_ratioforge
 
         echo ""
-        echo "Checking RatioForge process..."
+        echo "Waiting 10 seconds for RatioForge startup..."
+
+        sleep 10
+
 
         if kill -0 "$RATIOFORGE_PID" 2>/dev/null; then
+
+            echo ""
             echo "RatioForge process is running."
+
         else
-            echo "RatioForge already exited."
+
+            echo ""
+            echo "WARNING: RatioForge exited during startup."
+
+            echo ""
+            echo "=============================================="
+            echo " RatioForge / Wine LOG"
+            echo "=============================================="
+
+            cat /tmp/ratioforge.log || true
+
+            echo ""
+            echo "=============================================="
+            echo " End RatioForge / Wine LOG"
+            echo "=============================================="
+
         fi
 
 
@@ -190,16 +254,18 @@ ratioforge_supervisor() {
 }
 
 
-# Run supervisor in background.
+# Start RatioForge supervisor in background.
+
 ratioforge_supervisor &
 
 SUPERVISOR_PID=$!
 
+echo ""
 echo "RatioForge supervisor PID: $SUPERVISOR_PID"
 
 
 # ============================================================
-# 5. VNC PASSWORD
+# 5. CONFIGURE VNC PASSWORD
 # ============================================================
 
 echo ""
@@ -213,8 +279,9 @@ if [ -z "${VNC_PASSWORD:-}" ]; then
     echo ""
     echo "ERROR: VNC_PASSWORD is not configured."
     echo ""
-    echo "Add VNC_PASSWORD in:"
-    echo "Render → Service → Environment"
+    echo "Add VNC_PASSWORD to:"
+    echo ""
+    echo "Render → ratioforge → Environment"
     echo ""
 
     exit 1
@@ -262,8 +329,11 @@ sleep 3
 
 if ! kill -0 "$X11VNC_PID" 2>/dev/null; then
 
+    echo ""
     echo "ERROR: x11vnc failed to start."
 
+    echo ""
+    echo "x11vnc log:"
     cat /tmp/x11vnc.log || true
 
     exit 1
@@ -271,11 +341,11 @@ if ! kill -0 "$X11VNC_PID" 2>/dev/null; then
 fi
 
 echo "x11vnc PID: $X11VNC_PID"
-echo "x11vnc started."
+echo "x11vnc started successfully."
 
 
 # ============================================================
-# 7. START noVNC
+# 7. START NOVNC
 # ============================================================
 
 echo ""
@@ -284,17 +354,19 @@ echo " [7/7] Starting noVNC"
 echo "=============================================="
 
 echo ""
-echo "Browser desktop available"
+echo "=============================================="
+echo " Browser desktop available"
+echo "=============================================="
+
 echo ""
 echo "Port: $PORT"
 echo "VNC target: localhost:5900"
+echo "Web root: /usr/share/novnc"
 echo ""
-echo "WebSocket server settings:"
+
+echo "Starting websockify..."
 echo ""
-echo "- Listen on :$PORT"
-echo "- Web root: /usr/share/novnc"
-echo "- VNC target: localhost:5900"
-echo ""
+
 
 exec websockify \
     --web=/usr/share/novnc \
