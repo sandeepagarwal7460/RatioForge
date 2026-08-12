@@ -1,5 +1,5 @@
 # ============================================================
-# BUILD STAGE
+# BUILD
 # ============================================================
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS builder
@@ -28,7 +28,7 @@ RUN dotnet publish Source/RatioForge/RatioForge.csproj \
 # RUNTIME
 # ============================================================
 
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -39,52 +39,75 @@ ENV DISPLAY=:99
 WORKDIR /app
 
 
-# ------------------------------------------------------------
-# 32-bit support
-# ------------------------------------------------------------
+# ============================================================
+# Enable 32-bit architecture
+# ============================================================
 
 RUN dpkg --add-architecture i386
 
 
-# ------------------------------------------------------------
-# Install Wine + virtual desktop + VNC + noVNC
-# ------------------------------------------------------------
+# ============================================================
+# Install prerequisites for WineHQ
+# ============================================================
 
 RUN apt-get update && \
     apt-get install -y \
-        wine64 \
-        wine32 \
-        winbind \
+        wget \
+        ca-certificates \
+        gnupg2 \
+        software-properties-common \
         xvfb \
         x11vnc \
         novnc \
         websockify \
         xauth \
-        ca-certificates \
         procps \
         python3 \
         && \
     rm -rf /var/lib/apt/lists/*
 
 
-# ------------------------------------------------------------
-# Copy compiled RatioForge
-# ------------------------------------------------------------
+# ============================================================
+# WineHQ repository
+# ============================================================
+
+RUN mkdir -pm755 /etc/apt/keyrings && \
+    wget -O /etc/apt/keyrings/winehq-archive.key \
+        https://dl.winehq.org/wine-builds/winehq.key
+
+
+RUN wget -NP /etc/apt/sources.list.d/ \
+        https://dl.winehq.org/wine-builds/ubuntu/dists/noble/winehq-noble.sources
+
+
+# ============================================================
+# Install current Wine stable
+# ============================================================
+
+RUN apt-get update && \
+    apt-get install -y \
+        --install-recommends \
+        winehq-stable \
+        && \
+    rm -rf /var/lib/apt/lists/*
+
+
+# ============================================================
+# Copy RatioForge
+# ============================================================
 
 COPY --from=builder /publish /app/RatioForge
 
 
-# ------------------------------------------------------------
-# Startup script
-# ------------------------------------------------------------
+# ============================================================
+# Startup
+# ============================================================
 
 COPY start.sh /app/start.sh
 
 RUN chmod +x /app/start.sh
 
 
-# Render's public port
 EXPOSE 10000
-
 
 CMD ["/app/start.sh"]
