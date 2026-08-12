@@ -5,11 +5,14 @@
 
 .gitignore
 
-bin
-obj
+bin/
+obj/
+
+**/bin/
+**/obj/
 
 *.exe
 *.dll
 *.pdb
 
-__pycache__
+__pycache__/
