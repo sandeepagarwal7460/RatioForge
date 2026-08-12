@@ -2,10 +2,6 @@
 
 set -u
 
-echo "=========================================="
-echo " RatioForge - Render 24/7 Service"
-echo "=========================================="
-
 export DISPLAY=:99
 export WINEPREFIX=/wine
 export WINEARCH=win64
@@ -14,12 +10,16 @@ PORT="${PORT:-10000}"
 
 RATIOFORGE="/app/RatioForge/RatioForge.exe"
 
+echo "=============================================="
+echo " RatioForge + Wine + noVNC"
+echo "=============================================="
+
 
 # ============================================================
-# START VIRTUAL DISPLAY
+# 1. START VIRTUAL DISPLAY
 # ============================================================
 
-echo "[1] Starting Xvfb..."
+echo "[1/7] Starting Xvfb..."
 
 Xvfb :99 \
     -screen 0 1280x720x24 \
@@ -39,14 +39,14 @@ if ! kill -0 "$XVFB_PID" 2>/dev/null; then
     exit 1
 fi
 
-echo "Xvfb running."
+echo "Xvfb running: PID $XVFB_PID"
 
 
 # ============================================================
-# INITIALIZE WINE
+# 2. INITIALIZE WINE
 # ============================================================
 
-echo "[2] Initializing Wine..."
+echo "[2/7] Initializing Wine..."
 
 wineboot --init >/tmp/wineboot.log 2>&1 || true
 
@@ -58,17 +58,15 @@ wine --version || true
 
 
 # ============================================================
-# CHECK RATIOFORGE
+# 3. CHECK RATIOFORGE
 # ============================================================
 
-echo "[3] Checking RatioForge..."
+echo "[3/7] Checking RatioForge..."
 
 if [ ! -f "$RATIOFORGE" ]; then
 
-    echo "ERROR: RatioForge.exe does not exist."
+    echo "ERROR: RatioForge.exe was not found."
 
-    echo ""
-    echo "Contents of /app/RatioForge:"
     find /app/RatioForge -maxdepth 2 -type f
 
     exit 1
@@ -79,15 +77,15 @@ echo "$RATIOFORGE"
 
 
 # ============================================================
-# START RATIOFORGE FUNCTION
+# 4. START RATIOFORGE SUPERVISOR
 # ============================================================
 
 start_ratioforge() {
 
     echo ""
-    echo "=========================================="
+    echo "=============================================="
     echo " Starting RatioForge"
-    echo "=========================================="
+    echo "=============================================="
 
     wine "$RATIOFORGE" \
         >/tmp/ratioforge.log 2>&1 &
@@ -97,36 +95,27 @@ start_ratioforge() {
     echo "$RATIOFORGE_PID" >/tmp/ratioforge.pid
 
     echo "RatioForge PID: $RATIOFORGE_PID"
-
 }
 
 
-# ============================================================
-# RATIOFORGE SUPERVISOR
-# ============================================================
-
-supervisor() {
+ratioforge_supervisor() {
 
     while true; do
 
         start_ratioforge
 
-        echo ""
         echo "RatioForge started."
 
-        # Wait until RatioForge exits.
         wait "$RATIOFORGE_PID"
 
         EXIT_CODE=$?
 
         echo ""
-        echo "=========================================="
-        echo " RatioForge stopped"
-        echo " Exit code: $EXIT_CODE"
-        echo "=========================================="
+        echo "RatioForge exited."
+        echo "Exit code: $EXIT_CODE"
 
         echo ""
-        echo "Last RatioForge log:"
+        echo "Last RatioForge output:"
         tail -100 /tmp/ratioforge.log || true
 
         echo ""
@@ -138,167 +127,100 @@ supervisor() {
 }
 
 
-# ============================================================
-# START SUPERVISOR
-# ============================================================
+ratioforge_supervisor &
 
-supervisor &
 SUPERVISOR_PID=$!
 
 
 # ============================================================
-# HTTP SERVER
+# 5. CREATE VNC PASSWORD
 # ============================================================
 
 echo ""
-echo "=========================================="
-echo " Starting HTTP health server"
-echo "=========================================="
+echo "[5/7] Configuring VNC password..."
 
-python3 - "$PORT" <<'PY'
+if [ -z "${VNC_PASSWORD:-}" ]; then
 
-import sys
-import os
-from http.server import BaseHTTPRequestHandler
-from http.server import HTTPServer
+    echo ""
+    echo "ERROR:"
+    echo "VNC_PASSWORD environment variable is not set."
+    echo ""
+    echo "Set VNC_PASSWORD in Render Environment Variables."
+    echo ""
 
-PORT = int(sys.argv[1])
-
-
-class Handler(BaseHTTPRequestHandler):
-
-    def do_GET(self):
-
-        if self.path == "/":
-
-            body = b"RatioForge service is running\n"
-
-            self.send_response(200)
-
-            self.send_header(
-                "Content-Type",
-                "text/plain"
-            )
-
-            self.send_header(
-                "Content-Length",
-                str(len(body))
-            )
-
-            self.end_headers()
-
-            self.wfile.write(body)
-
-            return
+    exit 1
+fi
 
 
-        if self.path == "/health":
+mkdir -p /root/.vnc
 
-            body = b'{"status":"healthy"}\n'
+x11vnc -storepasswd \
+    "$VNC_PASSWORD" \
+    /root/.vnc/passwd \
+    >/tmp/vnc-password.log 2>&1
 
-            self.send_response(200)
+chmod 600 /root/.vnc/passwd
 
-            self.send_header(
-                "Content-Type",
-                "application/json"
-            )
-
-            self.send_header(
-                "Content-Length",
-                str(len(body))
-            )
-
-            self.end_headers()
-
-            self.wfile.write(body)
-
-            return
+echo "VNC password configured."
 
 
-        if self.path == "/status":
+# ============================================================
+# 6. START VNC SERVER
+# ============================================================
 
-            running = False
+echo ""
+echo "[6/7] Starting x11vnc..."
 
-            try:
+x11vnc \
+    -display :99 \
+    -rfbport 5900 \
+    -rfbauth /root/.vnc/passwd \
+    -localhost \
+    -forever \
+    -shared \
+    -noxdamage \
+    -repeat \
+    >/tmp/x11vnc.log 2>&1 &
 
-                with open("/tmp/ratioforge.pid", "r") as f:
-                    pid = int(f.read().strip())
+X11VNC_PID=$!
 
-                os.kill(pid, 0)
+sleep 3
 
-                running = True
+if ! kill -0 "$X11VNC_PID" 2>/dev/null; then
 
-            except Exception:
+    echo "ERROR: x11vnc failed."
 
-                running = False
+    cat /tmp/x11vnc.log
 
+    exit 1
+fi
 
-            if running:
-
-                body = b'{"ratioforge":"running"}\n'
-
-            else:
-
-                body = b'{"ratioforge":"restarting"}\n'
-
-
-            self.send_response(200)
-
-            self.send_header(
-                "Content-Type",
-                "application/json"
-            )
-
-            self.send_header(
-                "Content-Length",
-                str(len(body))
-            )
-
-            self.end_headers()
-
-            self.wfile.write(body)
-
-            return
+echo "x11vnc running: PID $X11VNC_PID"
 
 
-        body = b'{"error":"not found"}\n'
+# ============================================================
+# 7. START NOVNC / WEBSOCKIFY
+# ============================================================
 
-        self.send_response(404)
+echo ""
+echo "[7/7] Starting noVNC..."
 
-        self.send_header(
-            "Content-Type",
-            "application/json"
-        )
-
-        self.send_header(
-            "Content-Length",
-            str(len(body))
-        )
-
-        self.end_headers()
-
-        self.wfile.write(body)
+echo ""
+echo "=============================================="
+echo " Browser desktop available"
+echo "=============================================="
+echo ""
+echo "Port: $PORT"
+echo "VNC target: localhost:5900"
+echo ""
 
 
-    def log_message(self, format, *args):
+# websockify serves the noVNC web interface and
+# proxies WebSocket traffic to the local VNC server.
+#
+# Render forwards HTTPS/WebSocket traffic to this port.
 
-        print(
-            "[HTTP]",
-            format % args,
-            flush=True
-        )
-
-
-server = HTTPServer(
-    ("0.0.0.0", PORT),
-    Handler
-)
-
-print(
-    f"Health server listening on 0.0.0.0:{PORT}",
-    flush=True
-)
-
-server.serve_forever()
-
-PY
+exec websockify \
+    --web=/usr/share/novnc \
+    "$PORT" \
+    localhost:5900
