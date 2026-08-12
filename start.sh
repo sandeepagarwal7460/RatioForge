@@ -10,7 +10,7 @@ PORT="${PORT:-10000}"
 RATIOFORGE="/app/RatioForge/RatioForge.exe"
 
 echo "=============================================="
-echo " RatioForge + Wine 11 + Xvfb + noVNC"
+echo " RatioForge + Wine 11 + Wine Mono + noVNC"
 echo "=============================================="
 echo "PORT: $PORT"
 echo "DISPLAY: $DISPLAY"
@@ -58,6 +58,7 @@ echo "=============================================="
 echo " [2/7] Initializing Wine"
 echo "=============================================="
 
+echo "Wine version:"
 wine --version || true
 
 echo ""
@@ -101,6 +102,72 @@ else
 
 fi
 
+
+# ============================================================
+# INSTALL WINE MONO
+# ============================================================
+
+echo ""
+echo "=============================================="
+echo " Installing Wine Mono"
+echo "=============================================="
+
+if [ -f "/app/wine-mono.msi" ]; then
+
+    echo "Wine Mono MSI found."
+
+    echo "Installing Wine Mono..."
+    echo "Timeout: 120 seconds"
+
+    timeout 120s wine \
+        msiexec \
+        /i /app/wine-mono.msi \
+        /qn \
+        >/tmp/wine-mono-install.log 2>&1
+
+    MONO_EXIT=$?
+
+    echo ""
+    echo "Wine Mono installer exit code: $MONO_EXIT"
+
+    if [ "$MONO_EXIT" -eq 124 ]; then
+
+        echo ""
+        echo "WARNING: Wine Mono installation timed out."
+
+        echo ""
+        echo "Wine Mono installer log:"
+        cat /tmp/wine-mono-install.log || true
+
+    elif [ "$MONO_EXIT" -ne 0 ]; then
+
+        echo ""
+        echo "WARNING: Wine Mono installation returned an error."
+
+        echo ""
+        echo "Wine Mono installer log:"
+        cat /tmp/wine-mono-install.log || true
+
+    else
+
+        echo ""
+        echo "Wine Mono installation completed successfully."
+
+    fi
+
+else
+
+    echo ""
+    echo "WARNING: /app/wine-mono.msi was not found."
+
+    echo "RatioForge may show the Wine Mono prompt."
+
+fi
+
+
+echo ""
+echo "Continuing startup..."
+
 sleep 3
 
 
@@ -127,6 +194,7 @@ if [ ! -f "$RATIOFORGE" ]; then
         -print
 
     exit 1
+
 fi
 
 echo "RatioForge found:"
@@ -139,7 +207,7 @@ ls -lh "$RATIOFORGE"
 
 
 # ============================================================
-# 4. RATIOFORGE SUPERVISOR
+# 4. START RATIOFORGE SUPERVISOR
 # ============================================================
 
 echo ""
@@ -235,9 +303,13 @@ ratioforge_supervisor() {
         echo "=============================================="
 
         if [ -f /tmp/ratioforge.log ]; then
+
             cat /tmp/ratioforge.log
+
         else
+
             echo "No RatioForge log found."
+
         fi
 
         echo ""
@@ -279,7 +351,7 @@ if [ -z "${VNC_PASSWORD:-}" ]; then
     echo ""
     echo "ERROR: VNC_PASSWORD is not configured."
     echo ""
-    echo "Add VNC_PASSWORD to:"
+    echo "Add VNC_PASSWORD in:"
     echo ""
     echo "Render → ratioforge → Environment"
     echo ""
