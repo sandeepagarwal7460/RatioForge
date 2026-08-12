@@ -40,14 +40,14 @@ WORKDIR /app
 
 
 # ============================================================
-# Enable 32-bit architecture
+# 32-bit architecture
 # ============================================================
 
 RUN dpkg --add-architecture i386
 
 
 # ============================================================
-# Install basic packages
+# Basic packages
 # ============================================================
 
 RUN apt-get update && \
@@ -68,7 +68,7 @@ RUN apt-get update && \
 
 
 # ============================================================
-# Add WineHQ repository
+# WineHQ repository
 # ============================================================
 
 RUN mkdir -pm755 /etc/apt/keyrings
@@ -81,7 +81,7 @@ RUN wget -NP /etc/apt/sources.list.d/ \
 
 
 # ============================================================
-# Install Wine Stable
+# Wine Stable
 # ============================================================
 
 RUN apt-get update && \
@@ -93,54 +93,27 @@ RUN apt-get update && \
 
 
 # ============================================================
-# Copy RatioForge
+# RatioForge
 # ============================================================
 
 COPY --from=builder /publish /app/RatioForge
 
 
 # ============================================================
-# Create temporary display for Wine setup
+# Download Wine Mono
+#
+# IMPORTANT:
+# We only download it during Docker build.
+# We install it when the container starts, after
+# Wine/Xvfb are actually running.
 # ============================================================
 
-RUN Xvfb :99 \
-        -screen 0 1280x720x24 \
-        -ac \
-        >/tmp/build-xvfb.log 2>&1 & \
-    XVFB_PID=$! && \
-    sleep 3 && \
-    wineboot --init || true
-
-
-# ============================================================
-# Install Wine Mono
-# ============================================================
-
-RUN wget -O /tmp/wine-mono.msi \
+RUN wget -O /app/wine-mono.msi \
     https://dl.winehq.org/wine/wine-mono/10.2.0/wine-mono-10.2.0-x86.msi
 
 
-RUN Xvfb :99 \
-        -screen 0 1280x720x24 \
-        -ac \
-        >/tmp/mono-xvfb.log 2>&1 & \
-    XVFB_PID=$! && \
-    sleep 3 && \
-    wine msiexec /i /tmp/wine-mono.msi /qn || true
-
-
-RUN rm -f /tmp/wine-mono.msi
-
-
 # ============================================================
-# Verify Wine
-# ============================================================
-
-RUN wine --version
-
-
-# ============================================================
-# Startup script
+# Startup
 # ============================================================
 
 COPY start.sh /app/start.sh
