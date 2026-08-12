@@ -1,5 +1,5 @@
 # ============================================================
-# BUILD
+# BUILD STAGE
 # ============================================================
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS builder
@@ -38,7 +38,17 @@ ENV DISPLAY=:99
 
 WORKDIR /app
 
+
+# ------------------------------------------------------------
+# 32-bit support
+# ------------------------------------------------------------
+
 RUN dpkg --add-architecture i386
+
+
+# ------------------------------------------------------------
+# Install Wine + virtual desktop + VNC + noVNC
+# ------------------------------------------------------------
 
 RUN apt-get update && \
     apt-get install -y \
@@ -46,6 +56,9 @@ RUN apt-get update && \
         wine32 \
         winbind \
         xvfb \
+        x11vnc \
+        novnc \
+        websockify \
         xauth \
         ca-certificates \
         procps \
@@ -53,12 +66,25 @@ RUN apt-get update && \
         && \
     rm -rf /var/lib/apt/lists/*
 
+
+# ------------------------------------------------------------
+# Copy compiled RatioForge
+# ------------------------------------------------------------
+
 COPY --from=builder /publish /app/RatioForge
+
+
+# ------------------------------------------------------------
+# Startup script
+# ------------------------------------------------------------
 
 COPY start.sh /app/start.sh
 
 RUN chmod +x /app/start.sh
 
+
+# Render's public port
 EXPOSE 10000
+
 
 CMD ["/app/start.sh"]
